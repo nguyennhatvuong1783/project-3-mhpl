@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Web quản lý thành viên</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>Danh sách thiết bị</div>
+        <table border="1">
+            <tr>
+                <th>STT</th>
+                <th>Mã TB</th>
+                <th>Tên TB</th>
+                <th>Mô tả TB</th>
+            </tr>
+            <tr th:each="row, state: ${data}">
+                <th th:utext="${state.count}"></th>
+                <th th:utext="${row.maTB}"></th>
+                <th th:utext="${row.tenTB}"></th>
+                <th th:utext="${row.moTaTB}"></th>
+            </tr>
+        </table>
+    </body>
+</html>

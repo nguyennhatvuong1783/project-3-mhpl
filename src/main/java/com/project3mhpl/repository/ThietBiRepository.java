@@ -5,10 +5,6 @@
 package com.project3mhpl.repository;
 
 import com.project3mhpl.entity.ThietBi;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +13,4 @@ import org.springframework.stereotype.Repository;
  * @author Nguyen Nhat Vuong
  */
 @Repository
-public interface ThietBiRepository extends CrudRepository<ThietBi, Integer> {
-    
-  
-}
+public interface ThietBiRepository extends CrudRepository<ThietBi, Integer> {}

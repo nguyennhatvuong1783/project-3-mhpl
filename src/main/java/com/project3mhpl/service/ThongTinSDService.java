@@ -6,7 +6,6 @@ package com.project3mhpl.service;
 
 import com.project3mhpl.entity.ThongTinSD;
 import com.project3mhpl.repository.ThongTinSDRepository;
-import java.util.Iterator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

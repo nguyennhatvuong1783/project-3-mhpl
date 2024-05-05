@@ -27,7 +27,7 @@ public class ThietBiController {
     private ThietBiService thietBiService;
  
    
-    @GetMapping("/all")
+    @GetMapping("/dat-muon-thiet-bi")
     public String getAll(Model m)
     {
         Iterable<ThietBi> list = thietBiService.getAll();

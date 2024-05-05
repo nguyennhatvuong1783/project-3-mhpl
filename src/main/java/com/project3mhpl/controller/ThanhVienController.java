@@ -4,12 +4,12 @@
  */
 package com.project3mhpl.controller;
 
-import com.project3mhpl.entity.ThietBi;
+import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.entity.ThongTinSD;
-import com.project3mhpl.repository.ThietBiRepository;
-import com.project3mhpl.service.ThietBiService;
+import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThongTinSDService;
 import java.util.ArrayList;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,32 +23,24 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class ThanhVienController {
-//    @Autowired
-//    private ThietBiService thietBiService;
+    @Autowired
+    private ThanhVienService thanhvienService;
  
    
     @GetMapping("/profile")
     public String getAll(Model m)
-    {
-//        Iterable<ThietBi> list = thietBiService.getAll();
-//        ArrayList<ThietBi> products = new ArrayList<>();
-//        for(ThietBi t : list){
-//            products.add(t);
-//        }
-//
-//        m.addAttribute("data", products);
+    {   
+        Optional<ThanhVien> tv= thanhvienService.getById(1121530087);
+        ThanhVien thanhvien =tv.get();
+        m.addAttribute("data", thanhvien);
         return "Profile";
     }
     @GetMapping("/TTTV")
     public String getTTTV(Model m)
     {
-//        Iterable<ThietBi> list = thietBiService.getAll();
-//        ArrayList<ThietBi> products = new ArrayList<>();
-//        for(ThietBi t : list){
-//            products.add(t);
-//        }
-//
-//        m.addAttribute("data", products);
+//        Optional<ThanhVien> tv= thanhvienService.getById(1121530087);
+//        ThanhVien thanhvien =tv.get();
+//        m.addAttribute("data", thanhvien);
         return "ThongTinThanhVien";
     }
     @GetMapping("/TTSDTV")
@@ -61,7 +53,7 @@ public class ThanhVienController {
 //        }
 //
 //        m.addAttribute("data", products);
-        return "ThongTinSDThanhVien";
+        return "ThongTinSD";
     }
 
     

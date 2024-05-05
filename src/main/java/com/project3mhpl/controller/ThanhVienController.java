@@ -37,9 +37,32 @@ public class ThanhVienController {
 //        }
 //
 //        m.addAttribute("data", products);
+        return "Profile";
+    }
+    @GetMapping("/TTTV")
+    public String getTTTV(Model m)
+    {
+//        Iterable<ThietBi> list = thietBiService.getAll();
+//        ArrayList<ThietBi> products = new ArrayList<>();
+//        for(ThietBi t : list){
+//            products.add(t);
+//        }
+//
+//        m.addAttribute("data", products);
         return "ThongTinThanhVien";
     }
-    
+    @GetMapping("/TTSDTV")
+    public String getTTSDTV(Model m)
+    {
+//        Iterable<ThietBi> list = thietBiService.getAll();
+//        ArrayList<ThietBi> products = new ArrayList<>();
+//        for(ThietBi t : list){
+//            products.add(t);
+//        }
+//
+//        m.addAttribute("data", products);
+        return "ThongTinSDThanhVien";
+    }
 
     
    

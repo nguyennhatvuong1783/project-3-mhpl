@@ -24,4 +24,13 @@ public class DataController {
       return "alert";
     }
    }
+   
+   @GetMapping("/checkData2")
+   public String chcckData(@RequestParam("index") int index){
+       if (index ==1 ){
+           return "modal";
+       } else{
+           return "alert";
+       }
+   }
 }

@@ -23,7 +23,7 @@ public class ThanhVien {
     private String password;
     
     @Column
-    private String hoTen;
+    private String hoten;
     
     @Column
     private String khoa;
@@ -46,10 +46,10 @@ public class ThanhVien {
     public ThanhVien() {
     }
 
-    public ThanhVien(Integer maTV, String password, String hoTen, String khoa, String nganh, String email, String sdt) { // Thay đổi kiểu dữ liệu của tham số sdt
+    public ThanhVien(Integer maTV, String password, String hoten, String khoa, String nganh, String email, String sdt) { // Thay đổi kiểu dữ liệu của tham số sdt
         this.maTV = maTV;
         this.password = password;
-        this.hoTen = hoTen;
+        this.hoten = hoten;
         this.khoa = khoa;
         this.nganh = nganh;
         this.email = email;

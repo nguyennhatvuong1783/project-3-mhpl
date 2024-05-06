@@ -13,4 +13,5 @@ import org.springframework.stereotype.Repository;
  * @author Nguyen Nhat Vuong
  */
 @Repository
-public interface ThanhVienRepository extends CrudRepository<ThanhVien, Integer> {}
+public interface ThanhVienRepository extends CrudRepository<ThanhVien, Integer> {
+}

@@ -65,15 +65,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
   <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
+          <form action="/muonthietbi" method="POST">
         <div class="modal-header">
           <h5 class="modal-title">Mượn thiết bị</h5>
         </div>
         <div class="modal-body">
-            <form action="">
+           
                  <div class="form-group">
                     <label for="date">Thời gian trả:</label>
                     <div class="input-group" id="datetimepicker-3">
-                        <input type="text" class="form-control" id="date-input-3"/>
+                        <input type="text" class="form-control" id="date-input-3" name="date"/>
                         <span class="input-group-text"  data-toggle>
                             <i class="bi bi-calendar"></i>  
                         </span>
@@ -82,12 +83,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </span>
                     </div>     
                 </div>
-            </form>
+            
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="sumitBtn1">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         </div>
+               </form>
       </div>
     </div>
   </div>
@@ -96,15 +98,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
   <div id="myModal2" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
+        <form action="/dat-muon-thiet-bi" method="POST">
+
         <div class="modal-header">
           <h5 class="modal-title">Đặt chỗ mượn thiết bị</h5>
         </div>
         <div class="modal-body">
-            <form th:action="@{/submit-data}"  th:object="${formData}" method="post">
                 <div class="form-group">
                     <label for="date-input-1">Thời gian đặt chỗ:</label>
                     <div class="input-group" id="datetimepicker-1">
-                        <input type="text" class="form-control" id="date-input-1" th:field="*{date}"/>
+                        <input type="text" class="form-control" id="date-input-1" name="date"/>
                         <span class="input-group-text"  data-toggle>
                             <i class="bi bi-calendar"></i>  
                         </span>
@@ -113,12 +116,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </span>
                     </div>     
                 </div>
-            </form>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         </div>
+        </form>
+
       </div>
     </div>
   </div>

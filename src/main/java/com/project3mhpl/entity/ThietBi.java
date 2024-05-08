@@ -17,10 +17,10 @@ import lombok.Data;
 @Table(name = "thietbi")
 public class ThietBi {
     @Id
-    private Integer MaTB;
+    private Integer maTB;
     
     @Column
-    private String TenTB;
+    private String tenTB;
     
     @Column
     private String mo_tatb;
@@ -32,36 +32,9 @@ public class ThietBi {
     }
 
     public ThietBi(Integer MaTB, String TenTB, String MoTaTB) {
-        this.MaTB = MaTB;
-        this.TenTB = TenTB;
+        this.maTB = MaTB;
+        this.tenTB = TenTB;
         this.mo_tatb = MoTaTB;
     }
 
-    
-    
-    public Integer getMaTB(){
-        return MaTB;
-    }
-    
-    public void setMaTB(Integer MaTB){
-        this.MaTB = MaTB;
-    }
-    
-    public String getTenTB(){
-        return TenTB;
-    }
-    
-    public void setTenTB(String TenTB){
-        this.TenTB = TenTB;
-    }
-    
-    public String getMotaTB(){
-        return mo_tatb;
-    }
-    
-    public void setMotaTB(String MoTaTB){
-        this.mo_tatb = MoTaTB;
-    }
-    
-    
 }

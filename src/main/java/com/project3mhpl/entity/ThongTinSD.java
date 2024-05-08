@@ -20,23 +20,23 @@ public class ThongTinSD {
     private Integer maTT;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "MaTV", nullable = false)
+    @JoinColumn(name = "maTV", nullable = false)
     private ThanhVien thanhVienTTSD;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "MaTB", nullable = false)
+    @JoinColumn(name = "maTB", nullable = false)
     private ThietBi thietBi;
     
-    @Column
+    @Column(name = "TGDatcho")
     private Date tgDatcho;
     
     @Column
     private Date tgVao;
     
-    @Column
+    @Column(name = "TGMuon")
     private Date tgMuon;
     
-    @Column
+    @Column(name = "TGTra")
     private Date tgTra;
     
     //Bổ sung vài cái cho việc làm thống kê

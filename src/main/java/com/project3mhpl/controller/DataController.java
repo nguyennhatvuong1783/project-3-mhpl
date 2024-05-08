@@ -4,6 +4,12 @@
  */
 package com.project3mhpl.controller;
 
+import com.project3mhpl.service.ThongTinSDService;
+import com.project3mhpl.entity.ThongTinSD;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,23 +20,30 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class DataController {
+    @Autowired
+    private ThongTinSDService thongTinSDService;
+    
     @GetMapping("/checkData")
     public String checkData(@RequestParam("index") int index) {
-    // Xử lý ID và trả về kết quả tương ứng
-    // ví dụ checkThongTinSD(inđex)==false
-    if (index == 1) {
-      return "modal";
-    } else {
-      return "alert";
-    }
-   }
-   
-   @GetMapping("/checkData2")
-   public String chcckData(@RequestParam("index") int index){
-       if (index ==1 ){
-           return "modal";
-       } else{
-           return "alert";
-       }
+        // Xử lý
+        List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(index);
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getTgDatcho() != null) {
+                calendar.setTime(list.get(i).getTgDatcho());
+                calendar.add(Calendar.HOUR_OF_DAY, 1);
+                Date tgDatChoPlus1h = calendar.getTime();
+                if(currentDate.compareTo(tgDatChoPlus1h) <= 0) {
+                    return "alert";
+                }
+            }else {
+                if(currentDate.compareTo(list.get(i).getTgTra()) <= 0) {
+                    return "alert";
+                }
+            }
+        }
+        return "modal";
    }
 }

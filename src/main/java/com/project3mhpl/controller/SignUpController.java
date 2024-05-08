@@ -30,7 +30,7 @@ public class SignUpController {
     @GetMapping("/sign_up")
     public String showLogin(Model m){
         ThanhVien ThanhVien = new ThanhVien();
-        ThanhVien.setmaTV(9);
+        ThanhVien.setMaTV(9);
              
         m.addAttribute("ThanhVien",ThanhVien);
         return "sign_up";

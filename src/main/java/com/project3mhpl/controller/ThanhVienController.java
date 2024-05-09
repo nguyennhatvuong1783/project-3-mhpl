@@ -8,6 +8,7 @@ import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.entity.ThongTinSD;
 import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThongTinSDService;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -27,17 +30,16 @@ public class ThanhVienController {
     @Autowired
     private ThanhVienService thanhvienService;
  
-   
+   private static final Logger logger = LoggerFactory.getLogger(ThanhVienController.class);
     @GetMapping("/profile")
-public String getProfile(@ModelAttribute("maTV") String maTV, Model m) {
-    Optional<ThanhVien> tv = thanhvienService.getById(Integer.parseInt(maTV));
-    ThanhVien thanhvien = tv.orElse(null);
-    if (thanhvien != null) {
-        m.addAttribute("data", thanhvien);
+public String getProfile(HttpSession session, Model m) {
+    ThanhVien tv = (ThanhVien) session.getAttribute("tv");
+    if (tv!=null) {
+        m.addAttribute("data", tv);
         return "profile";
     } else {
-         m.addAttribute("errorMessage", "Đăng nhập để xem thông tin tài khoản");
-        return "login";
+        // m.addAttribute("errorMessage", "Đăng nhập để xem thông tin tài khoản");
+        return "ìndex";
     }
 }
 }

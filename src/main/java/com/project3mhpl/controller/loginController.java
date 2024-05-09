@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.service.ThanhVienService;
+import jakarta.servlet.http.HttpSession;
+import java.util.Optional;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -33,13 +36,14 @@ public class LoginController {
 	}
 
 	@PostMapping(value = "/login", consumes = { "application/x-www-form-urlencoded" })
-	public String login(Model m, ThanhVien loginForm) {
+	public String login(Model m, ThanhVien loginForm,HttpSession session) {
 
             boolean isLoggedIn = thanhVienService.verifyUser(loginForm.getMaTV(), loginForm.getPassword());
 
             if (isLoggedIn) {
-                m.addAttribute("maTV", loginForm.getMaTV());
-                return "Profile";
+                Optional<ThanhVien> tv= thanhVienService.getById(loginForm.getMaTV());
+                session.setAttribute("tv", tv);
+                return "redirect:/profile";
             }
 
             m.addAttribute("errorMessage", "Sai mật khẩu hoặc tài khoản không tồn tại");

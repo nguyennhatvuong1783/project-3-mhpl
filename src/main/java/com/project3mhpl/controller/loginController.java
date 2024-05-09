@@ -38,6 +38,7 @@ public class LoginController {
             boolean isLoggedIn = thanhVienService.verifyUser(loginForm.getMaTV(), loginForm.getPassword());
 
             if (isLoggedIn) {
+                m.addAttribute("maTV", loginForm.getMaTV());
                 return "Profile";
             }
 

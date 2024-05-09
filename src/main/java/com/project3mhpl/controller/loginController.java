@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.project3mhpl.dto.LoginForm;
+import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.service.ThanhVienService;
 
 /**
@@ -25,24 +25,24 @@ public class LoginController {
 
 	@GetMapping("/login")
 	public String showLogin(Model m) {
-		m.addAttribute("maTV", "");
-		m.addAttribute("password", "");
-		m.addAttribute("errorMessage", "");
+            m.addAttribute("maTV", "");
+            m.addAttribute("password", "");
+            m.addAttribute("errorMessage", "");
 
-		return "login";
+            return "login";
 	}
 
 	@PostMapping(value = "/login", consumes = { "application/x-www-form-urlencoded" })
-	public String login(Model m, LoginForm loginForm) {
+	public String login(Model m, ThanhVien loginForm) {
 
-		boolean isLoggedIn = thanhVienService.verifyUser(loginForm.getMaTV(), loginForm.getPassword());
+            boolean isLoggedIn = thanhVienService.verifyUser(loginForm.getMaTV(), loginForm.getPassword());
 
-		if (isLoggedIn) {
-			return "Profile";
-		}
+            if (isLoggedIn) {
+                return "Profile";
+            }
 
-		m.addAttribute("errorMessage", "Sai mật khẩu hoặc tài khoản không tồn tại");
+            m.addAttribute("errorMessage", "Sai mật khẩu hoặc tài khoản không tồn tại");
 
-		return "login";
+            return "login";
 	}
 }

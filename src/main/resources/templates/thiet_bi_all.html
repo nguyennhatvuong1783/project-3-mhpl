@@ -39,9 +39,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <tbody>
                     <tr th:each="item, loop : ${data}" class="text-center">
                         <td th:text="${loop.index+1}"></td>
-                        <td th:text="${item.MaTB}"></td>
-                        <td th:text="${item.TenTB}"></td>
-                        <td th:text="${item.mo_tatb}"></td>
+                        <td th:text="${item.maTB}"></td>
+                        <td th:text="${item.tenTB}"></td>
+                        <td th:text="${item.moTaTB}"></td>
                         <td>
                             <button class="btn btn-info" id="btn_muon">Mượn</button>   
                             <button class="btn btn-primary" id="btn_datcho">Đặt chỗ</button>

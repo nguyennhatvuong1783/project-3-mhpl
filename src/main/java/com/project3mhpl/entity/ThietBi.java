@@ -17,13 +17,14 @@ import lombok.Data;
 @Table(name = "thietbi")
 public class ThietBi {
     @Id
+    @Column(name = "matb")
     private Integer maTB;
     
-    @Column
+    @Column(name = "tentb")
     private String tenTB;
     
-    @Column
-    private String mo_tatb;
+    @Column(name = "motatb")
+    private String moTaTB;
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "thietBi")
     private List<ThongTinSD> thongTinSD;
@@ -31,10 +32,10 @@ public class ThietBi {
     public ThietBi() {
     }
 
-    public ThietBi(Integer MaTB, String TenTB, String MoTaTB) {
-        this.maTB = MaTB;
-        this.tenTB = TenTB;
-        this.mo_tatb = MoTaTB;
+    public ThietBi(Integer maTB, String tenTB, String moTaTB) {
+        this.maTB = maTB;
+        this.tenTB = tenTB;
+        this.moTaTB = moTaTB;
     }
 
 }

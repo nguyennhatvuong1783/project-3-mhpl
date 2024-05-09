@@ -17,24 +17,25 @@ import lombok.Data;
 @Table(name = "thanhvien")
 public class ThanhVien {
     @Id
+    @Column(name = "matv")
     private Integer maTV;
     
-    @Column
+    @Column(name = "password")
     private String password;
     
-    @Column
+    @Column(name = "hoten")
     private String hoten;
     
-    @Column
+    @Column(name = "khoa")
     private String khoa;
     
-    @Column
+    @Column(name = "nganh")
     private String nganh;
     
-    @Column
+    @Column(name = "email")
     private String email;
     
-    @Column
+    @Column(name = "sdt")
     private String sdt; // Thay đổi kiểu dữ liệu thành String
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "thanhVienTTSD")

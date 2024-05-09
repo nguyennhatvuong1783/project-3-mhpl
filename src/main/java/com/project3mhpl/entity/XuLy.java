@@ -17,36 +17,34 @@ import lombok.Data;
 @Table(name = "xuly")
 public class XuLy {
     @Id
+    @Column(name = "maxl")
     private Integer maXL;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "MaTV", nullable = false)
+    @JoinColumn(name = "matv", nullable = false)
     private ThanhVien thanhVienXL;
     
-    @Column
+    @Column(name = "hinhthucxl")
     private String hinhThucXL;
     
-    @Column
+    @Column(name = "sotien", length = 100, columnDefinition = "INT")
     private Long soTien;
     
-    @Column
+    @Column(name = "ngayxl")
     private Date ngayXL;
     
-    @Column
+    @Column(name = "trangthaixl", length = 2, columnDefinition = "INT")
     private Boolean trangThaiXL;
     
-    private Integer soluong;
-
     public XuLy() {
     }
 
-    public XuLy(Integer maXL, ThanhVien thanhVienXL, String hinhThucXL, Long soTien, Date ngayXL, Boolean trangThaiXL, Integer soluong) {
+    public XuLy(Integer maXL, ThanhVien thanhVienXL, String hinhThucXL, Long soTien, Date ngayXL, Boolean trangThaiXL) {
         this.maXL = maXL;
         this.thanhVienXL = thanhVienXL;
         this.hinhThucXL = hinhThucXL;
         this.soTien = soTien;
         this.ngayXL = ngayXL;
         this.trangThaiXL = trangThaiXL;
-        this.soluong = soluong;
     }
 }

@@ -17,41 +17,33 @@ import lombok.Data;
 @Table(name = "thongtinsd")
 public class ThongTinSD {
     @Id
+    @Column(name = "matt")
     private Integer maTT;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "maTV", nullable = false)
+    @JoinColumn(name = "matv", nullable = false)
     private ThanhVien thanhVienTTSD;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "maTB", nullable = false)
+    @JoinColumn(name = "matb", nullable = false)
     private ThietBi thietBi;
     
-    @Column(name = "TGDatcho")
+    @Column(name = "tgdatcho")
     private Date tgDatcho;
     
-    @Column
+    @Column(name = "tgvao")
     private Date tgVao;
     
-    @Column(name = "TGMuon")
+    @Column(name = "tgmuon")
     private Date tgMuon;
     
-    @Column(name = "TGTra")
+    @Column(name = "tgtra")
     private Date tgTra;
     
-    //Bổ sung vài cái cho việc làm thống kê
-    private Integer soluong;
-    
-    private String khoa;
-    
-    private String nganh;
-    
-    private String tenTB;
-
     public ThongTinSD() {
     }
 
-    public ThongTinSD(Integer maTT, ThanhVien thanhVienTTSD, ThietBi thietBi, Date tgDatcho, Date tgVao, Date tgMuon, Date tgTra, Integer soluong, String khoa, String nganh, String tenTB) {
+    public ThongTinSD(Integer maTT, ThanhVien thanhVienTTSD, ThietBi thietBi, Date tgDatcho, Date tgVao, Date tgMuon, Date tgTra) {
         this.maTT = maTT;
         this.thanhVienTTSD = thanhVienTTSD;
         this.thietBi = thietBi;
@@ -59,9 +51,5 @@ public class ThongTinSD {
         this.tgVao = tgVao;
         this.tgMuon = tgMuon;
         this.tgTra = tgTra;
-        this.soluong = soluong;
-        this.khoa = khoa;
-        this.nganh = nganh;
-        this.tenTB = tenTB;
     }
 }

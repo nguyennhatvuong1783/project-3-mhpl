@@ -23,7 +23,7 @@ public class ThanhVienService {
 		return thanhvienRepository.findAll();
 	}
 
-	public Optional<ThanhVien> getById(int id) {
+	public Optional<ThanhVien> getById(Integer id) {
 		return thanhvienRepository.findById(id);
 	}
 

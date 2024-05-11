@@ -33,13 +33,9 @@ public class ThanhVienController {
    private static final Logger logger = LoggerFactory.getLogger(ThanhVienController.class);
     @GetMapping("/profile")
 public String getProfile(HttpSession session, Model m) {
-    ThanhVien tv = (ThanhVien) session.getAttribute("tv");
-    if (tv!=null) {
+    Optional<ThanhVien> test= thanhvienService.getById(1120010007);
+        ThanhVien tv =test.get();
         m.addAttribute("data", tv);
-        return "profile";
-    } else {
-        // m.addAttribute("errorMessage", "Đăng nhập để xem thông tin tài khoản");
-        return "ìndex";
-    }
+        return "profile";    
 }
 }

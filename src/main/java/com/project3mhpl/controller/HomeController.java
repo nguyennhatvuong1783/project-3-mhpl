@@ -31,4 +31,11 @@ public class HomeController {
 
 		return "index";
 	}
+        
+        @GetMapping("/dashboard")
+	public String dashboardPage (Model m, HttpServletRequest request) {
+//		m.addAttribute("isAuthenticated", thanhVienService.checkAuth(request));
+
+		return "dashboard";
+	}
 }

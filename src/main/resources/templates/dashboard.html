@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Dashboard</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 250px;
+                background-color: #343a40;
+                padding-top: 20px;
+            }
+            .sidebar ul {
+                list-style-type: none;
+                padding: 0;
+            }
+            .sidebar ul li {
+                padding: 10px;
+            }
+            .sidebar ul li a {
+                color: #fff;
+                text-decoration: none;
+            }
+            .content {
+                margin-left: 250px;
+                padding: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="sidebar">
+        <ul>
+            <li><a href="#manage-members">Quản lý thành viên</a></li>
+            <li><a href="#manage-devices">Quản lý thiết bị</a></li>
+            <li><a href="#handle-violations">Xử lý vi phạm</a></li>
+            <li><a href="#statistics">Thống kê</a></li>
+        </ul>
+        </div>
+
+        <div class="content">
+            <h2 id="manage-members">Quản lý thành viên</h2>
+            <p>Thông tin và chức năng quản lý thành viên...</p>
+
+            <h2 id="manage-devices">Quản lý thiết bị</h2>
+            <p>Thông tin và chức năng quản lý thiết bị...</p>
+
+            <h2 id="handle-violations">Xử lý vi phạm</h2>
+            <p>Thông tin và chức năng xử lý vi phạm...</p>
+
+            <h2 id="statistics">Thống kê</h2>
+            <p>Thông tin và chức năng thống kê...</p>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

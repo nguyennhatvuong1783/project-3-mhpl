@@ -4,14 +4,17 @@
  */
 package com.project3mhpl.service;
 
-import com.project3mhpl.entity.XuLy;
-import com.project3mhpl.repository.XuLyRepository;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
+
+import com.project3mhpl.entity.XuLy;
+import com.project3mhpl.repository.XuLyRepository;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -19,17 +22,17 @@ import org.springframework.web.util.WebUtils;
  */
 @Service
 public class XuLyService {
-    @Autowired
-    private XuLyRepository xulyRepository;
-    
-    public Iterable<XuLy> getAll(){
-        return xulyRepository.findAll();
-    }
-    @SuppressWarnings("null")
+	@Autowired
+	private XuLyRepository xulyRepository;
+
+	public Iterable<XuLy> getAll() {
+		return xulyRepository.findAll();
+	}
+
+	@SuppressWarnings("null")
 	public List<XuLy> getTTXLByIdTV(HttpServletRequest request) {
 		Cookie c = WebUtils.getCookie(request, "auth");
 		List<XuLy> authUser = xulyRepository.findByThanhVienXL_MaTV(Integer.parseInt(c.getValue()));
 		return authUser;
 	}
 }
-

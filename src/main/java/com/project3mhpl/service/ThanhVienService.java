@@ -127,4 +127,23 @@ public class ThanhVienService {
 
 		thanhvienRepository.saveAll(thanhVienList);
 	}
+
+	public void deleteTV(Integer id) {
+		thanhvienRepository.deleteById(id);
+	}
+
+	public void updateTV(Integer id, ThanhVien tv) {
+		ThanhVien thanhVien = thanhvienRepository.findById(id).get();
+
+		thanhVien.setEmail(tv.getEmail());
+		thanhVien.setHoten(tv.getHoten());
+		thanhVien.setIsAdmin(tv.getIsAdmin());
+		thanhVien.setKhoa(tv.getKhoa());
+		thanhVien.setNganh(tv.getNganh());
+		thanhVien.setPassword(tv.getPassword());
+		thanhVien.setSdt(tv.getSdt());
+
+		thanhvienRepository.save(thanhVien);
+	}
+
 }

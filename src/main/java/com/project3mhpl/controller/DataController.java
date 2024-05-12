@@ -34,6 +34,9 @@ public class DataController {
 		Cookie c = WebUtils.getCookie(request, "auth");
 
 		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
+		if (c == null || c.getValue() == null || c.getValue() == "") {
+			return "redirect:sign-in";
+		}
 
 		// Xử lý
 		List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(index);

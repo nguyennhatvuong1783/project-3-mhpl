@@ -32,8 +32,8 @@ public class ThanhVienController {
 		Cookie c = WebUtils.getCookie(request, "auth");
 
 		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
-		if (c == null || c.getValue() == null) {
-			return "redirect:/sign-in";
+		if (c == null || c.getValue() == null || c.getValue() == "") {
+			return "redirect:sign-in";
 		}
 
 		Optional<ThanhVien> authUser = thanhvienService.getById(Integer.parseInt(c.getValue()));

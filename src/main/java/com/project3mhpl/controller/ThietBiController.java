@@ -35,6 +35,9 @@ public class ThietBiController {
 		Cookie c = WebUtils.getCookie(request, "auth");
 
 		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
+		if (c == null || c.getValue() == null || c.getValue() == "") {
+			return "redirect:sign-in";
+		}
 
 		Iterable<ThietBi> list = thietBiService.getAll();
 		ArrayList<ThietBi> products = new ArrayList<>();
@@ -51,6 +54,10 @@ public class ThietBiController {
 		Cookie c = WebUtils.getCookie(request, "auth");
 
 		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
+		if (c == null || c.getValue() == null || c.getValue() == "") {
+			return "redirect:sign-in";
+		}
+
 		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
 		// ...
 		return "redirect:/";
@@ -61,6 +68,10 @@ public class ThietBiController {
 		Cookie c = WebUtils.getCookie(request, "auth");
 
 		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
+		if (c == null || c.getValue() == null || c.getValue() == "") {
+			return "redirect:sign-in";
+		}
+
 		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
 		// ...
 		return "redirect:/";

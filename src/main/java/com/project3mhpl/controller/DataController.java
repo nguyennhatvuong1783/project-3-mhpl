@@ -25,39 +25,41 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class DataController {
-    @Autowired
-    private ThongTinSDService thongTinSDService;
-    private ThanhVienService thanhVienService;
+	@Autowired
+	private ThongTinSDService thongTinSDService;
 
-    @GetMapping("/checkData")
-    public String checkData(@RequestParam("index") int index, HttpServletRequest request, Model m) {
-        Boolean isAuthenticated = thanhVienService.checkAuth(request);
+	@Autowired
+	private ThanhVienService thanhVienService;
 
-        m.addAttribute("isAuthenticated", isAuthenticated);
-        if (isAuthenticated == false) {
-            return "redirect:sign-in";
-        }
+	@GetMapping("/checkData")
+	public String checkData(@RequestParam("index") int index, HttpServletRequest request, Model m) {
+		Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-        // Xử lý
-        List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(index);
-        Date currentDate = new Date();
-        Calendar calendar = Calendar.getInstance();
+		m.addAttribute("isAuthenticated", isAuthenticated);
+		if (isAuthenticated == false) {
+			return "redirect:sign-in";
+		}
 
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getTgDatcho() != null) {
-                calendar.setTime(list.get(i).getTgDatcho());
-                calendar.add(Calendar.HOUR_OF_DAY, 1);
-                Date tgDatChoPlus1h = calendar.getTime();
-                if (currentDate.compareTo(tgDatChoPlus1h) <= 0) {
-                    return "alert";
-                }
-            } else {
-                if (currentDate.compareTo(list.get(i).getTgTra()) <= 0) {
-                    return "alert";
-                }
-            }
-        }
-        
-        return "modal";
-    }
+		// Xử lý
+		List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(index);
+		Date currentDate = new Date();
+		Calendar calendar = Calendar.getInstance();
+
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getTgDatcho() != null) {
+				calendar.setTime(list.get(i).getTgDatcho());
+				calendar.add(Calendar.HOUR_OF_DAY, 1);
+				Date tgDatChoPlus1h = calendar.getTime();
+				if (currentDate.compareTo(tgDatChoPlus1h) <= 0) {
+					return "alert";
+				}
+			} else {
+				if (currentDate.compareTo(list.get(i).getTgTra()) <= 0) {
+					return "alert";
+				}
+			}
+		}
+
+		return "modal";
+	}
 }

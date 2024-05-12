@@ -44,8 +44,23 @@ public class ThanhVienService {
 
 	public Boolean checkAuth(HttpServletRequest request) {
 		Cookie c = WebUtils.getCookie(request, "auth");
-
+                
 		return c != null && c.getValue() != null && c.getValue() != "";
+	}
+        
+        public Boolean checkAdmin(HttpServletRequest request) {
+		Cookie c = WebUtils.getCookie(request, "auth");
+                
+                Boolean isAmin = false;
+                
+                try {
+                    ThanhVien tv = getProfile(request);
+                    isAmin = tv.getIsAdmin();
+                } catch (Exception e) {
+                    return false;
+                }
+
+		return c != null && c.getValue() != null && c.getValue() != "" && isAmin == true;
 	}
 
 	public Cookie createAuthSession(String maTV) {

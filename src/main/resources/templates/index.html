@@ -34,8 +34,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 					tiện lợi. Đến với chúng tôi, bạn sẽ trải nghiệm sự linh hoạt và tiết kiệm thời gian trong
 					việc sử dụng các thiết bị công nghệ hàng ngày của mình.
 				</p>
-				<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-					<a href="/sign-in" type="button" class="btn btn-primary btn-lg px-4 gap-3"
+				<div class="d-grid gap-2 d-sm-flex justify-content-sm-center" th:if="${isAuthenticated == false}">
+					<a href="/sign-up" type="button" class="btn btn-primary btn-lg px-4 gap-3"
 						>Đăng ký ngay</a
 					>
 				</div>

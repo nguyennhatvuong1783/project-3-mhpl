@@ -31,6 +31,7 @@ public class ThanhVienController {
 			return "redirect:sign-in";
 		}
 
+		m.addAttribute("isAdmin", thanhvienService.checkAdmin(request));
 		m.addAttribute("data", thanhvienService.getProfile(request));
 
 		return "profile";

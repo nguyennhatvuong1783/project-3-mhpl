@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2024 at 04:59 PM
+-- Generation Time: May 12, 2024 at 09:15 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.3.4
 
@@ -34,18 +34,20 @@ CREATE TABLE `thanhvien` (
   `Khoa` varchar(100) DEFAULT NULL,
   `Nganh` varchar(100) DEFAULT NULL,
   `Email` varchar(25) DEFAULT NULL,
-  `SDT` varchar(15) DEFAULT NULL
+  `SDT` varchar(15) DEFAULT NULL,
+  `is_admin` bit(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `thanhvien`
 --
 
-INSERT INTO `thanhvien` (`MaTV`, `Password`, `HoTen`, `Khoa`, `Nganh`, `Email`, `SDT`) VALUES
-(1120150184, '12345', 'Trần Thị Nữ', 'GDTH', 'GDTH', 'tranthinu@gmail.com', '1111111111'),
-(1121530087, '12345', 'Trần Thiếu Nam', 'TLH', 'QLGD', 'tranthieunam@gmail.com', '1111111112'),
-(1123330257, '12345', 'Ngô Tuyết Nhi', 'QTKD', 'QTKD', 'ngotuyetnhi@gmail.com', '1111111113'),
-(2147483647, '12345', 'Nguyễn Văn Nam', 'CNTT', 'HTTT', 'nguyenvannam@gmail.com', '123456789');
+INSERT INTO `thanhvien` (`MaTV`, `Password`, `HoTen`, `Khoa`, `Nganh`, `Email`, `SDT`, `is_admin`) VALUES
+(1, '1', 'Amin', NULL, NULL, NULL, NULL, b'1'),
+(1120150184, '12345', 'Trần Thị Nữ', 'GDTH', 'GDTH', 'tranthinu@gmail.com', '1111111111', b'0'),
+(1121530087, '12345', 'Trần Thiếu Nam', 'TLH', 'QLGD', 'tranthieunam@gmail.com', '1111111112', b'0'),
+(1123330257, '12345', 'Ngô Tuyết Nhi', 'QTKD', 'QTKD', 'ngotuyetnhi@gmail.com', '1111111113', b'0'),
+(2147483647, '12345', 'Nguyễn Văn Nam', 'CNTT', 'HTTT', 'nguyenvannam@gmail.com', '123456789', b'0');
 
 -- --------------------------------------------------------
 

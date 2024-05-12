@@ -49,6 +49,7 @@ public class ThietBiController {
 		if (isAuthenticated == false) {
 			return "redirect:sign-in";
 		}
+                m.addAttribute("isAdmin", thanhVienService.checkAdmin(request));
 
 		Iterable<ThietBi> list = thietBiService.getAll();
 		ArrayList<ThietBi> products = new ArrayList<>();
@@ -108,4 +109,8 @@ public class ThietBiController {
 		return "redirect:/";
 	}
 
+        @GetMapping("/manage-devices")
+	public String manageDevicesPage () {
+		return "manage-devices";
+	}
 }

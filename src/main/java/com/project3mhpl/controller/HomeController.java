@@ -30,13 +30,24 @@ public class HomeController {
 	@GetMapping("/home")
 	public String homepage(Model m, HttpServletRequest request) {
 		m.addAttribute("isAuthenticated", thanhVienService.checkAuth(request));
+                m.addAttribute("isAdmin", thanhVienService.checkAdmin(request));
 
 		return "index";
 	}
         
         @GetMapping("/dashboard")
 	public String dashboardPage (Model m, HttpServletRequest request) {
-//		m.addAttribute("isAuthenticated", thanhVienService.checkAuth(request));
+                Boolean isAuthenticated = thanhVienService.checkAuth(request);
+                Boolean isAdmin = thanhVienService.checkAdmin(request);
+
+		m.addAttribute("isAuthenticated", isAuthenticated);
+		if (isAuthenticated == false) {
+			return "redirect:sign-in";
+		}
+                m.addAttribute("isAdmin", isAdmin);
+                if (isAdmin == false) {
+			return "redirect:home";
+		}
 
 		return "dashboard";
 	}

@@ -6,6 +6,7 @@ package com.project3mhpl.repository;
 
 import com.project3mhpl.entity.ThongTinSD;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ThongTinSDRepository extends CrudRepository<ThongTinSD, Integer> {
     List<ThongTinSD> findByThietBi_MaTB(Integer maTB);
+    List<ThongTinSD> findByThanhVienTTSD_MaTV(Integer maTV);
 }

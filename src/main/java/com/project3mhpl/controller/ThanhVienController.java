@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.project3mhpl.dto.ChangePasswordDto;
 import com.project3mhpl.entity.ThanhVien;
+import com.project3mhpl.entity.ThongTinSD;
 import com.project3mhpl.service.ThanhVienService;
+import com.project3mhpl.service.ThongTinSDService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -24,7 +26,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ThanhVienController {
 	@Autowired
 	private ThanhVienService thanhvienService;
-
+        @Autowired
+        private ThongTinSDService thongtinsdService;
 	@GetMapping("/profile")
 	public String getProfile(Model m, HttpServletRequest request) {
 		Boolean isAuthenticated = thanhvienService.checkAuth(request);
@@ -36,7 +39,7 @@ public class ThanhVienController {
 
 		m.addAttribute("isAdmin", thanhvienService.checkAdmin(request));
 		m.addAttribute("data", thanhvienService.getProfile(request));
-
+                m.addAttribute("ttsd", thongtinsdService.getTTSDByIdTV(request));
 		return "profile";
 	}
 

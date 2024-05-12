@@ -116,9 +116,8 @@ public class ThanhVienService {
 			tv.setNganh(row.getCell(3).getStringCellValue());
 			tv.setSdt(row.getCell(4).getStringCellValue());
 			tv.setPassword(row.getCell(5).getStringCellValue());
-			tv.setEmail(row.getCell(5).getStringCellValue());
-
-			System.out.println(tv.toString());
+			tv.setEmail(row.getCell(7).getStringCellValue());
+			tv.setIsAdmin(false);
 
 			thanhVienList.add(tv);
 

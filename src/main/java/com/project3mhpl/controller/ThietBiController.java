@@ -15,10 +15,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project3mhpl.entity.ThietBi;
+import com.project3mhpl.entity.ThongTinSD;
 import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThietBiService;
+import com.project3mhpl.service.ThongTinSDService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Date;
 
 /**
  *
@@ -26,55 +32,75 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 @Controller
 public class ThietBiController {
-	@Autowired
-	private ThietBiService thietBiService;
-	private ThanhVienService thanhVienService;
+    @Autowired
+    private ThietBiService thietBiService;
+    private ThanhVienService thanhVienService;
+    private ThongTinSDService thongTinSDService;
 
-	@GetMapping("/dat-muon-thiet-bi")
-	public String getAll(Model m, HttpServletRequest request) {
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+    @GetMapping("/dat-muon-thiet-bi")
+    public String getAll(Model m, HttpServletRequest request) {
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+                return "redirect:sign-in";
+        }
 
-		Iterable<ThietBi> list = thietBiService.getAll();
-		ArrayList<ThietBi> products = new ArrayList<>();
-		for (ThietBi t : list) {
-			products.add(t);
-		}
+        Iterable<ThietBi> list = thietBiService.getAll();
+        ArrayList<ThietBi> products = new ArrayList<>();
+        for (ThietBi t : list) {
+                products.add(t);
+        }
 
-		m.addAttribute("data", products);
-		return "thiet_bi_all";
-	}
+        m.addAttribute("data", products);
+        return "thiet_bi_all";
+    }
 
-	@RequestMapping(value = "/dat-muon-thiet-bi", method = RequestMethod.POST)
-	public String submitData(@RequestParam("date") String date, Model m, HttpServletRequest request) {
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+    @RequestMapping(value = "/dat-muon-thiet-bi", method = RequestMethod.POST)
+    public String submitData(@RequestParam("date") String date, @RequestParam("idTB") int maTB, Model m, HttpServletRequest request) throws Exception {
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+                return "redirect:sign-in";
+        }
 
-		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-		// ...
-		return "redirect:/";
-	}
+        // Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
+        List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
+        System.out.println(list.get(0).getTgMuon());
+        Calendar calendar = Calendar.getInstance();
+        Date tgDatCho = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
+        System.out.println("Thoi gian dat cho: " + tgDatCho);
 
-	@RequestMapping(value = "/muonthietbi", method = RequestMethod.POST)
-	public String submitData2(@RequestParam("date") String date, Model m, HttpServletRequest request) {
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getTgDatcho() != null) {
+                calendar.setTime(list.get(i).getTgDatcho());
+                calendar.add(Calendar.HOUR_OF_DAY, 1);
+                Date tgDatChoPlus1h = calendar.getTime();
+                if(tgDatCho.compareTo(tgDatChoPlus1h) > 0) {
+                    return "modal";
+                }
+            }else {
+                if(tgDatCho.compareTo(list.get(i).getTgTra()) > 0) {
+                    return "modal";
+                }
+            }
+        }
+        return "redirect:/";
+    }
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
+    @RequestMapping(value = "/muonthietbi", method = RequestMethod.POST)
+    public String submitData2(@RequestParam("date") String date, Model m, HttpServletRequest request) {
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-		// ...
-		return "redirect:/";
-	}
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+            return "redirect:sign-in";
+        }
+
+        // Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
+        // ...
+        return "redirect:/";
+    }
 
 }

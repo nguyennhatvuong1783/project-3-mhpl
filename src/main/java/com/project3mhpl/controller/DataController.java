@@ -4,9 +4,9 @@
  */
 package com.project3mhpl.controller;
 
+import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThongTinSDService;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 import com.project3mhpl.entity.ThongTinSD;
@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.WebUtils;
 
 /**
  *
@@ -28,13 +27,14 @@ import org.springframework.web.util.WebUtils;
 public class DataController {
 	@Autowired
 	private ThongTinSDService thongTinSDService;
+	private ThanhVienService thanhVienService;
 
 	@GetMapping("/checkData")
 	public String checkData(@RequestParam("index") int index, HttpServletRequest request, Model m) {
-		Cookie c = WebUtils.getCookie(request, "auth");
+		Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
-		if (c == null || c.getValue() == null || c.getValue() == "") {
+		m.addAttribute("isAuthenticated", isAuthenticated);
+		if (isAuthenticated == false) {
 			return "redirect:sign-in";
 		}
 

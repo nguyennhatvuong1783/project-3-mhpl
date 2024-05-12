@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.util.WebUtils;
 
 import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.service.ThanhVienService;
@@ -18,8 +17,6 @@ import com.project3mhpl.service.ThanhVienService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.Optional;
 
 /**
  *
@@ -34,10 +31,7 @@ public class AuthenticationController {
 	@GetMapping("/sign-in")
 	public String signIn(Model m, HttpServletRequest request) {
 
-		Cookie c = WebUtils.getCookie(request, "auth");
-
-		if (c != null && c.getValue() != null && c.getValue() != "") {
-			System.out.println(c.getValue());
+		if (thanhVienService.checkAuth(request)) {
 			return "redirect:profile";
 		}
 
@@ -51,9 +45,7 @@ public class AuthenticationController {
 
 	@GetMapping("/log-out")
 	public String logout(HttpServletResponse response) {
-		Cookie cookie = new Cookie("auth", "");
-		cookie.setSecure(true);
-		cookie.setHttpOnly(true);
+		Cookie cookie = thanhVienService.clearAuthSession();
 
 		response.addCookie(cookie);
 
@@ -61,17 +53,12 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(value = "/login", consumes = { "application/x-www-form-urlencoded" })
-	public String login(Model m, ThanhVien loginForm, HttpSession session, HttpServletResponse response) {
+	public String login(Model m, ThanhVien loginForm, HttpServletResponse response) {
 
 		boolean isLoggedIn = thanhVienService.verifyUser(loginForm.getMaTV(), loginForm.getPassword());
 
 		if (isLoggedIn) {
-			Optional<ThanhVien> tv = thanhVienService.getById(loginForm.getMaTV());
-			session.setAttribute("tv", tv);
-
-			Cookie cookie = new Cookie("auth", loginForm.getMaTV().toString());
-			cookie.setSecure(true);
-			cookie.setHttpOnly(true);
+			Cookie cookie = thanhVienService.createAuthSession(loginForm.getMaTV().toString());
 
 			response.addCookie(cookie);
 

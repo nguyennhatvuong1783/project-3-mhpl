@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.util.WebUtils;
 
 import com.project3mhpl.entity.ThietBi;
+import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThietBiService;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -29,13 +28,14 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ThietBiController {
 	@Autowired
 	private ThietBiService thietBiService;
+	private ThanhVienService thanhVienService;
 
 	@GetMapping("/dat-muon-thiet-bi")
 	public String getAll(Model m, HttpServletRequest request) {
-		Cookie c = WebUtils.getCookie(request, "auth");
+		Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
-		if (c == null || c.getValue() == null || c.getValue() == "") {
+		m.addAttribute("isAuthenticated", isAuthenticated);
+		if (isAuthenticated == false) {
 			return "redirect:sign-in";
 		}
 
@@ -51,10 +51,10 @@ public class ThietBiController {
 
 	@RequestMapping(value = "/dat-muon-thiet-bi", method = RequestMethod.POST)
 	public String submitData(@RequestParam("date") String date, Model m, HttpServletRequest request) {
-		Cookie c = WebUtils.getCookie(request, "auth");
+		Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
-		if (c == null || c.getValue() == null || c.getValue() == "") {
+		m.addAttribute("isAuthenticated", isAuthenticated);
+		if (isAuthenticated == false) {
 			return "redirect:sign-in";
 		}
 
@@ -65,10 +65,10 @@ public class ThietBiController {
 
 	@RequestMapping(value = "/muonthietbi", method = RequestMethod.POST)
 	public String submitData2(@RequestParam("date") String date, Model m, HttpServletRequest request) {
-		Cookie c = WebUtils.getCookie(request, "auth");
+		Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
-		if (c == null || c.getValue() == null || c.getValue() == "") {
+		m.addAttribute("isAuthenticated", isAuthenticated);
+		if (isAuthenticated == false) {
 			return "redirect:sign-in";
 		}
 

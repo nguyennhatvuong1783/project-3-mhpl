@@ -1,0 +1,63 @@
+<form class="w-full">
+	<div class="row justify-content-start mt-2 w-full">
+		<div class="form-group mt-2 d-flex justify-content-between">
+			<h2>Danh sách thành viên</h2>
+			<button
+				type="button"
+				class="btn btn-xs btn-primary"
+				data-toggle="modal"
+				data-target="#import-user-modal"
+			>
+				Import excel
+			</button>
+		</div>
+	</div>
+	<div class="container">
+		<table class="table table_bordered">
+			<thead>
+				<tr>
+					<th>Ma thanh vien</th>
+					<th>Ho ten</th>
+					<th>Khoa</th>
+					<th>Nganh</th>
+					<th>Email</th>
+					<th>So dien thoai</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user, loop:${users}">
+					<td th:text="${user?.maTV}"></td>
+					<td th:text="${user?.hoten}"></td>
+					<td th:text="${user?.khoa}"></td>
+					<td th:text="${user?.nganh}"></td>
+					<td th:text="${user?.email}"></td>
+					<td th:text="${user?.sdt}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</form>
+
+<div id="import-user-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form th:action="@{/user/import}" enctype="multipart/form-data" method="POST">
+				<div class="modal-header">
+					<h5 class="modal-title">Import excel</h5>
+				</div>
+				<div class="modal-body">
+					<div class="row justify-content-center">
+						<div class="form-group">
+							<label for="curPass" class="font-weight-bold">File</label>
+							<input type="file" id="file" name="file" class="form-control" required />
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

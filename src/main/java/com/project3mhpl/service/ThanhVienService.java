@@ -10,9 +10,17 @@ import com.project3mhpl.repository.ThanhVienRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
 
 /**
@@ -44,21 +52,21 @@ public class ThanhVienService {
 
 	public Boolean checkAuth(HttpServletRequest request) {
 		Cookie c = WebUtils.getCookie(request, "auth");
-                
+
 		return c != null && c.getValue() != null && c.getValue() != "";
 	}
-        
-        public Boolean checkAdmin(HttpServletRequest request) {
+
+	public Boolean checkAdmin(HttpServletRequest request) {
 		Cookie c = WebUtils.getCookie(request, "auth");
-                
-                Boolean isAmin = false;
-                
-                try {
-                    ThanhVien tv = getProfile(request);
-                    isAmin = tv.getIsAdmin();
-                } catch (Exception e) {
-                    return false;
-                }
+
+		Boolean isAmin = false;
+
+		try {
+			ThanhVien tv = getProfile(request);
+			isAmin = tv.getIsAdmin();
+		} catch (Exception e) {
+			return false;
+		}
 
 		return c != null && c.getValue() != null && c.getValue() != "" && isAmin == true;
 	}
@@ -87,5 +95,36 @@ public class ThanhVienService {
 
 		return authUser.get();
 
+	}
+
+	public void saveListTV(MultipartFile file) throws IOException {
+		List<ThanhVien> thanhVienList = new ArrayList<ThanhVien>();
+
+		XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+
+		XSSFSheet worksheet = workbook.getSheetAt(0);
+
+		for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+
+			XSSFRow row = worksheet.getRow(i);
+
+			ThanhVien tv = new ThanhVien();
+
+			tv.setMaTV(Integer.parseInt(row.getCell(0).getStringCellValue()));
+			tv.setHoten(row.getCell(1).getStringCellValue());
+			tv.setKhoa(row.getCell(2).getStringCellValue());
+			tv.setNganh(row.getCell(3).getStringCellValue());
+			tv.setSdt(row.getCell(4).getStringCellValue());
+			tv.setPassword(row.getCell(5).getStringCellValue());
+			tv.setEmail(row.getCell(7).getStringCellValue());
+			tv.setIsAdmin(false);
+
+			thanhVienList.add(tv);
+
+		}
+
+		workbook.close();
+
+		thanhvienRepository.saveAll(thanhVienList);
 	}
 }

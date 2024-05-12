@@ -15,6 +15,7 @@ import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.entity.ThongTinSD;
 import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThongTinSDService;
+import com.project3mhpl.service.XuLyService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,6 +29,8 @@ public class ThanhVienController {
 	private ThanhVienService thanhvienService;
         @Autowired
         private ThongTinSDService thongtinsdService;
+        @Autowired
+        private XuLyService xulyService;
 	@GetMapping("/profile")
 	public String getProfile(Model m, HttpServletRequest request) {
 		Boolean isAuthenticated = thanhvienService.checkAuth(request);
@@ -40,6 +43,7 @@ public class ThanhVienController {
 		m.addAttribute("isAdmin", thanhvienService.checkAdmin(request));
 		m.addAttribute("data", thanhvienService.getProfile(request));
                 m.addAttribute("ttsd", thongtinsdService.getTTSDByIdTV(request));
+                m.addAttribute("ttxl", xulyService.getTTXLByIdTV(request));
 		return "profile";
 	}
 

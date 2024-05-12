@@ -177,5 +177,36 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </table>
             </div>
         </form>
+        <form>
+            <div class="row justify-content-start mt-2" style="margin-left: 30px">
+                <div class="col-md-6">
+                    <div class="form-group mt-2">
+                        <h4>Thông tin sử dụng</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <table class="table table_bordered">
+                    <thead>
+                        <tr>
+                            <th>Mã xử lý</th>
+                            <th>Hình thức xử lý</th>
+                            <th>Tiền phạt</th>
+                            <th>Ngày xử lý</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item, loop:${ttxl}">
+                            <td th:text="${item.maXL}">
+                            </td>
+                            <td th:text="${item.hinhThucXL}">
+                            </td>
+                            <td th:text="${item.soTien}"></td>
+                            <td th:text="${item.ngayXL}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
     </body>
 </html>

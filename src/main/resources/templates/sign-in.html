@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Login</title>
+		<!-- Bootstrap CSS -->
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		/>
+		<style>
+			.container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh; /* chiều cao của container bằng chiều cao của viewport */
+			}
+			.login-form {
+				width: 300px; /* Độ rộng của form */
+				padding: 20px; /* Khoảng cách giữa các phần tử bên trong form */
+				border: 1px solid #ddd; /* Viền của form */
+				border-radius: 5px; /* Bo góc của form */
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng cho form */
+			}
+			.error-message {
+				color: red;
+				font-size: 14px;
+				margin-top: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="login-form">
+				<h2 class="mb-4">Login</h2>
+				<form th:action="@{/login}" method="POST">
+					<div class="form-group">
+						<label for="username">Mã thành viên:</label>
+						<input
+							type="text"
+							id="maTV"
+							name="maTV"
+							class="form-control"
+							th:value="${maTV}"
+							required
+						/>
+					</div>
+					<div class="form-group">
+						<label for="password">Mật khẩu:</label>
+						<input
+							type="password"
+							id="password"
+							name="password"
+							class="form-control"
+							th:value="${password}"
+							required
+						/>
+					</div>
+					<button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+					<!-- Thêm phần hiển thị thông báo lỗi -->
+					<div th:if="${errorMessage}" class="error-message">
+						<span th:text="${errorMessage}"></span>
+					</div>
+				</form>
+				<p class="mt-3"><a href="/forgot-password">Quên mật khẩu?</a></p>
+				<p>Chưa có tài khoản? <a href="/sign-up">Đăng ký</a></p>
+			</div>
+		</div>
+
+		<!-- Bootstrap JS (optional) -->
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	</body>
+</html>

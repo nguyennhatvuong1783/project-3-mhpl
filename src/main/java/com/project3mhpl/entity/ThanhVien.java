@@ -16,44 +16,46 @@ import lombok.Data;
 @Entity
 @Table(name = "thanhvien")
 public class ThanhVien {
-    @Id
-    @Column(name = "matv")
-    private Integer maTV;
-    
-    @Column(name = "password")
-    private String password;
-    
-    @Column(name = "hoten")
-    private String hoten;
-    
-    @Column(name = "khoa")
-    private String khoa;
-    
-    @Column(name = "nganh")
-    private String nganh;
-    
-    @Column(name = "email")
-    private String email;
-    
-    @Column(name = "sdt")
-    private String sdt; // Thay đổi kiểu dữ liệu thành String
-    
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "thanhVienTTSD")
-    private List<ThongTinSD> thongTinSD;
-    
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "thanhVienXL")
-    private List<XuLy> xuLy;
+	@Id
+	@Column(name = "matv")
+	private Integer maTV;
 
-    public ThanhVien() {
-    }
+	@Column(name = "password")
+	private String password;
 
-    public ThanhVien(Integer maTV, String password, String hoten, String khoa, String nganh, String email, String sdt) { // Thay đổi kiểu dữ liệu của tham số sdt
-        this.maTV = maTV;
-        this.password = password;
-        this.hoten = hoten;
-        this.khoa = khoa;
-        this.nganh = nganh;
-        this.email = email;
-        this.sdt = sdt;
-    }
+	@Column(name = "ho_ten")
+	private String hoten;
+
+	@Column(name = "khoa")
+	private String khoa;
+
+	@Column(name = "nganh")
+	private String nganh;
+
+	@Column(name = "email")
+	private String email;
+
+	// Thay đổi kiểu dữ liệu thành String
+	@Column(name = "sdt")
+	private String sdt;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "thanhVienTTSD")
+	private List<ThongTinSD> thongTinSD;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "thanhVienXL")
+	private List<XuLy> xuLy;
+
+	public ThanhVien() {
+	}
+
+	// Thay đổi kiểu dữ liệu của tham số
+	public ThanhVien(Integer maTV, String password, String hoten, String khoa, String nganh, String email, String sdt) {
+		this.maTV = maTV;
+		this.password = password;
+		this.hoten = hoten;
+		this.khoa = khoa;
+		this.nganh = nganh;
+		this.email = email;
+		this.sdt = sdt;
+	}
 }

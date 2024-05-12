@@ -4,22 +4,19 @@
  */
 package com.project3mhpl.controller;
 
-import com.project3mhpl.entity.ThanhVien;
-import com.project3mhpl.entity.ThongTinSD;
-import com.project3mhpl.service.ThanhVienService;
-import com.project3mhpl.service.ThongTinSDService;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.web.util.WebUtils;
+
+import com.project3mhpl.entity.ThanhVien;
+import com.project3mhpl.service.ThanhVienService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -27,15 +24,25 @@ import org.slf4j.LoggerFactory;
  */
 @Controller
 public class ThanhVienController {
-    @Autowired
-    private ThanhVienService thanhvienService;
- 
-   private static final Logger logger = LoggerFactory.getLogger(ThanhVienController.class);
-    @GetMapping("/profile")
-public String getProfile(HttpSession session, Model m) {
-    Optional<ThanhVien> test= thanhvienService.getById(1120010007);
-        ThanhVien tv =test.get();
-        m.addAttribute("data", tv);
-        return "profile";    
-}
+	@Autowired
+	private ThanhVienService thanhvienService;
+
+	@GetMapping("/profile")
+	public String getProfile(Model m, HttpServletRequest request) {
+		Cookie c = WebUtils.getCookie(request, "auth");
+
+		m.addAttribute("isAuthenticated", c != null && c.getValue() != null && c.getValue() != "");
+		if (c == null || c.getValue() == null) {
+			return "redirect:/sign-in";
+		}
+
+		Optional<ThanhVien> authUser = thanhvienService.getById(Integer.parseInt(c.getValue()));
+
+		ThanhVien tv = authUser.get();
+
+		m.addAttribute("data", tv);
+		m.addAttribute("isAuthenticated", tv != null);
+
+		return "profile";
+	}
 }

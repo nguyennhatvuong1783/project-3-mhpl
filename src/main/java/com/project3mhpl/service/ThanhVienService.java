@@ -32,4 +32,8 @@ public class ThanhVienService {
 
 		return thanhVien.isPresent() && thanhVien.get().getPassword().equals(password);
 	}
+
+	public Boolean saveTV(ThanhVien tv) {
+		return thanhvienRepository.save(tv) != null;
+	}
 }

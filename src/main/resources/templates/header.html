@@ -1,26 +1,37 @@
 <header>
-    <div class="container">
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-            <a href="/home" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-                <img class="bi me-2" width="32" height="32" role="img" aria-label="Bootstrap" src="https://png.pngtree.com/png-clipart/20190516/original/pngtree-users-vector-icon-png-image_3723374.jpg" alt="Logo">
-            </a>
+	<div class="container">
+		<header
+			class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom"
+		>
+			<a
+				href="/home"
+				class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
+			>
+				<img
+					class="bi me-2"
+					width="32"
+					height="32"
+					role="img"
+					aria-label="Bootstrap"
+					src="https://png.pngtree.com/png-clipart/20190516/original/pngtree-users-vector-icon-png-image_3723374.jpg"
+					alt="Logo"
+				/>
+			</a>
 
-            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/home" class="nav-link px-2 link-secondary">Trang chủ</a></li>
-                <li><a href="/profile" class="nav-link px-2 link-dark">Thông tin cá nhân</a></li>
-                <li><a href="/dat-muon-thiet-bi" class="nav-link px-2 link-dark">Đặt mượn thiết bị</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">Thiết bị đã mượn</a></li>
-            </ul>
+			<ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+				<li><a href="/home" class="nav-link px-2 link-secondary">Trang chủ</a></li>
+				<li><a href="/profile" class="nav-link px-2 link-dark">Thông tin cá nhân</a></li>
+				<li><a href="/dat-muon-thiet-bi" class="nav-link px-2 link-dark">Đặt mượn thiết bị</a></li>
+				<li><a href="#" class="nav-link px-2 link-dark">Thiết bị đã mượn</a></li>
+			</ul>
 
-            <div class="col-md-3 text-end">
-                <button type="button" class="btn btn-outline-primary me-2" onclick="redirectToLoginPage()">Đăng nhập</button>
-                <button type="button" class="btn btn-primary">Đăng ký</button>
-            </div>
-        </header>
-    </div>
-    <script>
-        function redirectToLoginPage() {
-            window.location.href = "/login";
-        }
-    </script>
+			<div class="col-md-3 text-end" th:if="${isAuthenticated == false}">
+				<a href="/sign-in" type="button" class="btn btn-outline-primary me-2"> Đăng nhập </a>
+				<a href="/sign-up" type="button" class="btn btn-primary">Đăng ký</a>
+			</div>
+			<div class="col-md-3 text-end" th:if="${isAuthenticated == true}">
+				<a href="/log-out" type="button" class="btn btn-danger">Đăng xuất</a>
+			</div>
+		</header>
+	</div>
 </header>

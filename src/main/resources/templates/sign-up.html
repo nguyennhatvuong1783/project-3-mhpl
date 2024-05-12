@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Đăng ký tài khoản</title>
+		<!-- Bootstrap CSS -->
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		/>
+	</head>
+	<body>
+		<div class="container mt-5">
+			<h2 class="mb-4">Đăng ký tài khoản</h2>
+			<form th:action="@{/sign-up}" th:object="${thanhvien}" method="POST">
+				<div class="alert alert-danger" th:if="${errorMessage}">
+					<p th:text="${errorMessage}"></p>
+				</div>
+				`
+				<div class="form-group">
+					<label for="maTV">Mã thành viên:</label>
+					<input type="text" class="form-control" id="maTV" th:field="*{maTV}" required />
+				</div>
+				<div class="form-group">
+					<label for="hoten">Họ và tên:</label>
+					<input type="text" class="form-control" id="hoten" th:field="*{hoten}" required />
+				</div>
+				<div class="form-group">
+					<label for="khoa">Khoa:</label>
+					<input type="text" class="form-control" id="khoa" th:field="*{khoa}" required />
+				</div>
+				<div class="form-group">
+					<label for="nganh">Ngành:</label>
+					<input type="text" class="form-control" id="nganh" th:field="*{nganh}" required />
+				</div>
+				<div class="form-group">
+					<label for="sdt">Số điện thoại:</label>
+					<input type="text" class="form-control" id="sdt" th:field="*{sdt}" required />
+				</div>
+				<div class="form-group">
+					<label for="email">Email:</label>
+					<input type="email" class="form-control" id="email" th:field="*{email}" required />
+				</div>
+				<div class="form-group">
+					<label for="password">Mật khẩu:</label>
+					<input
+						type="password"
+						class="form-control"
+						id="password"
+						th:field="*{password}"
+						required
+					/>
+				</div>
+				<button type="submit" class="btn btn-primary">Đăng ký</button>
+				<a href="/login" class="btn btn-secondary">Đăng nhập</a>
+			</form>
+		</div>
+
+		<!-- Bootstrap JS (optional) -->
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	</body>
+</html>

@@ -2,14 +2,15 @@
 	<div class="row justify-content-start mt-2 w-full">
 		<div class="form-group mt-2 d-flex justify-content-between">
 			<h2>Danh sách thành viên</h2>
-			<button
+			<a
 				type="button"
 				class="btn btn-xs btn-primary"
 				data-toggle="modal"
 				data-target="#import-user-modal"
+				style="height: 2.5rem"
 			>
 				Import excel
-			</button>
+			</a>
 		</div>
 	</div>
 	<div class="container">
@@ -22,6 +23,7 @@
 					<th>Nganh</th>
 					<th>Email</th>
 					<th>So dien thoai</th>
+					<th>Thao tac</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,6 +34,14 @@
 					<td th:text="${user?.nganh}"></td>
 					<td th:text="${user?.email}"></td>
 					<td th:text="${user?.sdt}"></td>
+					<td>
+						<a type="button" class="btn btn-sm btn-warning" data-toggle="modal">
+							<i class="bi bi-pencil"></i>
+						</a>
+						<a type="button" class="btn btn-sm btn-danger" data-toggle="modal">
+							<i class="bi bi-trash"></i>
+						</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>

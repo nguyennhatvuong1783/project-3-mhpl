@@ -251,7 +251,7 @@
 		<div class="modal-content">
 			<form th:action="@{/user/add}" th:object="${newUser}" method="POST">
 				<div class="modal-header">
-					<h4 class="modal-title">Chỉnh sửa thông tin người dùng</h4>
+					<h4 class="modal-title">Thêm thành viên</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row justify-content-center">
@@ -288,7 +288,7 @@
 								id="email"
 								class="form-control"
 								placeholder="Email"
-								th:field="*{khoa}"
+								th:field="*{email}"
 							/>
 						</div>
 					</div>

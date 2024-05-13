@@ -134,8 +134,14 @@ public class ThanhVienService {
 		thanhvienRepository.saveAll(thanhVienList);
 	}
 
-	public void deleteTV(Integer id) {
+	public Boolean deleteTV(Integer id) {
+		if (id == null) {
+			return false;
+		}
+
 		thanhvienRepository.deleteById(id);
+
+		return true;
 	}
 
 	public void updateTV(Integer id, ThanhVien tv) {

@@ -36,6 +36,7 @@ public class UserController {
 
 		m.addAttribute("isAdmin", thanhvienService.checkAdmin(request));
 		m.addAttribute("users", thanhvienService.getAll());
+		m.addAttribute("newUser", new ThanhVien());
 
 		return "manage-users";
 	}
@@ -60,6 +61,16 @@ public class UserController {
 	public String updateUser(@PathVariable Integer maTV, ThanhVien tv) {
 
 		thanhvienService.updateTV(maTV, tv);
+
+		return "redirect:/dashboard#manage-users";
+	}
+
+	@PostMapping("/user/add")
+	public String addUser(ThanhVien tv) {
+
+		tv.setMaTV(Integer.parseInt(tv.getMaTV().toString()));
+
+		thanhvienService.saveTV(tv);
 
 		return "redirect:/dashboard#manage-users";
 	}

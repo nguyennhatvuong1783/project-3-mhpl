@@ -46,6 +46,12 @@ public class ThanhVienService {
 		return thanhVien.isPresent() && thanhVien.get().getPassword().equals(password);
 	}
 
+	public Boolean isAdminUser(Integer maTV) {
+		Optional<ThanhVien> thanhVien = thanhvienRepository.findById(maTV);
+
+		return thanhVien.isPresent() && thanhVien.get().getIsAdmin() == true;
+	}
+
 	public Boolean saveTV(ThanhVien tv) {
 		return thanhvienRepository.save(tv) != null;
 	}

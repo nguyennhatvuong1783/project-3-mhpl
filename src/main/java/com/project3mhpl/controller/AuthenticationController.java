@@ -32,6 +32,11 @@ public class AuthenticationController {
 	public String signIn(Model m, HttpServletRequest request) {
 
 		if (thanhVienService.checkAuth(request)) {
+
+			if (thanhVienService.checkAdmin(request)) {
+				return "redirect:dashboard";
+			}
+
 			return "redirect:profile";
 		}
 
@@ -62,7 +67,11 @@ public class AuthenticationController {
 
 			response.addCookie(cookie);
 
-			return "redirect:/profile";
+			if (thanhVienService.isAdminUser(loginForm.getMaTV())) {
+				return "redirect:dashboard";
+			}
+
+			return "redirect:profile";
 		}
 
 		m.addAttribute("errorMessage", "Sai mật khẩu hoặc tài khoản không tồn tại");
@@ -80,7 +89,6 @@ public class AuthenticationController {
 
 	@PostMapping("/sign-up")
 	public String processRegistration(@ModelAttribute("ThanhVien") ThanhVien tv) {
-		System.out.println(tv.toString());
 
 		tv.setMaTV(Integer.parseInt(tv.getMaTV().toString()));
 

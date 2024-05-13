@@ -2,15 +2,26 @@
 	<div class="row justify-content-start mt-2 w-full">
 		<div class="form-group mt-2 d-flex justify-content-between">
 			<h2>Danh sách thành viên</h2>
-			<a
-				type="button"
-				class="btn btn-xs btn-primary"
-				data-toggle="modal"
-				data-target="#import-user-modal"
-				style="height: 2.5rem"
-			>
-				Import excel
-			</a>
+			<div>
+				<a
+					type="button"
+					class="btn btn-xs btn-primary"
+					data-toggle="modal"
+					data-target="#add-user-modal"
+					style="height: 2.5rem"
+				>
+					Them thanh vien
+				</a>
+				<a
+					type="button"
+					class="btn btn-xs btn-primary"
+					data-toggle="modal"
+					data-target="#import-user-modal"
+					style="height: 2.5rem"
+				>
+					Import excel
+				</a>
+			</div>
 		</div>
 	</div>
 	<div class="container">
@@ -226,6 +237,115 @@
 						</div>
 					</div>
 				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="add-user-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<form th:action="@{/user/add}" th:object="${newUser}" method="POST">
+				<div class="modal-header">
+					<h4 class="modal-title">Chỉnh sửa thông tin người dùng</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row justify-content-center">
+						<div class="form-group">
+							<label for="MaTV" class="font-weight-bold">Mã thành viên:</label>
+							<input
+								type="number"
+								id="maTV"
+								class="form-control"
+								placeholder="Mã thành viên"
+								th:field="*{maTV}"
+							/>
+						</div>
+					</div>
+
+					<div class="row justify-content-center">
+						<div class="form-group mt-2">
+							<label for="hoten" class="font-weight-bold">Họ tên:</label>
+							<input
+								type="text"
+								id="hoten"
+								class="form-control"
+								placeholder="Họ tên"
+								th:field="*{hoten}"
+							/>
+						</div>
+					</div>
+
+					<div class="row justify-content-center">
+						<div class="form-group mt-2">
+							<label for="email" class="font-weight-bold">Email:</label>
+							<input
+								type="email"
+								id="email"
+								class="form-control"
+								placeholder="Email"
+								th:field="*{khoa}"
+							/>
+						</div>
+					</div>
+
+					<div class="row justify-content-center">
+						<div class="form-group mt-2">
+							<label for="sdt" class="font-weight-bold">Số điện thoại:</label>
+							<input
+								type="text"
+								id="sdt"
+								class="form-control"
+								placeholder="Số điện thoại"
+								th:field="*{sdt}"
+							/>
+						</div>
+					</div>
+
+					<div class="row justify-content-center">
+						<div class="form-group mt-2">
+							<label for="password" class="font-weight-bold">Mật khẩu:</label>
+							<input
+								type="password"
+								id="password"
+								class="form-control"
+								placeholder="Mật khẩu"
+								th:field="*{password}"
+							/>
+						</div>
+					</div>
+
+					<div class="row justify-content-center">
+						<div class="form-group mt-2">
+							<label for="khoa" class="font-weight-bold">Khoa:</label>
+							<input
+								type="text"
+								id="khoa"
+								class="form-control"
+								placeholder="Khoa"
+								th:field="*{khoa}"
+							/>
+						</div>
+					</div>
+
+					<div class="row justify-content-center">
+						<div class="form-group mt-2">
+							<label for="nganh" class="font-weight-bold">Ngành:</label>
+							<input
+								type="text"
+								id="nganh"
+								class="form-control"
+								placeholder="Ngành"
+								th:field="*{nganh}"
+							/>
+						</div>
+					</div>
+				</div>
+
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-primary">Submit</button>
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

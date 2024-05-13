@@ -117,6 +117,7 @@ public class AuthenticationController {
 			return "sign-up";
 		}
 		tv.setMaTV(Integer.parseInt(tv.getMaTV().toString()));
+		tv.setIsAdmin(false);
 		thanhVienService.saveTV(tv);
 
 		return "sign-in";

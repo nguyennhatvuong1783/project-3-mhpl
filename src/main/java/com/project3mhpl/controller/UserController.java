@@ -70,6 +70,7 @@ public class UserController {
 
 		tv.setMaTV((int) tv.getMaTV());
 
+		tv.setIsAdmin(false);
 		thanhvienService.saveTV(tv);
 
 		return "redirect:/dashboard#manage-users";

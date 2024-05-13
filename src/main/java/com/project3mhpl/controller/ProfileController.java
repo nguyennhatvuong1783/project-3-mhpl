@@ -137,6 +137,16 @@ public class ProfileController {
                     m.addAttribute("data", member);
                     return "profile";
                 }
+                if(!form.getEmail().matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")){
+                    m.addAttribute("errorMessage", "Email không đúng định dạng");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }
                 if(form.getSdt().isEmpty()){
                     m.addAttribute("errorMessage", "Vui lòng nhập số điện thoại!");
                     member.setHoten(form.getHoten());

@@ -14,5 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ThanhVienRepository extends CrudRepository<ThanhVien, Integer> {
-    ThanhVien findBySdt(String sdt);
+	ThanhVien findBySdt(String sdt);
+
+	ThanhVien findByEmail(String email);
 }

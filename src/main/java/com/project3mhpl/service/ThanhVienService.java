@@ -19,6 +19,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
@@ -31,6 +33,9 @@ import org.springframework.web.util.WebUtils;
 public class ThanhVienService {
 	@Autowired
 	private ThanhVienRepository thanhvienRepository;
+
+	@Autowired
+	private JavaMailSender mailSender;
 
 	public Iterable<ThanhVien> getAll() {
 		return thanhvienRepository.findAll();
@@ -169,9 +174,26 @@ public class ThanhVienService {
 
 		thanhvienRepository.save(thanhVien);
 	}
-        
-        public ThanhVien findBySdt(String sdt){
-            return thanhvienRepository.findBySdt(sdt);
-        }
-        
+
+	public ThanhVien findBySdt(String sdt) {
+		return thanhvienRepository.findBySdt(sdt);
+	}
+
+	public Boolean resetPassword(String email) {
+		ThanhVien tv = thanhvienRepository.findByEmail(email);
+
+		if (tv == null) {
+			return false;
+		}
+
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(email);
+		message.setSubject("Reset password");
+		message.setText("Your password is: " + tv.getPassword());
+
+		mailSender.send(message);
+
+		return true;
+	}
+
 }

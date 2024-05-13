@@ -14,11 +14,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
@@ -31,6 +34,22 @@ import org.springframework.web.util.WebUtils;
 public class ThanhVienService {
 	@Autowired
 	private ThanhVienRepository thanhvienRepository;
+
+	@Autowired
+	private JavaMailSender mailSender;
+
+	private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+	public static String generateRandomString(int length) {
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder(length);
+		for (int i = 0; i < length; i++) {
+			int randomIndex = random.nextInt(CHARACTERS.length());
+			char randomChar = CHARACTERS.charAt(randomIndex);
+			sb.append(randomChar);
+		}
+		return sb.toString();
+	}
 
 	public Iterable<ThanhVien> getAll() {
 		return thanhvienRepository.findAll();
@@ -169,9 +188,32 @@ public class ThanhVienService {
 
 		thanhvienRepository.save(thanhVien);
 	}
-        
-        public ThanhVien findBySdt(String sdt){
-            return thanhvienRepository.findBySdt(sdt);
-        }
-        
+
+	public ThanhVien findBySdt(String sdt) {
+		return thanhvienRepository.findBySdt(sdt);
+	}
+
+	public Boolean resetPassword(String email) {
+		ThanhVien tv = thanhvienRepository.findByEmail(email);
+
+		if (tv == null) {
+			return false;
+		}
+
+		String password = generateRandomString(6);
+
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(email);
+		message.setSubject("Reset password");
+		message.setText("Your password is: " + password);
+
+		mailSender.send(message);
+
+		tv.setPassword(password);
+
+		thanhvienRepository.save(tv);
+
+		return true;
+	}
+
 }

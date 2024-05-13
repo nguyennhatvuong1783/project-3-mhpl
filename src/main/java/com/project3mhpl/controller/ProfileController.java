@@ -167,6 +167,18 @@ public class ProfileController {
                     m.addAttribute("data", member);
                     return "profile";
                 }
+                ThanhVien existingMember = thanhvienService.findBySdt(form.getSdt());
+                if (!member.getSdt().equals(form.getSdt())){
+                if(existingMember != null){
+                    m.addAttribute("errorMessage", "Số điện thoại đã được đăng kí!");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }}
                 if(form.getKhoa().isEmpty()||form.getNganh().isEmpty()){
                     m.addAttribute("errorMessage", "Vui lòng nhập đủ khoa và ngành!");
                     member.setHoten(form.getHoten());

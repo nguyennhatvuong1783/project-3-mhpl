@@ -169,5 +169,9 @@ public class ThanhVienService {
 
 		thanhvienRepository.save(thanhVien);
 	}
-
+        
+        public ThanhVien findBySdt(String sdt){
+            return thanhvienRepository.findBySdt(sdt);
+        }
+        
 }

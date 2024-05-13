@@ -125,9 +125,42 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
    var datetimepicker3 = document.querySelector("#datetimepicker-3");
    var dateInput3 = datetimepicker3.querySelector("#date-input-3"); 
     var clearButton3 = datetimepicker3.querySelector("[data-clear]");
+    var now = new Date();
+    var currentHour = now.getHours();
+    var currentMinute = now.getMinutes();
+    var currentYear = now.getFullYear();
+    var currentMonth = now.getMonth() + 1;
+    var currentDay = now.getDate();
+    function updateMinTime(instance) {
+            var now = new Date(); // Lấy ngày và giờ hiện tại
+            var currentYear = now.getFullYear();
+            var currentMonth = now.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần +1
+            var currentDay = now.getDate();
+            var currentHour = now.getHours();
+            var currentMinute = now.getMinutes();
+
+            // Nếu ngày chọn là hôm nay
+            if (instance.latestSelectedDateObj.getDate() === currentDay &&
+                instance.latestSelectedDateObj.getMonth() + 1 === currentMonth &&
+                instance.latestSelectedDateObj.getFullYear() === currentYear) {
+                var newHour = currentHour + 1; // Giờ mới là giờ hiện tại + 1
+                instance.set("minTime", newHour + ":" + currentMinute); // Áp dụng min time là giờ hiện tại + 1
+            } else {
+                instance.set("minTime", null); // Hủy min time
+            }
+        }
    var flatpickr3 = flatpickr(datetimepicker3, {
     enableTime: true,
     dateFormat: "Y-m-d H:i",
+    defaultDate: "today", 
+    minDate: "today",       
+    onReady: function(selectedDates, dateStr, instance) {
+               updateMinTime(instance);
+            },    
+    onChange: function(selectedDates, dateStr, instance) {
+                updateMinTime(instance); // Cập nhật min time khi thay đổi ngày
+            },
+
     // Các tùy chọn khác của Flatpickr
    });
     flatpickr3.config.onChange.push(function (selectedDates, dateStr) {
@@ -143,6 +176,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
    var flatpickr1 = flatpickr(datetimepicker1, {
     enableTime: true,
     dateFormat: "Y-m-d H:i",
+    defaultDate: "today",
+    minDate: "today",
+    onReady: function(selectedDates, dateStr, instance) {
+              updateMinTime(instance);
+            },    
+    onChange: function(selectedDates, dateStr, instance) {
+                updateMinTime(instance); // 
+            },
+        
     // Các tùy chọn khác của Flatpickr
    });
     flatpickr1.config.onChange.push(function (selectedDates, dateStr) {

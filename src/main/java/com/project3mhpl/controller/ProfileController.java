@@ -105,11 +105,80 @@ public class ProfileController {
 		if (isAuthenticated == false) {
 			return "redirect:sign-in";
 		}
-
+                
 		ThanhVien member = thanhvienService.getProfile(request);
-
+                if(form.getHoten().isEmpty()){
+                    m.addAttribute("errorMessage", "Vui lòng nhập tên!");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }
+                if(!form.getHoten().matches("^[a-zA-Z\\s]+$")){
+                    m.addAttribute("errorMessage", "Tên sai định dạng!");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }
+                if(form.getEmail().isEmpty()){
+                    m.addAttribute("errorMessage", "Vui lòng nhập email!");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }
+                if(form.getSdt().isEmpty()){
+                    m.addAttribute("errorMessage", "Vui lòng nhập số điện thoại!");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }
+                if(!form.getSdt().matches("0\\d{9}")){
+                    m.addAttribute("errorMessage", "Số điện thoại sai định dạng!");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }
+                if(form.getKhoa().isEmpty()||form.getNganh().isEmpty()){
+                    m.addAttribute("errorMessage", "Vui lòng nhập đủ khoa và ngành!");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }
+                if(!form.getKhoa().matches("^[a-zA-Z\\s]+$")||!form.getNganh().matches("^[a-zA-Z\\s]+$")){
+                    m.addAttribute("errorMessage", "Khoa và ngành sai định dạng!");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }
 		m.addAttribute("data", member);
-
+                member.setHoten(form.getHoten());
 		member.setEmail(form.getEmail());
 		member.setKhoa(form.getKhoa());
 		member.setNganh(form.getNganh());

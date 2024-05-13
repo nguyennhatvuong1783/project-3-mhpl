@@ -225,13 +225,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 var modal = new bootstrap.Modal(modalEl);
                 modal.show();
               }
-              else{
+              else if (text.trim() === 'alert') {
                 Swal.fire({
                     position: "top",
                     icon: "warning",
                     title: "Thiết bị đang được mượn",
                     showConfirmButton: false,
                     timer: 2000
+                });
+              } else {
+                  Swal.fire({
+                    position: "top",
+                    icon: "warning",
+                    title: "Thiết bị đang trong thời gian đặt chỗ",
+                    showConfirmButton: false,
+                    timer: 2500
                 });
               }
             });
@@ -294,15 +302,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             showConfirmButton: false,
                             timer: 1500
                         });
+                    } else if ((text.trim()).includes("thời gian từ ")) {                        
+                        Swal.fire({
+                            position: "top",
+                            icon: "warning",
+                            title: "Thiết bị đã được đặt chỗ trong thời gian này",
+                            text: "Vui lòng chọn thời gian đặt chỗ ngoài " + text.trim(),
+                        });
                     } else {
-                        document.getElementById('btn_close_datcho').click();
-                        
                         Swal.fire({
                             position: "top",
                             icon: "warning",
                             title: "Thiết bị đang được mượn",
-                            showConfirmButton: false,
-                            timer: 2000
+                            text: "Vui lòng đặt chỗ sau " + text.trim()
                         });
                     }
                 });
@@ -345,15 +357,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             showConfirmButton: false,
                             timer: 1500
                         });
-                    } else {
-                        document.getElementById('btn_close_muon').click();
-                        
+                    } else {                        
                         Swal.fire({
                             position: "top",
                             icon: "warning",
-                            title: "Thiết bị đang được mượn",
-                            showConfirmButton: false,
-                            timer: 2000
+                            title: "Thiết bị đang được đặt chỗ",
+                            text: "Vui lòng trả trước " + text.trim(),
                         });
                     }
                 });

@@ -50,8 +50,8 @@ public class DataController {
 				calendar.setTime(list.get(i).getTgDatcho());
 				calendar.add(Calendar.HOUR_OF_DAY, 1);
 				Date tgDatChoPlus1h = calendar.getTime();
-				if (currentDate.compareTo(tgDatChoPlus1h) <= 0) {
-					return "alert";
+				if (currentDate.compareTo(tgDatChoPlus1h) <= 0 && currentDate.compareTo(list.get(i).getTgDatcho()) >= 0) {
+					return "alertDatcho";
 				}
 			} else {
 				if (currentDate.compareTo(list.get(i).getTgTra()) <= 0) {

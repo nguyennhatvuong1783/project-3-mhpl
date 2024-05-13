@@ -88,12 +88,21 @@ public class ThietBiController {
 				calendar.setTime(list.get(i).getTgDatcho());
 				calendar.add(Calendar.HOUR_OF_DAY, 1);
 				Date tgDatChoPlus1h = calendar.getTime();
-				if (tgDatCho.compareTo(tgDatChoPlus1h) <= 0) {
-					return "alert";
+                                
+                                calendar.setTime(list.get(i).getTgDatcho());
+				calendar.add(Calendar.HOUR_OF_DAY, -1);
+				Date tgDatChoMinus1h = calendar.getTime();
+                                
+				if (tgDatCho.compareTo(tgDatChoPlus1h) <= 0 && tgDatCho.compareTo(tgDatChoMinus1h) >= 0) {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd-MM-yyyy");
+				    String tgDatChoMinus1hStr = sdf.format(tgDatChoMinus1h);
+                                    String tgDatChoPlus1hStr = sdf.format(tgDatChoPlus1h);
+                                    
+                                    return "thời gian từ " + tgDatChoMinus1hStr + " đến " + tgDatChoPlus1hStr;
 				}
 			} else {
 				if (tgDatCho.compareTo(list.get(i).getTgTra()) <= 0) {
-					return "alert";
+					return list.get(i).getTgTra() + "";
 				}
 			}
 		}
@@ -126,8 +135,19 @@ public class ThietBiController {
 		}
 
 		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-                Date tgTra = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
+                List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
+		Calendar calendar = Calendar.getInstance();
+		Date tgTra = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
                 Date tgMuon = new Date();
+
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getTgDatcho() != null) {
+				if (list.get(i).getTgDatcho().compareTo(tgMuon) >= 0 && list.get(i).getTgDatcho().compareTo(tgTra) <= 0) {
+					return list.get(i).getTgDatcho() + "";
+				}
+			}
+		}
+                
                 Iterable<ThongTinSD> ThongTinSDIterable = thongTinSDService.getAll();
                 int maTT = 0;
                 for (ThongTinSD thongTinSD : ThongTinSDIterable) {

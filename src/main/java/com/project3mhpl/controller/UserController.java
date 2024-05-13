@@ -68,7 +68,7 @@ public class UserController {
 	@PostMapping("/user/add")
 	public String addUser(ThanhVien tv) {
 
-		tv.setMaTV(Integer.parseInt(tv.getMaTV().toString()));
+		tv.setMaTV((int) tv.getMaTV());
 
 		thanhvienService.saveTV(tv);
 

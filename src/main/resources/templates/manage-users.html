@@ -233,7 +233,14 @@
 					<div class="row justify-content-center">
 						<div class="form-group">
 							<label for="curPass" class="font-weight-bold">File</label>
-							<input type="file" id="file" name="file" class="form-control" required />
+							<input
+								type="file"
+								id="file"
+								name="file"
+								class="form-control"
+								required
+								accept=".xlsx, .xls, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+							/>
 						</div>
 					</div>
 				</div>
@@ -251,7 +258,7 @@
 		<div class="modal-content">
 			<form th:action="@{/user/add}" th:object="${newUser}" method="POST">
 				<div class="modal-header">
-					<h4 class="modal-title">Chỉnh sửa thông tin người dùng</h4>
+					<h4 class="modal-title">Thêm thành viên</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row justify-content-center">
@@ -288,7 +295,7 @@
 								id="email"
 								class="form-control"
 								placeholder="Email"
-								th:field="*{khoa}"
+								th:field="*{email}"
 							/>
 						</div>
 					</div>

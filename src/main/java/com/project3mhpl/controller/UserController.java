@@ -56,12 +56,12 @@ public class UserController {
 		return "redirect:/dashboard#manage-users";
 	}
 
-	// @PostMapping("/user/update/${maTV}")
-	// public String updateUser(@PathVariable("maTV") Integer maTV, ThanhVien tv) {
+	@PostMapping("/user/update/{maTV}")
+	public String updateUser(@PathVariable Integer maTV, ThanhVien tv) {
 
-	// hanhvienService.updateTV(maTV, tv);
+		thanhvienService.updateTV(maTV, tv);
 
-	// eturn "redirect:/dashboard#manage-users";
-	// }
+		return "redirect:/dashboard#manage-users";
+	}
 
 }

@@ -135,13 +135,25 @@ public class ThanhVienService {
 	public void updateTV(Integer id, ThanhVien tv) {
 		ThanhVien thanhVien = thanhvienRepository.findById(id).get();
 
-		thanhVien.setEmail(tv.getEmail());
-		thanhVien.setHoten(tv.getHoten());
-		thanhVien.setIsAdmin(tv.getIsAdmin());
-		thanhVien.setKhoa(tv.getKhoa());
-		thanhVien.setNganh(tv.getNganh());
-		thanhVien.setPassword(tv.getPassword());
-		thanhVien.setSdt(tv.getSdt());
+		if (tv.getEmail() != null) {
+			thanhVien.setEmail(tv.getEmail());
+		}
+
+		if (tv.getHoten() != null) {
+			thanhVien.setHoten(tv.getHoten());
+		}
+
+		if (tv.getKhoa() != null) {
+			thanhVien.setKhoa(tv.getKhoa());
+		}
+
+		if (tv.getNganh() != null) {
+			thanhVien.setNganh(tv.getNganh());
+		}
+
+		if (tv.getSdt() != null) {
+			thanhVien.setSdt(tv.getSdt());
+		}
 
 		thanhvienRepository.save(thanhVien);
 	}

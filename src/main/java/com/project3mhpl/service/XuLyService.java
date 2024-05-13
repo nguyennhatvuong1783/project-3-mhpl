@@ -1,38 +1,44 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.project3mhpl.service;
 
+import com.project3mhpl.entity.XuLy;
+import com.project3mhpl.repository.XuLyRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
-import com.project3mhpl.entity.XuLy;
-import com.project3mhpl.repository.XuLyRepository;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-
 /**
  *
- * @author ADMIN
+ * @author Nguyen Minh Tri
  */
 @Service
 public class XuLyService {
 	@Autowired
-	private XuLyRepository xulyRepository;
+	private XuLyRepository xuLyRepository;
 
 	public Iterable<XuLy> getAll() {
-		return xulyRepository.findAll();
+		return xuLyRepository.findAll();
+	}
+
+	public XuLy getOne(Integer maXL) {
+		try {
+			return xuLyRepository.findByMaXL(maXL).get(0);
+		} catch (Exception e) {
+			System.out.println("Error findByXuLy_MaTB " + e.getMessage());
+			return null;
+		}
+	}
+
+	public Boolean saveXl(XuLy xl) {
+		return xuLyRepository.save(xl) != null;
 	}
 
 	@SuppressWarnings("null")
 	public List<XuLy> getTTXLByIdTV(HttpServletRequest request) {
 		Cookie c = WebUtils.getCookie(request, "auth");
-		List<XuLy> authUser = xulyRepository.findByThanhVienXL_MaTV(Integer.parseInt(c.getValue()));
+		List<XuLy> authUser = xuLyRepository.findByThanhVienXL_MaTV(Integer.parseInt(c.getValue()));
 		return authUser;
 	}
 }

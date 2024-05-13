@@ -14,7 +14,7 @@ import org.springframework.web.util.WebUtils;
  * @author Nguyen Minh Tri
  */
 @Service
-public class XulyService {
+public class XuLyService {
 	@Autowired
 	private XuLyRepository xuLyRepository;
 

@@ -117,7 +117,7 @@ public class ProfileController {
                     m.addAttribute("data", member);
                     return "profile";
                 }
-                if(!form.getHoten().matches("^[a-zA-Z\\s]+$")){
+                if(!form.getHoten().matches("^[\\p{L}\\s]+$")){
                     m.addAttribute("errorMessage", "Tên sai định dạng!");
                     member.setHoten(form.getHoten());
                     member.setEmail(form.getEmail());

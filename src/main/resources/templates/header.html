@@ -26,17 +26,17 @@
 				</li>
 				<li><a href="/dat-muon-thiet-bi" class="nav-link px-2 link-dark">Đặt mượn thiết bị</a></li>
 				<li><a href="/xu-ly" class="nav-link px-2 link-dark">Xử lý vi phạm</a></li>
-                                <div th:if="${isAdmin == true}">
-                                    <li><a href="/dashboard" class="nav-link px-2 link-dark">Dashboard</a></li>
-                                </div>
+				<li th:if="${isAdmin == true}">
+					<a href="/dashboard" class="nav-link px-2 link-dark">Dashboard</a>
+				</li>
+				<li th:if="${isAuthenticated == true}" class="nav-link p-0 link-dark">
+					<a href="/log-out" type="button" class="btn btn-danger">Đăng xuất</a>
+				</li>
 			</ul>
 
 			<div class="col-md-3 text-end" th:if="${isAuthenticated == false}">
 				<a href="/sign-in" type="button" class="btn btn-outline-primary me-2"> Đăng nhập </a>
 				<a href="/sign-up" type="button" class="btn btn-primary">Đăng ký</a>
-			</div>
-			<div class="col-md-3 text-end" th:if="${isAuthenticated == true}">
-				<a href="/log-out" type="button" class="btn btn-danger">Đăng xuất</a>
 			</div>
 		</header>
 	</div>

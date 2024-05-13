@@ -5,6 +5,7 @@
 package com.project3mhpl.repository;
 
 import com.project3mhpl.entity.XuLy;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,5 @@ import java.util.List;
 @Repository
 public interface XuLyRepository extends CrudRepository<XuLy, Integer> {
     List<XuLy> findByMaXL(Integer maXL);
+List<XuLy> findByThanhVienXL_MaTV(Integer maTV);
 }

@@ -15,5 +15,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ThongTinSDRepository extends CrudRepository<ThongTinSD, Integer> {
-    List<ThongTinSD> findByThietBi_MaTB(Integer maTB);
+	List<ThongTinSD> findByThietBi_MaTB(Integer maTB);
+
+	List<ThongTinSD> findByThanhVienTTSD_MaTV(Integer maTV);
 }

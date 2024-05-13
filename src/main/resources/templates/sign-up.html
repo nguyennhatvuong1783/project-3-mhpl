@@ -11,15 +11,15 @@
 		/>
 	</head>
 	<body>
-                <div th:replace="header :: header"></div>
-            
+		<div th:replace="header :: header"></div>
+
 		<div class="container mt-5">
 			<h2 class="mb-4">Đăng ký tài khoản</h2>
 			<form th:action="@{/sign-up}" th:object="${thanhvien}" method="POST">
 				<div class="alert alert-danger" th:if="${errorMessage}">
 					<p th:text="${errorMessage}"></p>
 				</div>
-				
+
 				<div class="form-group">
 					<label for="maTV">Mã thành viên:</label>
 					<input type="text" class="form-control" id="maTV" th:field="*{maTV}" required />
@@ -54,14 +54,14 @@
 						required
 					/>
 				</div>
-                                <br>
+				<br />
 				<button type="submit" class="btn btn-primary">Đăng ký</button>
-				<a href="/login" class="btn btn-secondary">Đăng nhập</a>
+				<a href="/sign-in" class="btn btn-secondary">Đăng nhập</a>
 			</form>
 		</div>
-                <br>
-                <br>
-                <br>
+		<br />
+		<br />
+		<br />
 
 		<!-- Bootstrap JS (optional) -->
 		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

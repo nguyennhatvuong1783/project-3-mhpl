@@ -17,6 +17,12 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -60,7 +66,17 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-                
+    <dependency>
+    	<groupId>org.apache.poi</groupId>
+    	<artifactId>poi</artifactId>
+    	<version>3.12</version>
+		</dependency>
+		<!-- excel 2007 over-->
+		<dependency>
+    	<groupId>org.apache.poi</groupId>
+    	<artifactId>poi-ooxml</artifactId>
+    	<version>3.12</version>
+		</dependency>
               
 	</dependencies>
 

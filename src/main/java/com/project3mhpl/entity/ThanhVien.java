@@ -38,8 +38,8 @@ public class ThanhVien {
 	// Thay đổi kiểu dữ liệu thành String
 	@Column(name = "sdt")
 	private String sdt;
-        
-        @Column(name = "is_admin")
+
+	@Column(name = "is_admin")
 	private Boolean isAdmin;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "thanhVienTTSD")
@@ -52,7 +52,8 @@ public class ThanhVien {
 	}
 
 	// Thay đổi kiểu dữ liệu của tham số
-	public ThanhVien(Integer maTV, String password, String hoten, String khoa, String nganh, String email, String sdt, Boolean isAdmin) {
+	public ThanhVien(Integer maTV, String password, String hoten, String khoa, String nganh, String email, String sdt,
+			Boolean isAdmin) {
 		this.maTV = maTV;
 		this.password = password;
 		this.hoten = hoten;
@@ -60,6 +61,6 @@ public class ThanhVien {
 		this.nganh = nganh;
 		this.email = email;
 		this.sdt = sdt;
-                this.isAdmin = isAdmin;
+		this.isAdmin = isAdmin;
 	}
 }

@@ -12,7 +12,6 @@
         <table class="table table_bordered">
             <thead>
                 <tr class="text-center">
-                    <th>STT</th>
                     <th>Mã thiết bị</th>
                     <th>Tên thiết bị</th>
                     <th>Mô tả</th>
@@ -20,8 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="item, loop : ${data}" class="text-center">
-                    <td th:text="${loop.index+1}"></td>
+                <tr th:each="item, loop : ${data}" class="text-center" th:if="${item.status == null}">
                     <td th:text="${item.maTB}"></td>
                     <td th:text="${item.tenTB}"></td>
                     <td th:text="${item.moTaTB}"></td>
@@ -76,7 +74,7 @@
        </div>
    </div>
 
-   <!--        Model sửa thiết bị-->
+   <!--Model sửa thiết bị-->
     <div id="myModalUpdate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="manageDevicesModalLabel" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
@@ -112,17 +110,118 @@
            </div>
        </div>
    </div>
+   
+<!--    Form xác nhận xóa-->
+   <div id="myModalDelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="manageDevicesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form class="form_delete">
+                    <div class="modal-header justify-content-center">
+                        <h3 class="modal-title">Xóa thiết bị</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-center text-center">
+                            <p>Xác nhận xóa thiết bị</p>
+                            <div class="form-group">
+                                <input
+                                    type="text"
+                                    id="idTB"
+                                    name="idTB"
+                                    class="form-control"
+                                    hidden
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger flex-fill">Submit</button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary flex-fill"
+                            data-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
    <script th:inline="javascript">
         var tables = document.querySelector('.table');
         var buttons = tables.querySelectorAll("#btn_sua");
+        var buttons2 = tables.querySelectorAll("#btn_xoa");
+        
+        //xóa
+        buttons2.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
+                maTB = tableRow.cells[0].textContent;
+
+                document.querySelector(".form_delete #idTB").value = maTB;
+                
+                var modalEl = document.getElementById('myModalDelete');
+                var modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            });
+        });
+        
+        document.querySelector(".form_delete").addEventListener('submit', function(event) {
+            event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+
+            fetch('/xoa-thiet-bi', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'idTB': document.querySelector(".form_delete #idTB").value,
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    response.text().then(text => {
+                        if (text.trim() === 'modal') {
+                            Swal.fire({
+                                position: "top",
+                                icon: "success",
+                                title: "Xóa thiết bị thành công",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function() {
+                                window.location.reload(); // Tải lại trang sau khi cảnh báo biến mất
+                            });
+                        } else {
+                            document.getElementById('btn_close_add').click();
+                            Swal.fire({
+                                position: "top",
+                                icon: "warning",
+                                title: "Xóa thiết bị thất bại",
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        position: "top",
+                        icon: "error",
+                        title: "Có lỗi xảy ra",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                }
+            });
+
+        });
 
         //sửa
         buttons.forEach(function(button) {
             button.addEventListener('click', function() {
                 var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
-                maTB = tableRow.cells[1].textContent;
-                tenTB = tableRow.cells[2].textContent;
-                moTaTB = tableRow.cells[3].textContent;
+                maTB = tableRow.cells[0].textContent;
+                tenTB = tableRow.cells[1].textContent;
+                moTaTB = tableRow.cells[2].textContent;
 
                 document.querySelector(".form_update #matb").value = maTB;
                 document.querySelector(".form_update #tentb").value = tenTB;
@@ -187,6 +286,7 @@
 
         });
         
+        //thêm
         function ShowAddDevice() {                
             var modalEl = document.getElementById('myModalAdd');
             var modal = new bootstrap.Modal(modalEl);
@@ -223,11 +323,10 @@
                                 window.location.reload(); // Tải lại trang sau khi cảnh báo biến mất
                             });
                         } else {
-                            document.getElementById('btn_close_add').click();
                             Swal.fire({
                                 position: "top",
                                 icon: "warning",
-                                title: "Thêm thiết bị thất bại",
+                                title: "Mã thiết bị đã tồn tại",
                                 showConfirmButton: false,
                                 timer: 2000
                             });

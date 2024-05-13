@@ -26,16 +26,20 @@ public class ThietBi {
     @Column(name = "motatb")
     private String moTaTB;
     
+    @Column(name = "status")
+    private Integer status;
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "thietBi")
     private List<ThongTinSD> thongTinSD;
 
     public ThietBi() {
     }
 
-    public ThietBi(Integer maTB, String tenTB, String moTaTB) {
+    public ThietBi(Integer maTB, String tenTB, String moTaTB, Integer status) {
         this.maTB = maTB;
         this.tenTB = tenTB;
         this.moTaTB = moTaTB;
+        this.status = status;
     }
 
 }

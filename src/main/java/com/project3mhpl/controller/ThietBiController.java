@@ -176,7 +176,34 @@ public class ThietBiController {
 		}
 
 		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-                ThietBi thietBi = new ThietBi(maTB, tenTB, moTaTB);
+                Iterable<ThietBi> list = thietBiService.getAll();
+                for (ThietBi thietBi : list) {
+                    if (maTB == thietBi.getMaTB()) {
+                        return "alert";
+                    }
+                }
+                
+                ThietBi thietBi = new ThietBi(maTB, tenTB, moTaTB, null);
+                
+                thietBiService.store(thietBi);
+                
+		return "modal";
+	}
+        
+        @RequestMapping(value = "/xoa-thiet-bi", method = RequestMethod.DELETE)
+        @ResponseBody
+	public String xoaThietBi(@RequestParam("idTB") int maTB, Model m, HttpServletRequest request) {
+		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+
+		m.addAttribute("isAuthenticated", isAuthenticated);
+		if (isAuthenticated == false) {
+			return "redirect:sign-in";
+		}
+
+		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
+                Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
+                ThietBi thietBi = thietBiOptional.get();
+                thietBi.setStatus(0);
                 
                 thietBiService.store(thietBi);
                 

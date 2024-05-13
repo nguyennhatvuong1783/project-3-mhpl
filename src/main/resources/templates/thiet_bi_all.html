@@ -27,7 +27,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             <table class="table table_bordered">
                 <thead>
                     <tr class="text-center">
-                        <th>STT</th>
                         <th>Mã thiết bị</th>
                         <th>Tên thiết bị</th>
                         <th>Mô tả</th>
@@ -35,8 +34,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="item, loop : ${data}" class="text-center">
-                        <td th:text="${loop.index+1}"></td>
+                    <tr th:each="item, loop : ${data}" class="text-center" th:if="${item.status == null}">
                         <td th:text="${item.maTB}"></td>
                         <td th:text="${item.tenTB}"></td>
                         <td th:text="${item.moTaTB}"></td>
@@ -211,7 +209,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
       var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
       var index = 0;
       if(tableRow){
-         index = tableRow.cells[1].textContent;
+         index = tableRow.cells[0].textContent;
       }
       
       document.querySelector('#idTBMuon').value = index;
@@ -263,7 +261,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
         var idTB = 0;
         if (tableRow) {
-            idTB = tableRow.cells[1].textContent;
+            idTB = tableRow.cells[0].textContent;
         }
         
         document.querySelector('#idTB').value = idTB;

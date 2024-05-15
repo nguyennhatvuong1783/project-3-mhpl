@@ -3,7 +3,7 @@ package com.project3mhpl.controller;
 import com.project3mhpl.dto.XuLyDuyetDTO;
 import com.project3mhpl.entity.XuLy;
 import com.project3mhpl.service.ThanhVienService;
-import com.project3mhpl.service.XuLyService;
+import com.project3mhpl.service.XulyService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 @Controller
 public class XulyController {
 	@Autowired
-	private XuLyService xulyService;
+	private XulyService xulyService;
 
 	@Autowired
 	private ThanhVienService thanhVienService;

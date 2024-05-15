@@ -18,7 +18,7 @@ import com.project3mhpl.dto.ChangePasswordDto;
 import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThongTinSDService;
-import com.project3mhpl.service.XuLyService;
+import com.project3mhpl.service.XulyService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,7 +29,7 @@ public class ProfileController {
 	@Autowired
 	private ThongTinSDService thongtinsdService;
 	@Autowired
-	private XuLyService xulyService;
+	private XulyService xulyService;
 
 	@GetMapping("/profile")
 	public String getProfile(Model m, HttpServletRequest request) {

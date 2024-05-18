@@ -8,6 +8,9 @@
     <button class="btn btn-info ms-3" id="btn_them" onclick="ShowAddDevice()">
                             <i class="bi bi-plus-square"></i> Thêm thiết bị
                         </button>
+    <button class="btn btn-info ms-3" id="btn_them" onclick="ShowImportExcelDevices()">
+                            <i class="fa-regular fa-file-excel"></i> Nhập excel
+                        </button>
     <div class="container">
         <table class="table table_bordered">
             <thead>
@@ -147,10 +150,47 @@
             </div>
         </div>
     </div>
+
+    <div id="import-devices-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form enctype="multipart/form-data" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Nhập excel</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="form-group">
+                                <input
+                                    type="file"
+                                    id="file"
+                                    name="file"
+                                    class="form-control"
+                                    required
+                                    accept=".xlsx, .xls, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+	</div>
+    </div>
    <script th:inline="javascript">
         var tables = document.querySelector('.table');
         var buttons = tables.querySelectorAll("#btn_sua");
         var buttons2 = tables.querySelectorAll("#btn_xoa");
+        
+        //Nhập excel
+        function ShowImportExcelDevices () {
+            var modalEl = document.getElementById('import-devices-modal');
+            var modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        }
         
         //xóa
         buttons2.forEach(function(button) {

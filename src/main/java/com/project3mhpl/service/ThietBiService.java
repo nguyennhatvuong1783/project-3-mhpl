@@ -6,9 +6,16 @@ package com.project3mhpl.service;
 
 import com.project3mhpl.entity.ThietBi;
 import com.project3mhpl.repository.ThietBiRepository;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -43,5 +50,29 @@ public class ThietBiService {
         } catch (Exception ex) {
             return false;
         }
+    }
+    
+    public void importListTB(MultipartFile file) throws IOException{
+        List<ThietBi> thietbiList = new ArrayList<ThietBi>();
+        
+        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+
+	XSSFSheet worksheet = workbook.getSheetAt(0);
+        
+        for(int i=1; i< worksheet.getPhysicalNumberOfRows(); i++){
+            XSSFRow row = worksheet.getRow(i);
+            
+            ThietBi tb = new ThietBi();
+            
+            tb.setMaTB(Integer.parseInt(row.getCell(0).getStringCellValue()));
+            tb.setTenTB(row.getCell(1).getStringCellValue());
+            tb.setMoTaTB(row.getCell(2).getStringCellValue());
+            
+            thietbiList.add(tb);
+        }
+        
+        workbook.close();
+        
+        thietbiRepository.saveAll(thietbiList);
     }
 }

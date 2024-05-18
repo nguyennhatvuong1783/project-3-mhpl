@@ -22,13 +22,16 @@ import com.project3mhpl.service.ThietBiService;
 import com.project3mhpl.service.ThongTinSDService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Date;
 import java.util.Optional;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -231,5 +234,13 @@ public class ThietBiController {
 
             m.addAttribute("data", products);
             return "manage-devices";
+	}
+        
+        @PostMapping("/import")
+        public String importUsers(@RequestParam("file") MultipartFile file) throws IOException {
+
+		thietBiService.importListTB(file);
+
+		return "redirect:/dashboard#manage-devices";
 	}
 }

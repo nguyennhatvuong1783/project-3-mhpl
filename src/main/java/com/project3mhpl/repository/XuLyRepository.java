@@ -9,14 +9,13 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  *
  * @author Nguyen Nhat Vuong
  */
 @Repository
 public interface XuLyRepository extends CrudRepository<XuLy, Integer> {
-    List<XuLy> findByMaXL(Integer maXL);
-List<XuLy> findByThanhVienXL_MaTV(Integer maTV);
+	List<XuLy> findByMaXL(Integer maXL);
+
+	List<XuLy> findByThanhVienXL_MaTV(Integer maTV);
 }

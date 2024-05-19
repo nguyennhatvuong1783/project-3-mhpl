@@ -32,14 +32,14 @@ public class ThongTinSDService {
 	public List<ThongTinSD> getTTSDByIdTB(Integer idTB) {
 		return thongTinSDRepository.findByThietBi_MaTB(idTB);
 	}
-        
-        public boolean store(ThongTinSD thongTinSD) {
-            try {
-                thongTinSDRepository.save(thongTinSD);
-                return true;
-            } catch (Exception ex) {
-                return false;
-            }
+
+	public boolean store(ThongTinSD thongTinSD) {
+		try {
+			thongTinSDRepository.save(thongTinSD);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 
 	// public List<ThongTinSD> getTTSDByIdTV(Integer idTV) {

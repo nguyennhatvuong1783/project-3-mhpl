@@ -23,56 +23,56 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 public class ThietBiService {
-    @Autowired
-    private ThietBiRepository thietbiRepository;
-    
-    public Iterable<ThietBi> getAll(){
-        return thietbiRepository.findAll();
-    }
-    
-    public Optional<ThietBi> getByID(Integer maTB){
-        return thietbiRepository.findById(maTB);
-    }
-    
-    public boolean store(ThietBi thietBi) {
-        try {
-            thietbiRepository.save(thietBi);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-    
-    public boolean destroy(Integer maTB) {
-        try {
-            thietbiRepository.deleteById(maTB);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-    
-    public void importListTB(MultipartFile file) throws IOException{
-        List<ThietBi> thietbiList = new ArrayList<ThietBi>();
-        
-        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+	@Autowired
+	private ThietBiRepository thietbiRepository;
 
-	XSSFSheet worksheet = workbook.getSheetAt(0);
-        
-        for(int i=1; i< worksheet.getPhysicalNumberOfRows(); i++){
-            XSSFRow row = worksheet.getRow(i);
-            
-            ThietBi tb = new ThietBi();
-            
-            tb.setMaTB(Integer.parseInt(row.getCell(0).getStringCellValue()));
-            tb.setTenTB(row.getCell(1).getStringCellValue());
-            tb.setMoTaTB(row.getCell(2).getStringCellValue());
-            
-            thietbiList.add(tb);
-        }
-        
-        workbook.close();
-        
-        thietbiRepository.saveAll(thietbiList);
-    }
+	public Iterable<ThietBi> getAll() {
+		return thietbiRepository.findAll();
+	}
+
+	public Optional<ThietBi> getByID(Integer maTB) {
+		return thietbiRepository.findById(maTB);
+	}
+
+	public boolean store(ThietBi thietBi) {
+		try {
+			thietbiRepository.save(thietBi);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	public boolean destroy(Integer maTB) {
+		try {
+			thietbiRepository.deleteById(maTB);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	public void importListTB(MultipartFile file) throws IOException {
+		List<ThietBi> thietbiList = new ArrayList<ThietBi>();
+
+		XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+
+		XSSFSheet worksheet = workbook.getSheetAt(0);
+
+		for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+			XSSFRow row = worksheet.getRow(i);
+
+			ThietBi tb = new ThietBi();
+
+			tb.setMaTB(Integer.parseInt(row.getCell(0).getStringCellValue()));
+			tb.setTenTB(row.getCell(1).getStringCellValue());
+			tb.setMoTaTB(row.getCell(2).getStringCellValue());
+
+			thietbiList.add(tb);
+		}
+
+		workbook.close();
+
+		thietbiRepository.saveAll(thietbiList);
+	}
 }

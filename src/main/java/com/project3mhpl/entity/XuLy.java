@@ -16,35 +16,36 @@ import lombok.Data;
 @Entity
 @Table(name = "xuly")
 public class XuLy {
-    @Id
-    @Column(name = "maxl")
-    private Integer maXL;
-    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "matv", nullable = false)
-    private ThanhVien thanhVienXL;
-    
-    @Column(name = "hinhthucxl")
-    private String hinhThucXL;
-    
-    @Column(name = "sotien", length = 100, columnDefinition = "INT")
-    private Long soTien;
-    
-    @Column(name = "ngayxl")
-    private Date ngayXL;
-    
-    @Column(name = "trangthaixl", length = 2, columnDefinition = "INT")
-    private Boolean trangThaiXL;
-    
-    public XuLy() {
-    }
+	@Id
+	@Column(name = "maxl")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer maXL;
 
-    public XuLy(Integer maXL, ThanhVien thanhVienXL, String hinhThucXL, Long soTien, Date ngayXL, Boolean trangThaiXL) {
-        this.maXL = maXL;
-        this.thanhVienXL = thanhVienXL;
-        this.hinhThucXL = hinhThucXL;
-        this.soTien = soTien;
-        this.ngayXL = ngayXL;
-        this.trangThaiXL = trangThaiXL;
-    }
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "matv", nullable = false)
+	private ThanhVien thanhVienXL;
+
+	@Column(name = "hinhthucxl")
+	private String hinhThucXL;
+
+	@Column(name = "sotien", length = 100, columnDefinition = "INT")
+	private Long soTien;
+
+	@Column(name = "ngayxl", nullable = true, columnDefinition = "DATE")
+	private Date ngayXL;
+
+	@Column(name = "trangthaixl", length = 2, columnDefinition = "INT")
+	private Boolean trangThaiXL;
+
+	public XuLy() {
+	}
+
+	public XuLy(Integer maXL, ThanhVien thanhVienXL, String hinhThucXL, Long soTien, Date ngayXL, Boolean trangThaiXL) {
+		this.maXL = maXL;
+		this.thanhVienXL = thanhVienXL;
+		this.hinhThucXL = hinhThucXL;
+		this.soTien = soTien;
+		this.ngayXL = ngayXL;
+		this.trangThaiXL = trangThaiXL;
+	}
 }

@@ -1,408 +1,432 @@
 <body>
-    <div class="container py-2">
-        <form class="d-flex" id="searchForm">
-         <input class="form-control me-2" id="searchInput" type="text" placeholder="Search"/>
-         <button class="btn btn-primary" id="searchButton" type="submit" onclick="searchDevice()">Search</button>
-        </form>
-    </div>
-    <button class="btn btn-info ms-3" id="btn_them" onclick="ShowAddDevice()">
-                            <i class="bi bi-plus-square"></i> Thêm thiết bị
-                        </button>
-    <button class="btn btn-info ms-3" id="btn_them" onclick="ShowImportExcelDevices()">
-                            <i class="fa-regular fa-file-excel"></i> Nhập excel
-                        </button>
-    <div class="container">
-        <table class="table table_bordered">
-            <thead>
-                <tr class="text-center">
-                    <th>Mã thiết bị</th>
-                    <th>Tên thiết bị</th>
-                    <th>Mô tả</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item, loop : ${data}" class="text-center" th:if="${item.status == null}">
-                    <td th:text="${item.maTB}"></td>
-                    <td th:text="${item.tenTB}"></td>
-                    <td th:text="${item.moTaTB}"></td>
-                    <td>
-                        <button class="btn btn-primary" id="btn_sua">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-danger" id="btn_xoa">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-<!--Model thêm thiết bị-->
-    <div id="myModalAdd" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-        <div class="modal-content">
-        <form class="form_add">
-                  <div class="modal-header">
-                     <h5 class="modal-title">Thêm thiết bị</h5>
-                  </div>
-                  <div class="modal-body">          
-                     <div class="form-group">
-                       <label for="matb">Mã thiết bị:</label>
-                       <div class="input-group">
-                        <input type="text" class="form-control" id="matb" name="matb" th:value="${data[data.size()-1].getMaTB + 1}" readonly/>
-                       </div>     
-                     </div>
-                     <div class="form-group">
-                       <label for="tentb">Tên thiết bị:</label>
-                       <div class="input-group">
-                        <input type="text" class="form-control" id="tentb" name="tentb"/>
-                       </div>     
-                     </div>
-                     <div class="form-group">
-                       <label for="motatb">Mô tả:</label>
-                       <div class="input-group">
-                        <input type="text" class="form-control" id="motatb" name="motatb"/>
-                       </div>     
-                     </div>
-                  </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal" id="btn_close_add">Close</button>
-            </div>
-        </form>
-           </div>
-       </div>
-   </div>
-
-   <!--Model sửa thiết bị-->
-    <div id="myModalUpdate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="manageDevicesModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content">
-        <form class="form_update">
-                  <div class="modal-header">
-                     <h5 class="modal-title">Sửa thiết bị</h5>
-                  </div>
-                  <div class="modal-body">          
-                     <div class="form-group">
-                       <label for="matb">Mã thiết bị:</label>
-                       <div class="input-group">
-                       <input type="text" class="form-control" id="matb" name="matb" readonly/>
-                       </div>     
-                     </div>
-                     <div class="form-group">
-                       <label for="tentb">Tên thiết bị:</label>
-                       <div class="input-group">
-                        <input type="text" class="form-control" id="tentb" name="tentb"/>
-                       </div>     
-                     </div>
-                     <div class="form-group">
-                       <label for="motatb">Mô tả:</label>
-                       <div class="input-group">
-                        <input type="text" class="form-control" id="motatb" name="motatb"/>
-                       </div>     
-                     </div>
-                  </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </form>
-           </div>
-       </div>
-   </div>
-   
-<!--    Form xác nhận xóa-->
-   <div id="myModalDelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="manageDevicesModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <form class="form_delete">
-                    <div class="modal-header justify-content-center">
-                        <h3 class="modal-title">Xóa thiết bị</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row justify-content-center text-center">
-                            <p>Xác nhận xóa thiết bị</p>
-                            <div class="form-group">
-                                <input
-                                    type="text"
-                                    id="idTB"
-                                    name="idTB"
-                                    class="form-control"
-                                    hidden
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger flex-fill">Submit</button>
-                        <button
-                            type="button"
-                            class="btn btn-secondary flex-fill"
-                            data-dismiss="modal"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="import-devices-modal" class="modal fade" role="dialog">
-	<div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form th:action="@{/import}" enctype="multipart/form-data" method="POST">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Nhập excel</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row justify-content-center">
-                            <div class="form-group">
-                                <input
-                                    type="file"
-                                    id="file"
-                                    name="file"
-                                    class="form-control"
-                                    required
-                                    accept=".xlsx, .xls, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
-            </div>
+	<div class="mt-2 d-flex justify-content-between container">
+		<h2>Danh sách thiết bị</h2>
+		<div>
+			<button
+				class="btn btn-xs btn-info"
+				style="height: 2.5rem"
+				id="btn_them"
+				onclick="ShowAddDevice()"
+			>
+				<i class="bi bi-plus-square"></i> Thêm thiết bị
+			</button>
+			<button
+				style="height: 2.5rem"
+				class="btn btn-xs btn-info"
+				id="btn_them"
+				onclick="ShowImportExcelDevices()"
+			>
+				<i class="fa-regular fa-file-excel"></i> Nhập excel
+			</button>
+		</div>
 	</div>
-    </div>
-   <script th:inline="javascript">
-        var tables = document.querySelector('.table');
-        var buttons = tables.querySelectorAll("#btn_sua");
-        var buttons2 = tables.querySelectorAll("#btn_xoa");
-        
-        //Nhập excel
-        function ShowImportExcelDevices () {
-            var modalEl = document.getElementById('import-devices-modal');
-            var modal = new bootstrap.Modal(modalEl);
-            modal.show();
-        }
-        
-        //xóa
-        buttons2.forEach(function(button) {
-            button.addEventListener('click', function() {
-                var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
-                maTB = tableRow.cells[0].textContent;
+	<div class="container py-2">
+		<form class="d-flex" id="searchForm">
+			<input class="form-control me-2" id="searchInput" type="text" placeholder="Search" />
+			<button class="btn btn-primary" id="searchButton" type="submit" onclick="searchDevice()">
+				Search
+			</button>
+		</form>
+	</div>
+	<div class="container">
+		<table class="table table_bordered">
+			<thead>
+				<tr class="text-center">
+					<th>Mã thiết bị</th>
+					<th>Tên thiết bị</th>
+					<th>Mô tả</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item, loop : ${data}" class="text-center" th:if="${item.status == null}">
+					<td th:text="${item.maTB}"></td>
+					<td th:text="${item.tenTB}"></td>
+					<td th:text="${item.moTaTB}"></td>
+					<td>
+						<button class="btn btn-sm btn-warning" id="btn_sua">
+							<i class="bi bi-pencil"></i>
+						</button>
+						<button class="btn btn-sm btn-danger" id="btn_xoa">
+							<i class="bi bi-trash"></i>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
-                document.querySelector(".form_delete #idTB").value = maTB;
-                
-                var modalEl = document.getElementById('myModalDelete');
-                var modal = new bootstrap.Modal(modalEl);
-                modal.show();
-            });
-        });
-        
-        document.querySelector(".form_delete").addEventListener('submit', function(event) {
-            event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+	<!--Model thêm thiết bị-->
+	<div id="myModalAdd" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form class="form_add">
+					<div class="modal-header">
+						<h5 class="modal-title">Thêm thiết bị</h5>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="matb">Mã thiết bị:</label>
+							<div class="input-group">
+								<input
+									type="text"
+									class="form-control"
+									id="matb"
+									name="matb"
+									th:value="${data[data.size()-1].getMaTB + 1}"
+									readonly
+								/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="tentb">Tên thiết bị:</label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="tentb" name="tentb" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="motatb">Mô tả:</label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="motatb" name="motatb" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" id="btn_close_add">
+							Close
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
-            fetch('/xoa-thiet-bi', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    'idTB': document.querySelector(".form_delete #idTB").value,
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    response.text().then(text => {
-                        if (text.trim() === 'modal') {
-                            Swal.fire({
-                                position: "top",
-                                icon: "success",
-                                title: "Xóa thiết bị thành công",
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function() {
-                                window.location.reload(); // Tải lại trang sau khi cảnh báo biến mất
-                            });
-                        } else {
-                            document.getElementById('btn_close_add').click();
-                            Swal.fire({
-                                position: "top",
-                                icon: "warning",
-                                title: "Xóa thiết bị thất bại",
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        position: "top",
-                        icon: "error",
-                        title: "Có lỗi xảy ra",
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                }
-            });
+	<!--Model sửa thiết bị-->
+	<div
+		id="myModalUpdate"
+		class="modal fade"
+		tabindex="-1"
+		role="dialog"
+		aria-labelledby="manageDevicesModalLabel"
+		aria-hidden="true"
+	>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form class="form_update">
+					<div class="modal-header">
+						<h5 class="modal-title">Sửa thiết bị</h5>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="matb">Mã thiết bị:</label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="matb" name="matb" readonly />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="tentb">Tên thiết bị:</label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="tentb" name="tentb" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="motatb">Mô tả:</label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="motatb" name="motatb" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
-        });
+	<!--    Form xác nhận xóa-->
+	<div
+		id="myModalDelete"
+		class="modal fade"
+		tabindex="-1"
+		role="dialog"
+		aria-labelledby="manageDevicesModalLabel"
+		aria-hidden="true"
+	>
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<form class="form_delete">
+					<div class="modal-header justify-content-center">
+						<h3 class="modal-title">Xóa thiết bị</h3>
+					</div>
+					<div class="modal-body">
+						<div class="row justify-content-center text-center">
+							<p>Xác nhận xóa thiết bị</p>
+							<div class="form-group">
+								<input type="text" id="idTB" name="idTB" class="form-control" hidden />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-danger flex-fill">Submit</button>
+						<button type="button" class="btn btn-secondary flex-fill" data-dismiss="modal">
+							Close
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
-        //sửa
-        buttons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
-                maTB = tableRow.cells[0].textContent;
-                tenTB = tableRow.cells[1].textContent;
-                moTaTB = tableRow.cells[2].textContent;
+	<div id="import-devices-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<form th:action="@{/import}" enctype="multipart/form-data" method="POST">
+					<div class="modal-header">
+						<h5 class="modal-title">Nhập excel</h5>
+					</div>
+					<div class="modal-body">
+						<div class="row justify-content-center">
+							<div class="form-group">
+								<input
+									type="file"
+									id="file"
+									name="file"
+									class="form-control"
+									required
+									accept=".xlsx, .xls, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+								/>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script th:inline="javascript">
+		var tables = document.querySelector('.table');
+		var buttons = tables.querySelectorAll('#btn_sua');
+		var buttons2 = tables.querySelectorAll('#btn_xoa');
 
-                document.querySelector(".form_update #matb").value = maTB;
-                document.querySelector(".form_update #tentb").value = tenTB;
-                document.querySelector(".form_update #motatb").value = moTaTB;
-                
-                var modalEl = document.getElementById('myModalUpdate');
-                var modal = new bootstrap.Modal(modalEl);
-                modal.show();
-            });
-        });
-        
-        document.querySelector(".form_update").addEventListener('submit', function(event) {
-            event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+		//Nhập excel
+		function ShowImportExcelDevices() {
+			var modalEl = document.getElementById('import-devices-modal');
+			var modal = new bootstrap.Modal(modalEl);
+			modal.show();
+		}
 
-            //check validate
+		//xóa
+		buttons2.forEach(function (button) {
+			button.addEventListener('click', function () {
+				var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
+				maTB = tableRow.cells[0].textContent;
 
-            fetch('/them-thiet-bi', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    'matb': document.querySelector(".form_update #matb").value,
-                    'tentb': document.querySelector(".form_update #tentb").value,
-                    'motatb': document.querySelector(".form_update #motatb").value
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    response.text().then(text => {
-                        if (text.trim() === 'modal') {
-                            Swal.fire({
-                                position: "top",
-                                icon: "success",
-                                title: "Sửa thiết bị thành công",
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function() {
-                                window.location.reload(); // Tải lại trang sau khi cảnh báo biến mất
-                            });
-                        } else {
-                            document.getElementById('btn_close_add').click();
-                            Swal.fire({
-                                position: "top",
-                                icon: "warning",
-                                title: "Sửa thiết bị thất bại",
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        position: "top",
-                        icon: "error",
-                        title: "Có lỗi xảy ra",
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                }
-            });
+				document.querySelector('.form_delete #idTB').value = maTB;
 
-        });
-        
-        //thêm
-        function ShowAddDevice() {
-            var modalEl = document.getElementById('myModalAdd');
-            var modal = new bootstrap.Modal(modalEl);
-            modal.show();
-        }
-       
-        document.querySelector(".form_add").addEventListener('submit', function(event) {
-            event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+				var modalEl = document.getElementById('myModalDelete');
+				var modal = new bootstrap.Modal(modalEl);
+				modal.show();
+			});
+		});
 
-            //check validate
+		document.querySelector('.form_delete').addEventListener('submit', function (event) {
+			event.preventDefault(); // Ngăn form gửi dữ liệu lại server
 
-            fetch('/them-thiet-bi', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    'matb': document.querySelector(".form_add #matb").value,
-                    'tentb': document.querySelector(".form_add #tentb").value,
-                    'motatb': document.querySelector(".form_add #motatb").value
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    response.text().then(text => {
-                        if (text.trim() === 'modal') {
-                            Swal.fire({
-                                position: "top",
-                                icon: "success",
-                                title: "Thêm thiết bị thành công",
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function() {
-                                window.location.reload(); // Tải lại trang sau khi cảnh báo biến mất
-                            });
-                        } else {
-                            Swal.fire({
-                                position: "top",
-                                icon: "warning",
-                                title: "Mã thiết bị đã tồn tại",
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        position: "top",
-                        icon: "error",
-                        title: "Có lỗi xảy ra",
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                }
-            });
-        });
-       
-        //  Chức năng tìm kiếm
-        function searchDevice() {
-            var searchInput = document.getElementById("searchInput");
-            var searchForm = document.getElementById("searchForm");
-            var tableRows = document.querySelectorAll(".table tbody tr");
+			fetch('/xoa-thiet-bi', {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({
+					idTB: document.querySelector('.form_delete #idTB').value,
+				}),
+			}).then((response) => {
+				if (response.ok) {
+					response.text().then((text) => {
+						if (text.trim() === 'modal') {
+							Swal.fire({
+								position: 'top',
+								icon: 'success',
+								title: 'Xóa thiết bị thành công',
+								showConfirmButton: false,
+								timer: 1500,
+							}).then(function () {
+								window.location.reload(); // Tải lại trang sau khi cảnh báo biến mất
+							});
+						} else {
+							document.getElementById('btn_close_add').click();
+							Swal.fire({
+								position: 'top',
+								icon: 'warning',
+								title: 'Xóa thiết bị thất bại',
+								showConfirmButton: false,
+								timer: 2000,
+							});
+						}
+					});
+				} else {
+					Swal.fire({
+						position: 'top',
+						icon: 'error',
+						title: 'Có lỗi xảy ra',
+						showConfirmButton: false,
+						timer: 2000,
+					});
+				}
+			});
+		});
 
-            searchForm.addEventListener("submit", function(event) {
-                event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+		//sửa
+		buttons.forEach(function (button) {
+			button.addEventListener('click', function () {
+				var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
+				maTB = tableRow.cells[0].textContent;
+				tenTB = tableRow.cells[1].textContent;
+				moTaTB = tableRow.cells[2].textContent;
 
-                var searchText = searchInput.value.toLowerCase();
-                tableRows.forEach(function(row) {
-                    var rowText = row.textContent.toLowerCase();
-                    if (rowText.includes(searchText)) {
-                        row.style.display = ""; // Hiển thị dòng nếu tìm thấy
-                    } else {
-                        row.style.display = "none"; // Ẩn dòng nếu không tìm thấy
-                    }
-                });
-            });
-        }
-    </script>
+				document.querySelector('.form_update #matb').value = maTB;
+				document.querySelector('.form_update #tentb').value = tenTB;
+				document.querySelector('.form_update #motatb').value = moTaTB;
+
+				var modalEl = document.getElementById('myModalUpdate');
+				var modal = new bootstrap.Modal(modalEl);
+				modal.show();
+			});
+		});
+
+		document.querySelector('.form_update').addEventListener('submit', function (event) {
+			event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+
+			//check validate
+
+			fetch('/them-thiet-bi', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({
+					matb: document.querySelector('.form_update #matb').value,
+					tentb: document.querySelector('.form_update #tentb').value,
+					motatb: document.querySelector('.form_update #motatb').value,
+				}),
+			}).then((response) => {
+				if (response.ok) {
+					response.text().then((text) => {
+						if (text.trim() === 'modal') {
+							Swal.fire({
+								position: 'top',
+								icon: 'success',
+								title: 'Sửa thiết bị thành công',
+								showConfirmButton: false,
+								timer: 1500,
+							}).then(function () {
+								window.location.reload(); // Tải lại trang sau khi cảnh báo biến mất
+							});
+						} else {
+							document.getElementById('btn_close_add').click();
+							Swal.fire({
+								position: 'top',
+								icon: 'warning',
+								title: 'Sửa thiết bị thất bại',
+								showConfirmButton: false,
+								timer: 2000,
+							});
+						}
+					});
+				} else {
+					Swal.fire({
+						position: 'top',
+						icon: 'error',
+						title: 'Có lỗi xảy ra',
+						showConfirmButton: false,
+						timer: 2000,
+					});
+				}
+			});
+		});
+
+		//thêm
+		function ShowAddDevice() {
+			var modalEl = document.getElementById('myModalAdd');
+			var modal = new bootstrap.Modal(modalEl);
+			modal.show();
+		}
+
+		document.querySelector('.form_add').addEventListener('submit', function (event) {
+			event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+
+			//check validate
+
+			fetch('/them-thiet-bi', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({
+					matb: document.querySelector('.form_add #matb').value,
+					tentb: document.querySelector('.form_add #tentb').value,
+					motatb: document.querySelector('.form_add #motatb').value,
+				}),
+			}).then((response) => {
+				if (response.ok) {
+					response.text().then((text) => {
+						if (text.trim() === 'modal') {
+							Swal.fire({
+								position: 'top',
+								icon: 'success',
+								title: 'Thêm thiết bị thành công',
+								showConfirmButton: false,
+								timer: 1500,
+							}).then(function () {
+								window.location.reload(); // Tải lại trang sau khi cảnh báo biến mất
+							});
+						} else {
+							Swal.fire({
+								position: 'top',
+								icon: 'warning',
+								title: 'Mã thiết bị đã tồn tại',
+								showConfirmButton: false,
+								timer: 2000,
+							});
+						}
+					});
+				} else {
+					Swal.fire({
+						position: 'top',
+						icon: 'error',
+						title: 'Có lỗi xảy ra',
+						showConfirmButton: false,
+						timer: 2000,
+					});
+				}
+			});
+		});
+
+		//  Chức năng tìm kiếm
+		function searchDevice() {
+			var searchInput = document.getElementById('searchInput');
+			var searchForm = document.getElementById('searchForm');
+			var tableRows = document.querySelectorAll('.table tbody tr');
+
+			searchForm.addEventListener('submit', function (event) {
+				event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+
+				var searchText = searchInput.value.toLowerCase();
+				tableRows.forEach(function (row) {
+					var rowText = row.textContent.toLowerCase();
+					if (rowText.includes(searchText)) {
+						row.style.display = ''; // Hiển thị dòng nếu tìm thấy
+					} else {
+						row.style.display = 'none'; // Ẩn dòng nếu không tìm thấy
+					}
+				});
+			});
+		}
+	</script>
 </body>

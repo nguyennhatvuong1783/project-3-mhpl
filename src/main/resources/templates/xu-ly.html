@@ -1,238 +1,177 @@
 <body>
-<div class="container py-2">
-    <form class="d-flex" id="searchForm">
-        <input class="form-control me-2" id="searchInput" type="text" placeholder="Search" />
-        <button class="btn btn-primary" id="searchButton" type="submit">Search</button>
-    </form>
-</div>
-<div class="container">
-    <table class="table table_bordered">
-        <thead>
-        <tr class="text-center">
-            <th>STT</th>
-            <th>Tên thành viên</th>
-            <th>Hình thức xử lý</th>
-            <th>Số tiền</th>
-            <th>Ngày xử lý</th>
-            <th>Trạng thái xử lý</th>
-            <th>Hành động</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item, loop : ${data}" class="text-center">
-            <td class="align-middle" th:text="${loop.index+1}"></td>
-            <td class="align-middle" th:text="${item.thanhVienXL.getHoten()}"></td>
-            <td class="align-middle" th:text="${item.hinhThucXL}"></td>
-            <td class="align-middle" th:text="${item.soTien}"></td>
-            <td class="align-middle" th:text="${item.ngayXL}"></td>
-            <td class="align-middle" >
-                <span class="p-1 bg-success text-white rounded" th:if="${item.trangThaiXL == false}">Đã xử lý</span>
-                <span class="p-1 bg-warning text-dark rounded" th:if="${item.trangThaiXL == true}">Chưa xử lý</span>
-            </td>
-            <td class="align-middle">
-                <button th:if="${item.trangThaiXL == false}" class="btn btn-info" id="btn_xuly">Xử lý</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="toast py-4">
-      <div class="toast-header">
-        Thông báo
-        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-      </div>
-      <div class="toast-body">
-        Xử lý thất bại!
-      </div>
-    </div>
-</div>
+	<div class="mt-2 d-flex justify-content-between container">
+		<h2>Danh sách vi phạm</h2>
+		<div>
+			<a
+				style="height: 2.5rem"
+				class="btn btn-xs btn-info"
+				data-toggle="modal"
+				data-target="#add-violation-modal"
+			>
+				<i class="bi bi-plus-square"></i> Thêm vi phạm
+			</a>
+		</div>
+	</div>
+	<div class="container py-2">
+		<form class="d-flex" id="searchForm">
+			<input class="form-control me-2" id="searchInput" type="text" placeholder="Search" />
+			<button class="btn btn-primary" id="searchButton" type="submit">Search</button>
+		</form>
+	</div>
+	<div class="container">
+		<table class="table table_bordered">
+			<thead>
+				<tr class="text-center">
+					<th>STT</th>
+					<th>Tên thành viên</th>
+					<th>Hình thức xử lý</th>
+					<th>Số tiền</th>
+					<th>Ngày xử lý</th>
+					<th>Trạng thái xử lý</th>
+					<th>Hành động</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item, loop : ${data}" class="text-center">
+					<td class="align-middle" th:text="${loop.index+1}"></td>
+					<td class="align-middle" th:text="${item.thanhVienXL.getHoten()}"></td>
+					<td class="align-middle" th:text="${item.hinhThucXL}"></td>
+					<td class="align-middle" th:text="${item.soTien}"></td>
+					<td class="align-middle" th:text="${item.ngayXL}"></td>
+					<td class="align-middle">
+						<span class="p-1 bg-success text-white rounded" th:if="${item.trangThaiXL == true}"
+							>Đã xử lý</span
+						>
+						<span class="p-1 bg-warning text-dark rounded" th:if="${item.trangThaiXL == false}"
+							>Chưa xử lý</span
+						>
+					</td>
+					<td th:if="${item.trangThaiXL}"></td>
+					<td class="align-middle d-flex gap-1" th:if="${!item.trangThaiXL}">
+						<form th:action="@{/xu-ly/duyet/} + ${item.maXL}" method="post">
+							<button type="submit" class="btn btn-success btn-sm">
+								<i class="bi bi-bookmark-check"></i>
+							</button>
+						</form>
+						<a
+							type="button"
+							class="btn btn-sm btn-warning"
+							data-toggle="modal"
+							th:attr="data-target='#update-user'+${user?.maTV}"
+						>
+							<i class="bi bi-pencil"></i>
+						</a>
+						<a
+							type="button"
+							class="btn btn-sm btn-danger"
+							data-toggle="modal"
+							th:attr="data-target='#delete-user'+${user?.maTV}"
+						>
+							<i class="bi bi-trash"></i>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="toast py-4">
+			<div class="toast-header">
+				Thông báo
+				<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+			</div>
+			<div class="toast-body">Xử lý thất bại!</div>
+		</div>
+	</div>
 
-<!-- Modal -->
-<!-- <div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form action="/muonthietbi" method="POST">
-        <div class="modal-header">
-          <h5 class="modal-title">Mượn thiết bị</h5>
-        </div>
-        <div class="modal-body">
+	<div id="add-violation-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<form method="POST" th:action="@{/xu-ly}">
+					<div class="modal-header">
+						<h4 class="modal-title">Thêm vi phạm</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row justify-content-center">
+							<div class="form-group mt-2">
+								<label for="user" class="font-weight-bold">Thành viên:</label>
+								<select id="user" class="form-select" name="maTV" required="required">
+									<option selected disabled value="">Open this select menu</option>
+									<option
+										th:each="user, loop : ${users}"
+										th:value="${user?.maTV}"
+										th:text="${user?.hoten}"
+									></option>
+								</select>
+							</div>
+						</div>
 
-          <div class="form-group">
-            <label for="date">Thời gian trả:</label>
-            <div class="input-group" id="datetimepicker-3">
-              <input type="text" class="form-control" id="date-input-3" name="date" />
-              <span class="input-group-text" data-toggle>
-                <i class="bi bi-calendar"></i>
-              </span>
-              <span class="input-group-text" title="clear" data-clear>
-                <i class="bi bi-x"></i>
-              </span>
-            </div>
-          </div>
+						<div class="row justify-content-center">
+							<div class="form-group mt-2">
+								<label for="hinhThucXL" class="font-weight-bold">Hình thức xử lý:</label>
+								<input
+									type="text"
+									id="hinhThucXL"
+									class="form-control"
+									name="hinhThucXL"
+									placeholder="Hình thức xử lý"
+								/>
+							</div>
+						</div>
 
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div> -->
+						<div class="row justify-content-center" id="total" style="display: none">
+							<div class="form-group mt-2">
+								<label for="soTien" class="font-weight-bold">Số tiền:</label>
+								<input
+									type="number"
+									id="soTien"
+									class="form-control"
+									name="soTien"
+									placeholder="Số tiền"
+								/>
+							</div>
+						</div>
+					</div>
 
-<!-- Modal -->
-<!-- <div id="myModal2" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form action="/dat-muon-thiet-bi" method="POST">
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
-        <div class="modal-header">
-          <h5 class="modal-title">Đặt chỗ mượn thiết bị</h5>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="date-input-1">Thời gian đặt chỗ:</label>
-            <div class="input-group" id="datetimepicker-1">
-              <input type="text" class="form-control" id="date-input-1" name="date" />
-              <input type="hidden" id="idTB" name="idTB" />
-              <span class="input-group-text" data-toggle>
-                <i class="bi bi-calendar"></i>
-              </span>
-              <span class="input-group-text" title="clear" data-clear>
-                <i class="bi bi-x"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        </div>
-      </form>
+	<script th:inline="javascript">
+		//  Chức năng tìm kiếm
+		document.addEventListener('DOMContentLoaded', function () {
+			var searchInput = document.getElementById('searchInput');
+			var searchForm = document.getElementById('searchForm');
+			var tableRows = document.querySelectorAll('.table tbody tr');
 
-    </div>
-  </div>
-</div> -->
+			searchForm.addEventListener('submit', function (event) {
+				event.preventDefault(); // Ngăn form gửi dữ liệu lại server
 
+				var searchText = searchInput.value.toLowerCase();
+				tableRows.forEach(function (row) {
+					var rowText = row.textContent.toLowerCase();
+					if (rowText.includes(searchText)) {
+						row.style.display = ''; // Hiển thị dòng nếu tìm thấy
+					} else {
+						row.style.display = 'none'; // Ẩn dòng nếu không tìm thấy
+					}
+				});
+			});
+		});
 
+		const total = document.querySelector('#total');
 
-
-<!--    <div class="flatpickr">
-  <div class="input-group">
-      <input type="text" class="form-control" id="date-input" placeholder="Chọn ngày.." />
-      <a type="button" data-toggle>
-          <i class="bi bi-calendar"></i>
-      </a>
-      <a type="button" data-clear>
-          <i class="bi bi-x"></i>
-      </a>
-  </div>
-</div>-->
-
-
-
-<script>
-  var datetimepicker3 = document.querySelector("#datetimepicker-3");
-  var dateInput3 = datetimepicker3.querySelector("#date-input-3");
-  var clearButton3 = datetimepicker3.querySelector("[data-clear]");
-  var flatpickr3 = flatpickr(datetimepicker3, {
-    enableTime: true,
-    dateFormat: "Y-m-d H:i",
-    // Các tùy chọn khác của Flatpickr
-  });
-  flatpickr3.config.onChange.push(function (selectedDates, dateStr) {
-    dateInput3.value = dateStr;
-  });
-  clearButton3.addEventListener('click', function () {
-    dateInput3.value = '';
-  });
-
-  var datetimepicker1 = document.querySelector("#datetimepicker-1");
-  var dateInput1 = datetimepicker1.querySelector("#date-input-1");
-  var clearButton1 = datetimepicker1.querySelector("[data-clear]");
-  var flatpickr1 = flatpickr(datetimepicker1, {
-    enableTime: true,
-    dateFormat: "Y-m-d H:i",
-    // Các tùy chọn khác của Flatpickr
-  });
-  flatpickr1.config.onChange.push(function (selectedDates, dateStr) {
-    dateInput1.value = dateStr;
-  });
-  clearButton1.addEventListener('click', function () {
-    dateInput1.value = '';
-  });
-
-</script>
+		document.querySelector('#hinhThucXL').addEventListener('input', (e) => {
+			const value = e.target.value.toLowerCase();
+			console.log('b', total, ['boi thuong', 'bồi thường'].includes(value));
+			if (['boi thuong', 'boithuong', 'bồithường', 'bồi thường'].includes(value)) {
+				total.style.display = 'block';
+			} else {
+				total.style.display = 'none';
+			}
+		});
+	</script>
 </body>
-
-</html>
-<script th:inline="javascript">
-document.addEventListener('DOMContentLoaded', function () {
-  var tables = document.querySelector('.table');
-  var buttons = tables.querySelectorAll("#btn_xuly");
-
-  buttons.forEach(function (button) {
-    button.addEventListener('click', function () {
-      var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
-      var toast = document.querySelector('.toast'); // Tìm toast trong dòng
-      var index = 0;
-      if (tableRow) {
-        index = tableRow.cells[0].textContent;
-        console.log("abc", index)
-      }
-
-      fetch('/xu-ly/duyet',
-        {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({maXL: parseInt(index)})
-        }
-      )
-        .then(response => {
-          if (response.ok) {
-            response.text().then(text => {
-              // if (text.trim() === 'modal') {
-              //   var modalEl = document.getElementById('myModal');
-              //   var modal = new bootstrap.Modal(modalEl);
-              //   modal.show();
-              // }
-              // else {
-              //   var toast = document.querySelector('.toast'); // Tìm toast trong dòng
-              //   var toastInstance = new bootstrap.Toast(toast);
-              //   toastInstance.show();
-              // }
-            });
-          } else {
-            alert('Có lỗi xảy ra!');
-          }
-        });
-
-    });
-  });
-
-});
-
-
-//  Chức năng tìm kiếm
-document.addEventListener("DOMContentLoaded", function () {
-  var searchInput = document.getElementById("searchInput");
-  var searchForm = document.getElementById("searchForm");
-  var tableRows = document.querySelectorAll(".table tbody tr");
-
-  searchForm.addEventListener("submit", function (event) {
-    event.preventDefault(); // Ngăn form gửi dữ liệu lại server
-
-    var searchText = searchInput.value.toLowerCase();
-    tableRows.forEach(function (row) {
-      var rowText = row.textContent.toLowerCase();
-      if (rowText.includes(searchText)) {
-        row.style.display = ""; // Hiển thị dòng nếu tìm thấy
-      } else {
-        row.style.display = "none"; // Ẩn dòng nếu không tìm thấy
-      }
-    });
-  });
-});
-</script>

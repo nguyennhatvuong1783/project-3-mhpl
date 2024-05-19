@@ -4,17 +4,27 @@
  */
 package com.project3mhpl.controller;
 
-import com.project3mhpl.entity.ThanhVien;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.entity.ThietBi;
 import com.project3mhpl.entity.ThongTinSD;
 import com.project3mhpl.service.ThanhVienService;
@@ -22,16 +32,6 @@ import com.project3mhpl.service.ThietBiService;
 import com.project3mhpl.service.ThongTinSDService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Date;
-import java.util.Optional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -50,14 +50,14 @@ public class ThietBiController {
 
 	@GetMapping("/dat-muon-thiet-bi")
 	public String getAll(Model m, HttpServletRequest request) {
-                Date currentDate = new Date();
+		Date currentDate = new Date();
 		Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
 		m.addAttribute("isAuthenticated", isAuthenticated);
 		if (isAuthenticated == false) {
 			return "redirect:sign-in";
 		}
-                m.addAttribute("isAdmin", thanhVienService.checkAdmin(request));
+		m.addAttribute("isAdmin", thanhVienService.checkAdmin(request));
 
 		Iterable<ThietBi> list = thietBiService.getAll();
 		ArrayList<ThietBi> products = new ArrayList<>();
@@ -66,12 +66,13 @@ public class ThietBiController {
 		}
 
 		m.addAttribute("data", products);
-                m.addAttribute("currentDate", currentDate);
+		m.addAttribute("currentDate", currentDate);
 		return "thiet_bi_all";
 	}
 
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/dat-muon-thiet-bi", method = RequestMethod.POST)
-        @ResponseBody
+	@ResponseBody
 	public String submitData(@RequestParam("date") String date, @RequestParam("idTB") int maTB, Model m,
 			HttpServletRequest request) throws ParseException {
 		Boolean isAuthenticated = thanhVienService.checkAuth(request);
@@ -91,17 +92,17 @@ public class ThietBiController {
 				calendar.setTime(list.get(i).getTgDatcho());
 				calendar.add(Calendar.HOUR_OF_DAY, 1);
 				Date tgDatChoPlus1h = calendar.getTime();
-                                
-                                calendar.setTime(list.get(i).getTgDatcho());
+
+				calendar.setTime(list.get(i).getTgDatcho());
 				calendar.add(Calendar.HOUR_OF_DAY, -1);
 				Date tgDatChoMinus1h = calendar.getTime();
-                                
+
 				if (tgDatCho.compareTo(tgDatChoPlus1h) <= 0 && tgDatCho.compareTo(tgDatChoMinus1h) >= 0) {
-                                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd-MM-yyyy");
-				    String tgDatChoMinus1hStr = sdf.format(tgDatChoMinus1h);
-                                    String tgDatChoPlus1hStr = sdf.format(tgDatChoPlus1h);
-                                    
-                                    return "thời gian từ " + tgDatChoMinus1hStr + " đến " + tgDatChoPlus1hStr;
+					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd-MM-yyyy");
+					String tgDatChoMinus1hStr = sdf.format(tgDatChoMinus1h);
+					String tgDatChoPlus1hStr = sdf.format(tgDatChoPlus1h);
+
+					return "thời gian từ " + tgDatChoMinus1hStr + " đến " + tgDatChoPlus1hStr;
 				}
 			} else {
 				if (tgDatCho.compareTo(list.get(i).getTgTra()) <= 0) {
@@ -109,27 +110,29 @@ public class ThietBiController {
 				}
 			}
 		}
-                
-                Iterable<ThongTinSD> ThongTinSDIterable = thongTinSDService.getAll();
-                int maTT = 0;
-                for (ThongTinSD thongTinSD : ThongTinSDIterable) {
-                    maTT++;
-                }
-                maTT++;
 
-                ThanhVien tv = thanhVienService.getProfile(request);
-                Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
-                ThietBi thietBi = thietBiOptional.get();
-                ThongTinSD thongTinSD = new ThongTinSD(maTT, tv, thietBi, tgDatCho, null, null, null);
-                
-                thongTinSDService.store(thongTinSD);
-                
+		Iterable<ThongTinSD> ThongTinSDIterable = thongTinSDService.getAll();
+		int maTT = 0;
+		for (ThongTinSD thongTinSD : ThongTinSDIterable) {
+			maTT++;
+		}
+		maTT++;
+
+		ThanhVien tv = thanhVienService.getProfile(request);
+		Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
+		ThietBi thietBi = thietBiOptional.get();
+		ThongTinSD thongTinSD = new ThongTinSD(maTT, tv, thietBi, tgDatCho, null, null, null);
+
+		thongTinSDService.store(thongTinSD);
+
 		return "modal";
 	}
 
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/muonthietbi", method = RequestMethod.POST)
-        @ResponseBody
-	public String submitData2(@RequestParam("date") String date, @RequestParam("idTBMuon") int maTB, Model m, HttpServletRequest request) throws ParseException {
+	@ResponseBody
+	public String submitData2(@RequestParam("date") String date, @RequestParam("idTBMuon") int maTB, Model m,
+			HttpServletRequest request) throws ParseException {
 		Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
 		m.addAttribute("isAuthenticated", isAuthenticated);
@@ -138,10 +141,10 @@ public class ThietBiController {
 		}
 
 		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-                List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
-		Calendar calendar = Calendar.getInstance();
+		List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
+		// Calendar calendar = Calendar.getInstance();
 		Date tgTra = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
-                Date tgMuon = new Date();
+		Date tgMuon = new Date();
 
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getTgDatcho() != null) {
@@ -150,27 +153,28 @@ public class ThietBiController {
 				}
 			}
 		}
-                
-                Iterable<ThongTinSD> ThongTinSDIterable = thongTinSDService.getAll();
-                int maTT = 0;
-                for (ThongTinSD thongTinSD : ThongTinSDIterable) {
-                    maTT++;
-                }
-                maTT++;
 
-                ThanhVien tv = thanhVienService.getProfile(request);
-                Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
-                ThietBi thietBi = thietBiOptional.get();
-                ThongTinSD thongTinSD = new ThongTinSD(maTT, tv, thietBi, null, null, tgMuon, tgTra);
-                
-                thongTinSDService.store(thongTinSD);
-                
+		Iterable<ThongTinSD> ThongTinSDIterable = thongTinSDService.getAll();
+		int maTT = 0;
+		for (ThongTinSD thongTinSD : ThongTinSDIterable) {
+			maTT++;
+		}
+		maTT++;
+
+		ThanhVien tv = thanhVienService.getProfile(request);
+		Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
+		ThietBi thietBi = thietBiOptional.get();
+		ThongTinSD thongTinSD = new ThongTinSD(maTT, tv, thietBi, null, null, tgMuon, tgTra);
+
+		thongTinSDService.store(thongTinSD);
+
 		return "modal";
 	}
-        
-        @RequestMapping(value = "/them-thiet-bi", method = RequestMethod.POST)
-        @ResponseBody
-	public String themThietBi(@RequestParam("matb") int maTB, @RequestParam("tentb") String tenTB, @RequestParam("motatb") String moTaTB, Model m, HttpServletRequest request) {
+
+	@RequestMapping(value = "/them-thiet-bi", method = RequestMethod.POST)
+	@ResponseBody
+	public String themThietBi(@RequestParam("matb") int maTB, @RequestParam("tentb") String tenTB,
+			@RequestParam("motatb") String moTaTB, Model m, HttpServletRequest request) {
 		Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
 		m.addAttribute("isAuthenticated", isAuthenticated);
@@ -179,22 +183,22 @@ public class ThietBiController {
 		}
 
 		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-                Iterable<ThietBi> list = thietBiService.getAll();
-                for (ThietBi thietBi : list) {
-                    if (maTB == thietBi.getMaTB()) {
-                        return "alert";
-                    }
-                }
-                
-                ThietBi thietBi = new ThietBi(maTB, tenTB, moTaTB, null);
-                
-                thietBiService.store(thietBi);
-                
+		Iterable<ThietBi> list = thietBiService.getAll();
+		for (ThietBi thietBi : list) {
+			if (maTB == thietBi.getMaTB()) {
+				return "alert";
+			}
+		}
+
+		ThietBi thietBi = new ThietBi(maTB, tenTB, moTaTB, null);
+
+		thietBiService.store(thietBi);
+
 		return "modal";
 	}
-        
-        @RequestMapping(value = "/xoa-thiet-bi", method = RequestMethod.DELETE)
-        @ResponseBody
+
+	@RequestMapping(value = "/xoa-thiet-bi", method = RequestMethod.DELETE)
+	@ResponseBody
 	public String xoaThietBi(@RequestParam("idTB") int maTB, Model m, HttpServletRequest request) {
 		Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
@@ -204,40 +208,40 @@ public class ThietBiController {
 		}
 
 		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-                Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
-                ThietBi thietBi = thietBiOptional.get();
-                thietBi.setStatus(0);
-                
-                thietBiService.store(thietBi);
-                
+		Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
+		ThietBi thietBi = thietBiOptional.get();
+		thietBi.setStatus(0);
+
+		thietBiService.store(thietBi);
+
 		return "modal";
 	}
 
-        @GetMapping("/manage-devices")
-	public String manageDevicesPage (Model m, HttpServletRequest request) {
-            Boolean isAuthenticated = thanhVienService.checkAuth(request);
-            Boolean isAdmin = thanhVienService.checkAdmin(request);
+	@GetMapping("/manage-devices")
+	public String manageDevicesPage(Model m, HttpServletRequest request) {
+		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+		Boolean isAdmin = thanhVienService.checkAdmin(request);
 
-            m.addAttribute("isAuthenticated", isAuthenticated);
-            if (isAuthenticated == false) {
-                    return "redirect:sign-in";
-            }
-            m.addAttribute("isAdmin", isAdmin);
-            if (isAdmin == false) {
-                    return "redirect:home";
-            }
-            Iterable<ThietBi> list = thietBiService.getAll();
-            ArrayList<ThietBi> products = new ArrayList<>();
-            for (ThietBi t : list) {
-                    products.add(t);
-            }
+		m.addAttribute("isAuthenticated", isAuthenticated);
+		if (isAuthenticated == false) {
+			return "redirect:sign-in";
+		}
+		m.addAttribute("isAdmin", isAdmin);
+		if (isAdmin == false) {
+			return "redirect:home";
+		}
+		Iterable<ThietBi> list = thietBiService.getAll();
+		ArrayList<ThietBi> products = new ArrayList<>();
+		for (ThietBi t : list) {
+			products.add(t);
+		}
 
-            m.addAttribute("data", products);
-            return "manage-devices";
+		m.addAttribute("data", products);
+		return "manage-devices";
 	}
-        
-        @PostMapping("/import")
-        public String importUsers(@RequestParam("file") MultipartFile file) throws IOException {
+
+	@PostMapping("/import")
+	public String importUsers(@RequestParam("file") MultipartFile file) throws IOException {
 
 		thietBiService.importListTB(file);
 

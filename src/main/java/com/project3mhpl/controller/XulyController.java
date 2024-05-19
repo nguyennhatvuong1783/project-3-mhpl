@@ -1,17 +1,17 @@
 package com.project3mhpl.controller;
 
-import com.project3mhpl.dto.XuLyDuyetDTO;
-import com.project3mhpl.entity.XuLy;
-import com.project3mhpl.service.ThanhVienService;
-import com.project3mhpl.service.XuLyService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
+import com.project3mhpl.dto.CreateViolatedDto;
+import com.project3mhpl.service.ThanhVienService;
+import com.project3mhpl.service.XulyService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 @Controller
 public class XuLyController {
 	@Autowired
-	private XuLyService xulyService;
+	private XulyService xulyService;
 
 	@Autowired
 	private ThanhVienService thanhVienService;
@@ -35,45 +35,23 @@ public class XuLyController {
 		}
 		m.addAttribute("isAdmin", thanhVienService.checkAdmin(request));
 
-		Iterable<XuLy> list = xulyService.getAll();
-		ArrayList<XuLy> xuLyArrayList = new ArrayList<>();
-		for (XuLy t : list) {
-			xuLyArrayList.add(t);
-		}
-
-		m.addAttribute("data", xuLyArrayList);
+		m.addAttribute("data", xulyService.getAll());
+		m.addAttribute("users", thanhVienService.getAll());
+		m.addAttribute("violated", new CreateViolatedDto());
 		return "xu-ly";
 	}
 
-	@PostMapping("/xu-ly/duyet")
-	public String submitData(
-			Model m,
-			XuLyDuyetDTO form,
-			HttpServletRequest request) {
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+	@PostMapping("/xu-ly")
+	public String createViolation(CreateViolatedDto form) {
+		xulyService.createViolation(form);
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
+		return "redirect:/dashboard#handle-violations";
+	}
 
-		XuLy member = xulyService.getOne(form.getMaXL());
+	@PostMapping("/xu-ly/duyet/{maXL}")
+	public String resolveViolated(@PathVariable Integer maXL) {
+		xulyService.resolveViolated(maXL);
 
-		if (member == null) {
-			m.addAttribute("errorMessage", "Vi phạm cần xử lý không hợp lệ");
-			return "xu-ly";
-		}
-
-		Iterable<XuLy> list = xulyService.getAll();
-		ArrayList<XuLy> xuLyArrayList = new ArrayList<>();
-		for (XuLy t : list) {
-			xuLyArrayList.add(t);
-		}
-
-		m.addAttribute("data", xuLyArrayList);
-
-		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-		// ...
-		return "xu-ly";
+		return "redirect:/dashboard#handle-violations";
 	}
 }

@@ -39,212 +39,262 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 @Controller
 public class ThietBiController {
-	@Autowired
-	private ThietBiService thietBiService;
 
-	@Autowired
-	private ThanhVienService thanhVienService;
+    @Autowired
+    private ThietBiService thietBiService;
 
-	@Autowired
-	private ThongTinSDService thongTinSDService;
+    @Autowired
+    private ThanhVienService thanhVienService;
 
-	@GetMapping("/dat-muon-thiet-bi")
-	public String getAll(Model m, HttpServletRequest request) {
-		Date currentDate = new Date();
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+    @Autowired
+    private ThongTinSDService thongTinSDService;
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
-		m.addAttribute("isAdmin", thanhVienService.checkAdmin(request));
+    @GetMapping("/dat-muon-thiet-bi")
+    public String getAll(Model m, HttpServletRequest request) {
+        Date currentDate = new Date();
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		Iterable<ThietBi> list = thietBiService.getAll();
-		ArrayList<ThietBi> products = new ArrayList<>();
-		for (ThietBi t : list) {
-			products.add(t);
-		}
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+            return "redirect:sign-in";
+        }
+        m.addAttribute("isAdmin", thanhVienService.checkAdmin(request));
 
-		m.addAttribute("data", products);
-		m.addAttribute("currentDate", currentDate);
-		return "thiet_bi_all";
-	}
+        Iterable<ThietBi> list = thietBiService.getAll();
+        ArrayList<ThietBi> products = new ArrayList<>();
+        for (ThietBi t : list) {
+            products.add(t);
+        }
 
-	@SuppressWarnings("unused")
-	@RequestMapping(value = "/dat-muon-thiet-bi", method = RequestMethod.POST)
-	@ResponseBody
-	public String submitData(@RequestParam("date") String date, @RequestParam("idTB") int maTB, Model m,
-			HttpServletRequest request) throws ParseException {
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+        m.addAttribute("data", products);
+        m.addAttribute("currentDate", currentDate);
+        return "thiet_bi_all";
+    }
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
+    @SuppressWarnings("unused")
+    @RequestMapping(value = "/dat-muon-thiet-bi", method = RequestMethod.POST)
+    @ResponseBody
+    public String submitData(@RequestParam("date") String date, @RequestParam("idTB") int maTB, Model m,
+            HttpServletRequest request) throws ParseException {
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-		List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
-		Calendar calendar = Calendar.getInstance();
-		Date tgDatCho = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+            return "redirect:sign-in";
+        }
 
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getTgDatcho() != null) {
-				calendar.setTime(list.get(i).getTgDatcho());
-				calendar.add(Calendar.HOUR_OF_DAY, 1);
-				Date tgDatChoPlus1h = calendar.getTime();
+        // Xử lý đặt mượn
+        List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
+        Calendar calendar = Calendar.getInstance();
+        Date tgDatCho = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
+        calendar.setTime(tgDatCho);
+        int ngayDatCho = calendar.get(Calendar.DAY_OF_MONTH);
 
-				calendar.setTime(list.get(i).getTgDatcho());
-				calendar.add(Calendar.HOUR_OF_DAY, -1);
-				Date tgDatChoMinus1h = calendar.getTime();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getTgDatcho() != null) {
+                calendar.setTime(list.get(i).getTgDatcho());
+                int ngayDatChoTTSD = calendar.get(Calendar.DAY_OF_MONTH);
 
-				if (tgDatCho.compareTo(tgDatChoPlus1h) <= 0 && tgDatCho.compareTo(tgDatChoMinus1h) >= 0) {
-					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd-MM-yyyy");
-					String tgDatChoMinus1hStr = sdf.format(tgDatChoMinus1h);
-					String tgDatChoPlus1hStr = sdf.format(tgDatChoPlus1h);
+                if (ngayDatCho == ngayDatChoTTSD) {
+                    return "alertDatCho";
+                }
+            } else {
+                calendar.setTime(list.get(i).getTgMuon());
+                int ngayMuon = calendar.get(Calendar.DAY_OF_MONTH);
 
-					return "thời gian từ " + tgDatChoMinus1hStr + " đến " + tgDatChoPlus1hStr;
-				}
-			} else {
-				if (tgDatCho.compareTo(list.get(i).getTgTra()) <= 0) {
-					return list.get(i).getTgTra() + "";
-				}
-			}
-		}
+                if (list.get(i).getTgTra() == null && ngayDatCho == ngayMuon) {
+                    return "alertMuon";
+                }
+            }
+        }
 
-		Iterable<ThongTinSD> ThongTinSDIterable = thongTinSDService.getAll();
-		int maTT = 0;
-		for (ThongTinSD thongTinSD : ThongTinSDIterable) {
-			maTT++;
-		}
-		maTT++;
+        Iterable<ThongTinSD> ThongTinSDIterable = thongTinSDService.getAll();
+        int maTT = 0;
+        for (ThongTinSD thongTinSD : ThongTinSDIterable) {
+            maTT++;
+        }
+        maTT++;
 
-		ThanhVien tv = thanhVienService.getProfile(request);
-		Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
-		ThietBi thietBi = thietBiOptional.get();
-		ThongTinSD thongTinSD = new ThongTinSD(maTT, tv, thietBi, tgDatCho, null, null, null);
+        ThanhVien tv = thanhVienService.getProfile(request);
+        Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
+        ThietBi thietBi = thietBiOptional.get();
+        ThongTinSD thongTinSD = new ThongTinSD(maTT, tv, thietBi, tgDatCho, null, null, null);
 
-		thongTinSDService.store(thongTinSD);
+        thongTinSDService.store(thongTinSD);
 
-		return "modal";
-	}
+        return "modal";
+    }
 
-	@SuppressWarnings("unused")
-	@RequestMapping(value = "/muonthietbi", method = RequestMethod.POST)
-	@ResponseBody
-	public String submitData2(@RequestParam("date") String date, @RequestParam("idTBMuon") int maTB, Model m,
-			HttpServletRequest request) throws ParseException {
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+    @SuppressWarnings("unused")
+    @RequestMapping(value = "/muonthietbi", method = RequestMethod.POST)
+    @ResponseBody
+    public String submitData2(@RequestParam("matv") int maTV, @RequestParam("matb") int maTB, Model m,
+            HttpServletRequest request) throws ParseException {
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+            return "redirect:sign-in";
+        }
 
-		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-		List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
-		// Calendar calendar = Calendar.getInstance();
-		Date tgTra = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
-		Date tgMuon = new Date();
+        // Xử lý mượn
+        List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
 
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getTgDatcho() != null) {
-				if (list.get(i).getTgDatcho().compareTo(tgMuon) >= 0 && list.get(i).getTgDatcho().compareTo(tgTra) <= 0) {
-					return list.get(i).getTgDatcho() + "";
-				}
-			}
-		}
+        ThongTinSD oldThongTinSD = new ThongTinSD();
+        boolean flag = false;
 
-		Iterable<ThongTinSD> ThongTinSDIterable = thongTinSDService.getAll();
-		int maTT = 0;
-		for (ThongTinSD thongTinSD : ThongTinSDIterable) {
-			maTT++;
-		}
-		maTT++;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getTgDatcho() != null) {
+                calendar.setTime(list.get(i).getTgDatcho());
+                calendar.add(Calendar.HOUR_OF_DAY, 1);
+                Date tgDatChoPlus1h = calendar.getTime();
+                int NgayDatCho = calendar.get(Calendar.DAY_OF_MONTH);
 
-		ThanhVien tv = thanhVienService.getProfile(request);
-		Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
-		ThietBi thietBi = thietBiOptional.get();
-		ThongTinSD thongTinSD = new ThongTinSD(maTT, tv, thietBi, null, null, tgMuon, tgTra);
+                calendar.setTime(currentDate);
+                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-		thongTinSDService.store(thongTinSD);
+                if (currentDate.compareTo(tgDatChoPlus1h) <= 0 && currentDay == NgayDatCho) {
+                    if (maTV == list.get(i).getThanhVienTTSD().getMaTV()) {
+                        oldThongTinSD = list.get(i);
+                        flag = true;
+                        break;
+                    }
+                    return "alertDatcho";
+                }
+            } else {
+                if (list.get(i).getTgTra() == null) {
+                    return "alert";
+                }
+            }
+        }
 
-		return "modal";
-	}
+        // Insert DB
+        if (flag == true) {
+            oldThongTinSD.setTgMuon(currentDate);
+            thongTinSDService.store(oldThongTinSD);
+            return "ok";
+        }
 
-	@RequestMapping(value = "/them-thiet-bi", method = RequestMethod.POST)
-	@ResponseBody
-	public String themThietBi(@RequestParam("matb") int maTB, @RequestParam("tentb") String tenTB,
-			@RequestParam("motatb") String moTaTB, Model m, HttpServletRequest request) {
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+        Iterable<ThongTinSD> ThongTinSDIterable = thongTinSDService.getAll();
+        int maTT = 0;
+        for (ThongTinSD thongTinSD : ThongTinSDIterable) {
+            maTT++;
+        }
+        maTT++;
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
+        Optional<ThanhVien> tvOptinonal = thanhVienService.getById(maTV);
+        ThanhVien tv = tvOptinonal.get();
+        Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
+        ThietBi thietBi = thietBiOptional.get();
+        ThongTinSD thongTinSD = new ThongTinSD(maTT, tv, thietBi, null, null, currentDate, null);
 
-		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-		Iterable<ThietBi> list = thietBiService.getAll();
-		for (ThietBi thietBi : list) {
-			if (maTB == thietBi.getMaTB()) {
-				return "alert";
-			}
-		}
+        thongTinSDService.store(thongTinSD);
+        return "ok";
+    }
 
-		ThietBi thietBi = new ThietBi(maTB, tenTB, moTaTB, null);
+    @RequestMapping(value = "/trathietbi", method = RequestMethod.POST)
+    @ResponseBody
+    public String traThietBi(@RequestParam("matv") int maTV, @RequestParam("matb") int maTB, Model m, HttpServletRequest request) throws ParseException {
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+            return "redirect:sign-in";
+        }
 
-		thietBiService.store(thietBi);
+        // Xử lý trả
+        List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
 
-		return "modal";
-	}
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getThanhVienTTSD().getMaTV() == maTV) {
+                if (list.get(i).getTgMuon() != null && list.get(i).getTgTra() == null) {
+                    Date currentDate = new Date();
+                    ThongTinSD thongTinSD = list.get(i);
+                    thongTinSD.setTgTra(currentDate);
+                    thongTinSDService.store(thongTinSD);
+                    return "ok";
+                }
+            }
+        }
 
-	@RequestMapping(value = "/xoa-thiet-bi", method = RequestMethod.DELETE)
-	@ResponseBody
-	public String xoaThietBi(@RequestParam("idTB") int maTB, Model m, HttpServletRequest request) {
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
+        return "alert";
+    }
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
+    @RequestMapping(value = "/them-thiet-bi", method = RequestMethod.POST)
+    @ResponseBody
+    public String themThietBi(@RequestParam("matb") int maTB, @RequestParam("tentb") String tenTB,
+            @RequestParam("motatb") String moTaTB, Model m, HttpServletRequest request) {
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-		// Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
-		Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
-		ThietBi thietBi = thietBiOptional.get();
-		thietBi.setStatus(0);
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+            return "redirect:sign-in";
+        }
 
-		thietBiService.store(thietBi);
+        // Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
+        Iterable<ThietBi> list = thietBiService.getAll();
+        for (ThietBi thietBi : list) {
+            if (maTB == thietBi.getMaTB()) {
+                return "alert";
+            }
+        }
 
-		return "modal";
-	}
+        ThietBi thietBi = new ThietBi(maTB, tenTB, moTaTB, null);
 
-	@GetMapping("/manage-devices")
-	public String manageDevicesPage(Model m, HttpServletRequest request) {
-		Boolean isAuthenticated = thanhVienService.checkAuth(request);
-		Boolean isAdmin = thanhVienService.checkAdmin(request);
+        thietBiService.store(thietBi);
 
-		m.addAttribute("isAuthenticated", isAuthenticated);
-		if (isAuthenticated == false) {
-			return "redirect:sign-in";
-		}
-		m.addAttribute("isAdmin", isAdmin);
-		if (isAdmin == false) {
-			return "redirect:home";
-		}
-		Iterable<ThietBi> list = thietBiService.getAll();
-		ArrayList<ThietBi> products = new ArrayList<>();
-		for (ThietBi t : list) {
-			products.add(t);
-		}
+        return "modal";
+    }
 
-		m.addAttribute("data", products);
-		return "manage-devices";
-	}
+    @RequestMapping(value = "/xoa-thiet-bi", method = RequestMethod.DELETE)
+    @ResponseBody
+    public String xoaThietBi(@RequestParam("idTB") int maTB, Model m, HttpServletRequest request) {
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
 
-	@PostMapping("/import")
-	public String importUsers(@RequestParam("file") MultipartFile file) throws IOException {
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+            return "redirect:sign-in";
+        }
 
-		thietBiService.importListTB(file);
+        // Xử lý dữ liệu và trả về view hoặc thực hiện các hành động khác
+        Optional<ThietBi> thietBiOptional = thietBiService.getByID(maTB);
+        ThietBi thietBi = thietBiOptional.get();
+        thietBi.setStatus(0);
 
-		return "redirect:/dashboard#manage-devices";
-	}
+        thietBiService.store(thietBi);
+
+        return "modal";
+    }
+
+    @GetMapping("/manage-devices")
+    public String manageDevicesPage(Model m, HttpServletRequest request) {
+        Boolean isAuthenticated = thanhVienService.checkAuth(request);
+        Boolean isAdmin = thanhVienService.checkAdmin(request);
+
+        m.addAttribute("isAuthenticated", isAuthenticated);
+        if (isAuthenticated == false) {
+            return "redirect:sign-in";
+        }
+        m.addAttribute("isAdmin", isAdmin);
+        if (isAdmin == false) {
+            return "redirect:home";
+        }
+        Iterable<ThietBi> list = thietBiService.getAll();
+        ArrayList<ThietBi> products = new ArrayList<>();
+        for (ThietBi t : list) {
+            products.add(t);
+        }
+
+        m.addAttribute("data", products);
+        return "manage-devices";
+    }
+
+    @PostMapping("/import")
+    public String importUsers(@RequestParam("file") MultipartFile file) throws IOException {
+
+        thietBiService.importListTB(file);
+
+        return "redirect:/dashboard#manage-devices";
+    }
 }

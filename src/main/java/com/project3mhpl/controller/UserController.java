@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.service.ThanhVienService;
+import com.project3mhpl.service.ThietBiService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -24,6 +25,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UserController {
 	@Autowired
 	private ThanhVienService thanhvienService;
+        
+        @Autowired
+	private ThietBiService thietBiService;
 
 	@GetMapping("/manage-users")
 	public String getProfile(Model m, HttpServletRequest request) {
@@ -37,6 +41,7 @@ public class UserController {
 		m.addAttribute("isAdmin", thanhvienService.checkAdmin(request));
 		m.addAttribute("users", thanhvienService.getAll());
 		m.addAttribute("newUser", new ThanhVien());
+                m.addAttribute("devices", thietBiService.getAll());
 
 		return "manage-users";
 	}

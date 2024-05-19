@@ -1,365 +1,582 @@
 <form class="w-full">
-	<div class="container mt-2 w-full">
-		<div class="mt-2 d-flex justify-content-between">
-			<h2>Danh sách thành viên</h2>
-			<div>
-				<a
-					type="button"
-					class="btn btn-xs btn-info"
-					data-toggle="modal"
-					data-target="#add-user-modal"
-					style="height: 2.5rem"
-				>
-					<i class="bi bi-plus-square"></i>
-					Thêm thành viên
-				</a>
-				<a
-					type="button"
-					class="btn btn-xs btn-info"
-					data-toggle="modal"
-					data-target="#import-user-modal"
-					style="height: 2.5rem"
-				>
-					<i class="fa-regular fa-file-excel"></i>
-					Nhập excel
-				</a>
-			</div>
-		</div>
-	</div>
-	<div class="container">
-		<table class="table table_bordered">
-			<thead>
-				<tr>
-					<th>Ma thanh vien</th>
-					<th>Ho ten</th>
-					<th>Khoa</th>
-					<th>Nganh</th>
-					<th>Email</th>
-					<th>So dien thoai</th>
-					<th>Thao tac</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="user, loop:${users}">
-					<td th:text="${user?.maTV}"></td>
-					<td th:text="${user?.hoten}"></td>
-					<td th:text="${user?.khoa}"></td>
-					<td th:text="${user?.nganh}"></td>
-					<td th:text="${user?.email}"></td>
-					<td th:text="${user?.sdt}"></td>
-					<td>
-						<a
-							type="button"
-							class="btn btn-sm btn-warning"
-							data-toggle="modal"
-							th:attr="data-target='#update-user'+${user?.maTV}"
-						>
-							<i class="bi bi-pencil"></i>
-						</a>
-						<a
-							type="button"
-							class="btn btn-sm btn-danger"
-							data-toggle="modal"
-							th:attr="data-target='#delete-user'+${user?.maTV}"
-						>
-							<i class="bi bi-trash"></i>
-						</a>
+    <div class="container mt-2 w-full">
+        <div class="mt-2 d-flex justify-content-between">
+            <h2>Danh sách thành viên</h2>
+            <div>
+                <a
+                    type="button"
+                    class="btn btn-xs btn-info"
+                    data-toggle="modal"
+                    data-target="#add-user-modal"
+                    style="height: 2.5rem"
+                    >
+                    <i class="bi bi-plus-square"></i>
+                    Thêm thành viên
+                </a>
+                <a
+                    type="button"
+                    class="btn btn-xs btn-info"
+                    data-toggle="modal"
+                    data-target="#import-user-modal"
+                    style="height: 2.5rem"
+                    >
+                    <i class="fa-regular fa-file-excel"></i>
+                    Nhập excel
+                </a>
+                <a
+                    type="button"
+                    class="btn btn-xs btn-info"
+                    data-toggle="modal"
+                    data-target="#myModal"
+                    style="height: 2.5rem"
+                    >
+                    <i class="fa-solid fa-computer"></i>
+                    Mượn thiết bị
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <table class="table table_bordered">
+            <thead>
+                <tr>
+                    <th>Ma thanh vien</th>
+                    <th>Ho ten</th>
+                    <th>Khoa</th>
+                    <th>Nganh</th>
+                    <th>Email</th>
+                    <th>So dien thoai</th>
+                    <th>Thao tac</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user, loop:${users}">
+                    <td th:text="${user?.maTV}"></td>
+                    <td th:text="${user?.hoten}"></td>
+                    <td th:text="${user?.khoa}"></td>
+                    <td th:text="${user?.nganh}"></td>
+                    <td th:text="${user?.email}"></td>
+                    <td th:text="${user?.sdt}"></td>
+                    <td>
+                        <a
+                            type="button"
+                            class="btn btn-sm btn-warning"
+                            data-toggle="modal"
+                            th:attr="data-target='#update-user'+${user?.maTV}"
+                            >
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a
+                            type="button"
+                            class="btn btn-sm btn-danger"
+                            data-toggle="modal"
+                            th:attr="data-target='#delete-user'+${user?.maTV}"
+                            >
+                            <i class="bi bi-trash"></i>
+                        </a>
+                        <a
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            data-toggle="modal"
+                            data-target="#myModalTra"
+                            id="btn_tra"
+                            >
+                            <i class="fa-solid fa-rotate-left"></i>
+                            Trả thiết bị
+                        </a>
 
-						<!-- ##### -->
+                        <!-- ##### -->
 
-						<div th:id="delete-user + ${user?.maTV}" class="modal fade" role="dialog">
-							<div class="modal-dialog modal-sm">
-								<div class="modal-content">
-									<form th:action="@{/user/delete}" method="POST">
-										<div class="modal-header justify-content-center">
-											<h3 class="modal-title">Xóa người dùng</h3>
-										</div>
-										<div class="modal-body">
-											<div class="row justify-content-center text-center">
-												<p>Xác nhận xóa người dùng</p>
-												<div class="form-group">
-													<input
-														type="text"
-														id="maTV"
-														name="maTV"
-														class="form-control"
-														th:value="${user?.maTV}"
-														hidden
-													/>
-												</div>
-											</div>
-										</div>
-										<div class="modal-footer">
-											<button type="submit" class="btn btn-danger flex-fill">Submit</button>
-											<button
-												type="button"
-												class="btn btn-secondary flex-fill"
-												data-dismiss="modal"
-											>
-												Close
-											</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
+                        <div th:id="delete-user + ${user?.maTV}" class="modal fade" role="dialog">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <form th:action="@{/user/delete}" method="POST">
+                                        <div class="modal-header justify-content-center">
+                                            <h3 class="modal-title">Xóa người dùng</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row justify-content-center text-center">
+                                                <p>Xác nhận xóa người dùng</p>
+                                                <div class="form-group">
+                                                    <input
+                                                        type="text"
+                                                        id="maTV"
+                                                        name="maTV"
+                                                        class="form-control"
+                                                        th:value="${user?.maTV}"
+                                                        hidden
+                                                        />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger flex-fill">Submit</button>
+                                            <button
+                                                type="button"
+                                                class="btn btn-secondary flex-fill"
+                                                data-dismiss="modal"
+                                                >
+                                                Close
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-						<!-- ##### -->
+                        <!-- ##### -->
 
-						<div th:id="update-user + ${user?.maTV}" class="modal fade" role="dialog">
-							<div class="modal-dialog modal-dialog-centered">
-								<div class="modal-content">
-									<form
-										th:action="@{/user/update/} + ${user.maTV}"
-										th:object="${user}"
-										method="POST"
-									>
-										<div class="modal-header">
-											<h4 class="modal-title">Chỉnh sửa thông tin người dùng</h4>
-										</div>
-										<div class="modal-body">
-											<div class="row justify-content-center">
-												<div class="form-group">
-													<label for="MaTV" class="font-weight-bold">Mã thành viên:</label>
-													<input
-														type="number"
-														id="maTV"
-														name="maTV"
-														class="form-control"
-														placeholder="Mã thành viên"
-														th:value="${user?.maTV}"
-														disabled
-													/>
-												</div>
-											</div>
+                        <div th:id="update-user + ${user?.maTV}" class="modal fade" role="dialog">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <form
+                                        th:action="@{/user/update/} + ${user.maTV}"
+                                        th:object="${user}"
+                                        method="POST"
+                                        >
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Chỉnh sửa thông tin người dùng</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row justify-content-center">
+                                                <div class="form-group">
+                                                    <label for="MaTV" class="font-weight-bold">Mã thành viên:</label>
+                                                    <input
+                                                        type="number"
+                                                        id="maTV"
+                                                        name="maTV"
+                                                        class="form-control"
+                                                        placeholder="Mã thành viên"
+                                                        th:value="${user?.maTV}"
+                                                        disabled
+                                                        />
+                                                </div>
+                                            </div>
 
-											<div class="row justify-content-center">
-												<div class="form-group mt-2">
-													<label for="name" class="font-weight-bold">Họ tên:</label>
-													<input
-														type="text"
-														id="hoten"
-														name="hoten"
-														class="form-control"
-														placeholder="Họ tên"
-														th:value="${user?.hoten}"
-														disabled
-													/>
-												</div>
-											</div>
+                                            <div class="row justify-content-center">
+                                                <div class="form-group mt-2">
+                                                    <label for="name" class="font-weight-bold">Họ tên:</label>
+                                                    <input
+                                                        type="text"
+                                                        id="hoten"
+                                                        name="hoten"
+                                                        class="form-control"
+                                                        placeholder="Họ tên"
+                                                        th:value="${user?.hoten}"
+                                                        disabled
+                                                        />
+                                                </div>
+                                            </div>
 
-											<div class="row justify-content-center">
-												<div class="form-group mt-2">
-													<label for="email" class="font-weight-bold">Email:</label>
-													<input
-														type="email"
-														id="email"
-														name="email"
-														class="form-control"
-														placeholder="Email"
-														th:value="${user?.email}"
-													/>
-												</div>
-											</div>
+                                            <div class="row justify-content-center">
+                                                <div class="form-group mt-2">
+                                                    <label for="email" class="font-weight-bold">Email:</label>
+                                                    <input
+                                                        type="email"
+                                                        id="email"
+                                                        name="email"
+                                                        class="form-control"
+                                                        placeholder="Email"
+                                                        th:value="${user?.email}"
+                                                        />
+                                                </div>
+                                            </div>
 
-											<div class="row justify-content-center">
-												<div class="form-group mt-2">
-													<label for="phone" class="font-weight-bold">Số điện thoại:</label>
-													<input
-														type="text"
-														id="sdt"
-														name="sdt"
-														class="form-control"
-														placeholder="Số điện thoại"
-														th:value="${user?.sdt}"
-													/>
-												</div>
-											</div>
+                                            <div class="row justify-content-center">
+                                                <div class="form-group mt-2">
+                                                    <label for="phone" class="font-weight-bold">Số điện thoại:</label>
+                                                    <input
+                                                        type="text"
+                                                        id="sdt"
+                                                        name="sdt"
+                                                        class="form-control"
+                                                        placeholder="Số điện thoại"
+                                                        th:value="${user?.sdt}"
+                                                        />
+                                                </div>
+                                            </div>
 
-											<div class="row justify-content-center">
-												<div class="form-group mt-2">
-													<label for="khoa" class="font-weight-bold">Khoa:</label>
-													<input
-														type="text"
-														id="khoa"
-														name="khoa"
-														class="form-control"
-														placeholder="Khoa"
-														th:value="${user?.khoa}"
-													/>
-												</div>
-											</div>
+                                            <div class="row justify-content-center">
+                                                <div class="form-group mt-2">
+                                                    <label for="khoa" class="font-weight-bold">Khoa:</label>
+                                                    <input
+                                                        type="text"
+                                                        id="khoa"
+                                                        name="khoa"
+                                                        class="form-control"
+                                                        placeholder="Khoa"
+                                                        th:value="${user?.khoa}"
+                                                        />
+                                                </div>
+                                            </div>
 
-											<div class="row justify-content-center">
-												<div class="form-group mt-2">
-													<label for="nganh" class="font-weight-bold">Ngành:</label>
-													<input
-														type="text"
-														id="nganh"
-														name="nganh"
-														class="form-control"
-														placeholder="Ngành"
-														th:value="${user?.nganh}"
-													/>
-												</div>
-											</div>
-										</div>
+                                            <div class="row justify-content-center">
+                                                <div class="form-group mt-2">
+                                                    <label for="nganh" class="font-weight-bold">Ngành:</label>
+                                                    <input
+                                                        type="text"
+                                                        id="nganh"
+                                                        name="nganh"
+                                                        class="form-control"
+                                                        placeholder="Ngành"
+                                                        th:value="${user?.nganh}"
+                                                        />
+                                                </div>
+                                            </div>
+                                        </div>
 
-										<div class="modal-footer">
-											<button type="submit" class="btn btn-primary">Submit</button>
-											<button type="button" class="btn btn-secondary" data-dismiss="modal">
-												Close
-											</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-						<!-- ##### -->
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+                        <!-- ##### -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </form>
 
 <div id="import-user-modal" class="modal fade" role="dialog">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<form th:action="@{/user/import}" enctype="multipart/form-data" method="POST">
-				<div class="modal-header">
-					<h5 class="modal-title">Import excel</h5>
-				</div>
-				<div class="modal-body">
-					<div class="row justify-content-center">
-						<div class="form-group">
-							<label for="curPass" class="font-weight-bold">File</label>
-							<input
-								type="file"
-								id="file"
-								name="file"
-								class="form-control"
-								required
-								accept=".xlsx, .xls, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-							/>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">Submit</button>
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
-			</form>
-		</div>
-	</div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form th:action="@{/user/import}" enctype="multipart/form-data" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import excel</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row justify-content-center">
+                        <div class="form-group">
+                            <label for="curPass" class="font-weight-bold">File</label>
+                            <input
+                                type="file"
+                                id="file"
+                                name="file"
+                                class="form-control"
+                                required
+                                accept=".xlsx, .xls, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <div id="add-user-modal" class="modal fade" role="dialog">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<form th:action="@{/user/add}" th:object="${newUser}" method="POST">
-				<div class="modal-header">
-					<h4 class="modal-title">Thêm thành viên</h4>
-				</div>
-				<div class="modal-body">
-					<div class="row justify-content-center">
-						<div class="form-group">
-							<label for="MaTV" class="font-weight-bold">Mã thành viên:</label>
-							<input
-								type="number"
-								id="maTV"
-								class="form-control"
-								placeholder="Mã thành viên"
-								th:field="*{maTV}"
-							/>
-						</div>
-					</div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form th:action="@{/user/add}" th:object="${newUser}" method="POST">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm thành viên</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row justify-content-center">
+                        <div class="form-group">
+                            <label for="MaTV" class="font-weight-bold">Mã thành viên:</label>
+                            <input
+                                type="number"
+                                id="maTV"
+                                class="form-control"
+                                placeholder="Mã thành viên"
+                                th:field="*{maTV}"
+                                />
+                        </div>
+                    </div>
 
-					<div class="row justify-content-center">
-						<div class="form-group mt-2">
-							<label for="hoten" class="font-weight-bold">Họ tên:</label>
-							<input
-								type="text"
-								id="hoten"
-								class="form-control"
-								placeholder="Họ tên"
-								th:field="*{hoten}"
-							/>
-						</div>
-					</div>
+                    <div class="row justify-content-center">
+                        <div class="form-group mt-2">
+                            <label for="hoten" class="font-weight-bold">Họ tên:</label>
+                            <input
+                                type="text"
+                                id="hoten"
+                                class="form-control"
+                                placeholder="Họ tên"
+                                th:field="*{hoten}"
+                                />
+                        </div>
+                    </div>
 
-					<div class="row justify-content-center">
-						<div class="form-group mt-2">
-							<label for="email" class="font-weight-bold">Email:</label>
-							<input
-								type="email"
-								id="email"
-								class="form-control"
-								placeholder="Email"
-								th:field="*{email}"
-							/>
-						</div>
-					</div>
+                    <div class="row justify-content-center">
+                        <div class="form-group mt-2">
+                            <label for="email" class="font-weight-bold">Email:</label>
+                            <input
+                                type="email"
+                                id="email"
+                                class="form-control"
+                                placeholder="Email"
+                                th:field="*{email}"
+                                />
+                        </div>
+                    </div>
 
-					<div class="row justify-content-center">
-						<div class="form-group mt-2">
-							<label for="sdt" class="font-weight-bold">Số điện thoại:</label>
-							<input
-								type="text"
-								id="sdt"
-								class="form-control"
-								placeholder="Số điện thoại"
-								th:field="*{sdt}"
-							/>
-						</div>
-					</div>
+                    <div class="row justify-content-center">
+                        <div class="form-group mt-2">
+                            <label for="sdt" class="font-weight-bold">Số điện thoại:</label>
+                            <input
+                                type="text"
+                                id="sdt"
+                                class="form-control"
+                                placeholder="Số điện thoại"
+                                th:field="*{sdt}"
+                                />
+                        </div>
+                    </div>
 
-					<div class="row justify-content-center">
-						<div class="form-group mt-2">
-							<label for="password" class="font-weight-bold">Mật khẩu:</label>
-							<input
-								type="password"
-								id="password"
-								class="form-control"
-								placeholder="Mật khẩu"
-								th:field="*{password}"
-							/>
-						</div>
-					</div>
+                    <div class="row justify-content-center">
+                        <div class="form-group mt-2">
+                            <label for="password" class="font-weight-bold">Mật khẩu:</label>
+                            <input
+                                type="password"
+                                id="password"
+                                class="form-control"
+                                placeholder="Mật khẩu"
+                                th:field="*{password}"
+                                />
+                        </div>
+                    </div>
 
-					<div class="row justify-content-center">
-						<div class="form-group mt-2">
-							<label for="khoa" class="font-weight-bold">Khoa:</label>
-							<input
-								type="text"
-								id="khoa"
-								class="form-control"
-								placeholder="Khoa"
-								th:field="*{khoa}"
-							/>
-						</div>
-					</div>
+                    <div class="row justify-content-center">
+                        <div class="form-group mt-2">
+                            <label for="khoa" class="font-weight-bold">Khoa:</label>
+                            <input
+                                type="text"
+                                id="khoa"
+                                class="form-control"
+                                placeholder="Khoa"
+                                th:field="*{khoa}"
+                                />
+                        </div>
+                    </div>
 
-					<div class="row justify-content-center">
-						<div class="form-group mt-2">
-							<label for="nganh" class="font-weight-bold">Ngành:</label>
-							<input
-								type="text"
-								id="nganh"
-								class="form-control"
-								placeholder="Ngành"
-								th:field="*{nganh}"
-							/>
-						</div>
-					</div>
-				</div>
+                    <div class="row justify-content-center">
+                        <div class="form-group mt-2">
+                            <label for="nganh" class="font-weight-bold">Ngành:</label>
+                            <input
+                                type="text"
+                                id="nganh"
+                                class="form-control"
+                                placeholder="Ngành"
+                                th:field="*{nganh}"
+                                />
+                        </div>
+                    </div>
+                </div>
 
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">Submit</button>
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
-			</form>
-		</div>
-	</div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+<!-- Modal mượn thiết bị-->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/muonthietbi" method="POST" id="form_muon">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mượn thiết bị</h5>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="matv">Mã thành viên:</label>
+                        <div class="input-group">
+                            <input class="form-control" list="users" name="matv" id="matv">
+                            <datalist id="users">
+                                <option th:each="user : ${users}" th:value="${user.maTV}" th:text="${user.hoten}">
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="matb">Mã thiết bị:</label>
+                        <div class="input-group">
+                            <input class="form-control" list="devices" name="matb" id="matb">
+                            <datalist id="devices">
+                                <option th:each="device : ${devices}" th:value="${device.maTB}" th:text="${device.tenTB}">
+                            </datalist>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_close_muon">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal trả thiết bị-->
+<div id="myModalTra" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/trathietbi" method="POST" id="form_tra">
+                <div class="modal-header">
+                    <h5 class="modal-title">Trả thiết bị</h5>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="matv">Mã thành viên:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="matv" name="matv" readonly/>
+                        </div>     
+                    </div>
+                    <div class="form-group">
+                        <label for="matb">Mã thiết bị:</label>
+                        <div class="input-group">
+                            <input class="form-control" list="devices" name="matb" id="matb">
+                            <datalist id="devices">
+                                <option th:each="device : ${devices}" th:value="${device.maTB}" th:text="${device.tenTB}">
+                            </datalist>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_close_muon">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var tables = document.querySelector('.table');
+    var buttonsTra = tables.querySelectorAll("#btn_tra");
+
+    //hien-thi-dat-muon
+    buttonsTra.forEach(function (button) {
+        button.addEventListener('click', function () {
+            var tableRow = this.closest('tr'); // Tìm dòng cha của nút được nhấp
+            var maTB = 0;
+            if (tableRow) {
+                maTB = tableRow.cells[0].textContent;
+            }
+
+            document.querySelector('#form_tra #matv').value = maTB;
+            document.querySelector('#form_tra #matb').value = "";
+        });
+    });
+
+    document.querySelector("#form_muon").addEventListener('submit', function (event) {
+        event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+
+        fetch('/muonthietbi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'matv': document.querySelector("#form_muon #matv").value,
+                'matb': document.querySelector("#form_muon #matb").value
+            })
+        })
+                .then(response => {
+                    if (response.ok) {
+                        response.text().then(text => {
+                            if (text.trim() === 'ok') {
+                                document.getElementById('btn_close_muon').click();
+                                Swal.fire({
+                                    position: "top",
+                                    icon: "success",
+                                    title: "Mượn thành công",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            } else if (text.trim() === 'alert') {
+                                Swal.fire({
+                                    position: "top",
+                                    icon: "warning",
+                                    title: "Thiết bị đang được mượn",
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            } else {
+                                Swal.fire({
+                                    position: "top",
+                                    icon: "warning",
+                                    title: "Thiết bị đang được đặt chỗ",
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            position: "top",
+                            icon: "error",
+                            title: "Vui lòng nhập đầy đủ thông tin",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
+                });
+    });
+
+    document.querySelector("#form_tra").addEventListener('submit', function (event) {
+        event.preventDefault(); // Ngăn form gửi dữ liệu lại server
+
+        fetch('/trathietbi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'matv': document.querySelector("#form_tra #matv").value,
+                'matb': document.querySelector("#form_tra #matb").value
+            })
+        })
+                .then(response => {
+                    if (response.ok) {
+                        response.text().then(text => {
+                            if (text.trim() === 'ok') {
+                                document.getElementById('btn_close_muon').click();
+                                Swal.fire({
+                                    position: "top",
+                                    icon: "success",
+                                    title: "Trả thiết bị thành công",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            } else {
+                                Swal.fire({
+                                    position: "top",
+                                    icon: "warning",
+                                    title: "Thiết bị không hợp lệ",
+                                    text: "Thành viên không mượn thiết bị này"
+                                });
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            position: "top",
+                            icon: "error",
+                            title: "Vui lòng nhập đầy đủ thông tin",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
+                });
+    });
+
+</script>

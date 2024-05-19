@@ -25,8 +25,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UserController {
 	@Autowired
 	private ThanhVienService thanhvienService;
-        
-        @Autowired
+
+	@Autowired
 	private ThietBiService thietBiService;
 
 	@GetMapping("/manage-users")
@@ -41,7 +41,7 @@ public class UserController {
 		m.addAttribute("isAdmin", thanhvienService.checkAdmin(request));
 		m.addAttribute("users", thanhvienService.getAll());
 		m.addAttribute("newUser", new ThanhVien());
-                m.addAttribute("devices", thietBiService.getAll());
+		m.addAttribute("devices", thietBiService.getAll());
 
 		return "manage-users";
 	}
@@ -76,7 +76,7 @@ public class UserController {
 		tv.setMaTV((int) tv.getMaTV());
 
 		tv.setIsAdmin(false);
-                if (tv.getMaTV().toString().length() != 10 || !tv.getMaTV().toString().matches("\\d+")) {
+		if (tv.getMaTV().toString().length() != 10 || !tv.getMaTV().toString().matches("\\d+")) {
 			m.addAttribute("errorMessage", "Mã thành viên đủ 10 số và không chứa kí tự!");
 			m.addAttribute("thanhvien", tv);
 			return "/user/add";

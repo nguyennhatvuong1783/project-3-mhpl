@@ -46,18 +46,22 @@
 							>Chưa xử lý</span
 						>
 					</td>
-					<td th:if="${item.trangThaiXL}"></td>
-					<td class="align-middle d-flex gap-1" th:if="${!item.trangThaiXL}">
-						<form th:action="@{/xu-ly/duyet/} + ${item.maXL}" method="post">
+					<td class="align-middle d-flex justify-content-center gap-1">
+						<form
+							th:if="${!item.trangThaiXL}"
+							th:action="@{/xu-ly/duyet/} + ${item.maXL}"
+							method="post"
+						>
 							<button type="submit" class="btn btn-success btn-sm">
 								<i class="bi bi-bookmark-check"></i>
 							</button>
 						</form>
 						<a
+							th:if="${!item.trangThaiXL}"
 							type="button"
 							class="btn btn-sm btn-warning"
 							data-toggle="modal"
-							th:attr="data-target='#update-user'+${user?.maTV}"
+							th:attr="data-target='#update-violated'+${item?.maXL}"
 						>
 							<i class="bi bi-pencil"></i>
 						</a>
@@ -65,10 +69,129 @@
 							type="button"
 							class="btn btn-sm btn-danger"
 							data-toggle="modal"
-							th:attr="data-target='#delete-user'+${user?.maTV}"
+							th:attr="data-target='#delete-violated'+${item?.maXL}"
 						>
 							<i class="bi bi-trash"></i>
 						</a>
+
+						<!-- ##### -->
+
+						<div th:id="delete-violated + ${item?.maXL}" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<form th:action="@{/xu-ly/delete}" method="POST">
+										<div class="modal-header justify-content-center">
+											<h3 class="modal-title">Xóa vi phạm</h3>
+										</div>
+										<div class="modal-body">
+											<div class="row justify-content-center text-center">
+												<p>Xác nhận xóa vi phạm</p>
+												<div class="form-group">
+													<input
+														type="text"
+														id="maXL"
+														name="maXL"
+														class="form-control"
+														th:value="${item?.maXL}"
+														hidden
+													/>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="submit" class="btn btn-danger flex-fill">Submit</button>
+											<button
+												type="button"
+												class="btn btn-secondary flex-fill"
+												data-dismiss="modal"
+											>
+												Close
+											</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+
+						<!-- ##### -->
+
+						<div th:id="update-violated + ${item?.maXL}" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-dialog-centered">
+								<div class="modal-content text-left">
+									<form
+										method="POST"
+										th:action="@{/xu-ly/update/} + ${item?.maXL}"
+										th:object="${item}"
+									>
+										<div class="modal-header">
+											<h4 class="modal-title">Chỉnh sửa vi phạm</h4>
+										</div>
+										<div class="modal-body text-left" style="text-align: left !important">
+											<div class="row justify-content-center">
+												<div class="form-group mt-2">
+													<label for="update-user" class="font-weight-bold">Thành viên:</label>
+													<select
+														id="update-user"
+														class="form-select"
+														name="maTV"
+														required="required"
+													>
+														<option disabled value="">Open this select menu</option>
+														<option
+															th:each="user, loop : ${users}"
+															th:selected="${item?.thanhVienXL?.getMaTV() == user?.maTV}"
+															th:value="${user?.maTV}"
+															th:text="${user?.hoten}"
+														></option>
+													</select>
+												</div>
+											</div>
+
+											<div class="row justify-content-center">
+												<div class="form-group mt-2">
+													<label for="hinhThucXL" class="font-weight-bold">Hình thức xử lý:</label>
+													<input
+														type="text"
+														id="hinhThucXL"
+														class="form-control"
+														name="hinhThucXL"
+														placeholder="Hình thức xử lý"
+														th:value="${item?.hinhThucXL}"
+													/>
+												</div>
+											</div>
+
+											<div
+												class="row justify-content-center"
+												id="total"
+												th:style="${item?.soTien == null ? 'display: none': ''}"
+											>
+												<div class="form-group mt-2">
+													<label for="soTien" class="font-weight-bold">Số tiền:</label>
+													<input
+														type="number"
+														id="soTien"
+														class="form-control"
+														name="soTien"
+														th:value="${item?.soTien}"
+														placeholder="Số tiền"
+													/>
+												</div>
+											</div>
+										</div>
+
+										<div class="modal-footer">
+											<button type="submit" class="btn btn-primary">Submit</button>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">
+												Close
+											</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+
+						<!-- ##### -->
 					</td>
 				</tr>
 			</tbody>
@@ -162,16 +285,18 @@
 			});
 		});
 
-		const total = document.querySelector('#total');
+		document.querySelectorAll('#hinhThucXL').forEach((element) => {
+			element.addEventListener('input', (e) => {
+				const value = e.target.value.toLowerCase();
 
-		document.querySelector('#hinhThucXL').addEventListener('input', (e) => {
-			const value = e.target.value.toLowerCase();
-			console.log('b', total, ['boi thuong', 'bồi thường'].includes(value));
-			if (['boi thuong', 'boithuong', 'bồithường', 'bồi thường'].includes(value)) {
-				total.style.display = 'block';
-			} else {
-				total.style.display = 'none';
-			}
+				const totalElement = element.closest('.modal-body').querySelector('#total');
+
+				if (['boi thuong', 'boithuong', 'bồithường', 'bồi thường'].includes(value)) {
+					totalElement.style.display = 'block';
+				} else {
+					totalElement.style.display = 'none';
+				}
+			});
 		});
 	</script>
 </body>

@@ -4,14 +4,9 @@
  */
 package com.project3mhpl.service;
 
-import com.project3mhpl.entity.ThanhVien;
-import com.project3mhpl.repository.ThanhVienRepository;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -25,6 +20,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
+
+import com.project3mhpl.dto.BaseResponse;
+import com.project3mhpl.dto.CheckInResponseDto;
+import com.project3mhpl.entity.ThanhVien;
+import com.project3mhpl.entity.XuLy;
+import com.project3mhpl.repository.ThanhVienRepository;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -192,14 +196,15 @@ public class ThanhVienService {
 	public ThanhVien findBySdt(String sdt) {
 		return thanhvienRepository.findBySdt(sdt);
 	}
-        
-        public ThanhVien findByEmail(String email) {
-                return thanhvienRepository.findByEmail(email);
-        }
 
-        public ThanhVien findByMaTV(Integer maTV) {
-                return thanhvienRepository.findByMaTV(maTV);
-        }
+	public ThanhVien findByEmail(String email) {
+		return thanhvienRepository.findByEmail(email);
+	}
+
+	public ThanhVien findByMaTV(Integer maTV) {
+		return thanhvienRepository.findByMaTV(maTV);
+	}
+
 	public Boolean resetPassword(String email) {
 		ThanhVien tv = thanhvienRepository.findByEmail(email);
 
@@ -221,6 +226,41 @@ public class ThanhVienService {
 		thanhvienRepository.save(tv);
 
 		return true;
+	}
+
+	public BaseResponse<CheckInResponseDto> checkIn(Integer maTV) {
+
+		BaseResponse<CheckInResponseDto> result = new BaseResponse<CheckInResponseDto>();
+
+		ThanhVien tv = thanhvienRepository.findByMaTV(maTV);
+
+		if (tv == null) {
+			result.setIsSuccess(false);
+			result.setMessage("Thành viên không tồn tại");
+			return result;
+		}
+
+		if (!tv.getXuLy().isEmpty()) {
+			for (XuLy xl : tv.getXuLy()) {
+				if (!xl.getTrangThaiXL()) {
+					result.setIsSuccess(false);
+					result.setMessage("Thành viên có vi phạm đang xử lý");
+
+					return result;
+				}
+			}
+		}
+
+		// Clear sensitive data before return
+		tv.setPassword(null);
+		tv.setXuLy(null);
+
+		result.setIsSuccess(true);
+		result.setMessage("Check in thành công");
+
+		result.setData(new CheckInResponseDto(tv, new Date()));
+
+		return result;
 	}
 
 }

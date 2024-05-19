@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
 import com.project3mhpl.dto.CreateViolatedDto;
+import com.project3mhpl.dto.UpdateViolatedDto;
 import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.entity.XuLy;
 import com.project3mhpl.repository.XuLyRepository;
@@ -72,6 +73,33 @@ public class XulyService {
 
 		xl.setTrangThaiXL(true);
 		xl.setNgayXL(new Date());
+
+		saveXl(xl);
+	}
+
+	public void deleteXL(Integer id) {
+		xuLyRepository.deleteById(id);
+	}
+
+	public void updateVP(Integer maXL, UpdateViolatedDto form) {
+		XuLy xl = getOne(maXL);
+
+		if (xl == null) {
+			return;
+		}
+
+		if (form.getMaTV() != null) {
+			ThanhVien tv = thanhVienService.getById(form.getMaTV()).get();
+			xl.setThanhVienXL(tv);
+		}
+
+		if (form.getHinhThucXL() != null) {
+			xl.setHinhThucXL(form.getHinhThucXL());
+		}
+
+		if (form.getSoTien() != null) {
+			xl.setSoTien(form.getSoTien());
+		}
 
 		saveXl(xl);
 	}

@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project3mhpl.dto.BaseResponse;
+import com.project3mhpl.dto.CheckInResponseDto;
 import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThietBiService;
@@ -25,8 +28,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UserController {
 	@Autowired
 	private ThanhVienService thanhvienService;
-        
-        @Autowired
+
+	@Autowired
 	private ThietBiService thietBiService;
 
 	@GetMapping("/manage-users")
@@ -41,7 +44,7 @@ public class UserController {
 		m.addAttribute("isAdmin", thanhvienService.checkAdmin(request));
 		m.addAttribute("users", thanhvienService.getAll());
 		m.addAttribute("newUser", new ThanhVien());
-                m.addAttribute("devices", thietBiService.getAll());
+		m.addAttribute("devices", thietBiService.getAll());
 
 		return "manage-users";
 	}
@@ -76,7 +79,7 @@ public class UserController {
 		tv.setMaTV((int) tv.getMaTV());
 
 		tv.setIsAdmin(false);
-                if (tv.getMaTV().toString().length() != 10 || !tv.getMaTV().toString().matches("\\d+")) {
+		if (tv.getMaTV().toString().length() != 10 || !tv.getMaTV().toString().matches("\\d+")) {
 			m.addAttribute("errorMessage", "Mã thành viên đủ 10 số và không chứa kí tự!");
 			m.addAttribute("thanhvien", tv);
 			return "/user/add";
@@ -105,6 +108,15 @@ public class UserController {
 		thanhvienService.saveTV(tv);
 
 		return "redirect:/dashboard#manage-users";
+	}
+
+	@PostMapping("/user/check-in/{maTV}")
+	@ResponseBody
+	public BaseResponse<CheckInResponseDto> checkInUser(@PathVariable Integer maTV) {
+
+		System.out.println(maTV);
+
+		return thanhvienService.checkIn(maTV);
 	}
 
 }

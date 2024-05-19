@@ -18,5 +18,5 @@ public interface ThanhVienRepository extends CrudRepository<ThanhVien, Integer> 
 
 	ThanhVien findByEmail(String email);
 
-        ThanhVien findByMaTV(Integer maTV);
+	ThanhVien findByMaTV(Integer maTV);
 }

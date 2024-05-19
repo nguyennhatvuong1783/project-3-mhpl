@@ -59,10 +59,13 @@ public class ProfileController {
 		}
 
 		ChangePasswordDto form = new ChangePasswordDto();
-
+                
 		m.addAttribute("data", thanhvienService.getProfile(request));
 		m.addAttribute("formPassword", form);
-
+                ThanhVien tv =thanhvienService.getProfile(request);
+                if (thanhvienService.isAdminUser(tv.getMaTV())) {
+                                m.addAttribute("isAdmin", true);
+			}
 		return "change-password";
 	}
 
@@ -89,7 +92,10 @@ public class ProfileController {
 			m.addAttribute("errorMessage", "Mật khẩu cũ không đúng");
 			return "change-password";
 		}
-
+                
+                if (thanhvienService.isAdminUser(member.getMaTV())) {
+                                m.addAttribute("isAdmin", true);
+			}
 		member.setPassword(form.confirmPassword);
 
 		thanhvienService.saveTV(member);
@@ -193,9 +199,11 @@ public class ProfileController {
 		member.setKhoa(form.getKhoa());
 		member.setNganh(form.getNganh());
 		member.setSdt(form.getSdt());
-
+                if (thanhvienService.isAdminUser(member.getMaTV())) {
+                                m.addAttribute("isAdmin", true);
+			}
 		thanhvienService.saveTV(member);
-
+                
 		return "profile";
 	}
 

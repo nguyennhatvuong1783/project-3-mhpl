@@ -66,11 +66,37 @@ public class UserController {
 	}
 
 	@PostMapping("/user/add")
-	public String addUser(ThanhVien tv) {
+	public String addUser(ThanhVien tv, Model m) {
 
 		tv.setMaTV((int) tv.getMaTV());
 
 		tv.setIsAdmin(false);
+                if (tv.getMaTV().toString().length() != 10 || !tv.getMaTV().toString().matches("\\d+")) {
+			m.addAttribute("errorMessage", "Mã thành viên đủ 10 số và không chứa kí tự!");
+			m.addAttribute("thanhvien", tv);
+			return "/user/add";
+		}
+		if (!tv.getHoten().matches("^[\\p{L}\\s]+$")) {
+			m.addAttribute("errorMessage", "Tên thành viên chỉ chứa chữ cái!");
+			m.addAttribute("thanhvien", tv);
+			return "/user/add";
+		}
+		if (!tv.getKhoa().matches("^[\\p{L}\\s]+$") || !tv.getNganh().matches("^[\\p{L}\\s]+$")) {
+			m.addAttribute("errorMessage", "Khoa và ngành chỉ chứa chữ cái!");
+			m.addAttribute("thanhvien", tv);
+			return "/user/add";
+		}
+		if (!tv.getSdt().matches("0\\d{9}")) {
+			m.addAttribute("errorMessage", "Số điện thoại không đúng dịnh dạng!");
+			m.addAttribute("thanhvien", tv);
+			return "/user/add";
+		}
+		if (!tv.getEmail().matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
+			m.addAttribute("errorMessage", "Email không đúng dịnh dạng!");
+			m.addAttribute("thanhvien", tv);
+			return "/user/add";
+		}
+		tv.setMaTV(Integer.parseInt(tv.getMaTV().toString()));
 		thanhvienService.saveTV(tv);
 
 		return "redirect:/dashboard#manage-users";

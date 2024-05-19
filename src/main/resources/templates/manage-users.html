@@ -33,6 +33,16 @@
 					<i class="fa-solid fa-computer"></i>
 					Mượn thiết bị
 				</a>
+				<a
+					type="button"
+					class="btn btn-xs btn-info"
+					data-toggle="modal"
+					data-target="#check-in-user-modal"
+					style="height: 2.5rem"
+				>
+					<i class="bi bi-upc-scan"></i>
+					Vào khu vực học tập
+				</a>
 			</div>
 		</div>
 	</div>
@@ -384,6 +394,89 @@
 	</div>
 </div>
 
+<div id="check-in-user-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<form id="check-in-form">
+				<div class="modal-header">
+					<h4 class="modal-title">Vào khu vực học tập</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row justify-content-center">
+						<div class="form-group">
+							<label for="checkInUser" class="font-weight-bold">Mã thành viên:</label>
+							<input
+								type="number"
+								id="checkInUser"
+								name="maTV"
+								class="form-control"
+								placeholder="Mã thành viên"
+							/>
+						</div>
+					</div>
+
+					<div id="check-in-info" style="display: none">
+						<div class="row justify-content-center">
+							<div class="form-group mt-2">
+								<label for="info-checkInAt" class="font-weight-bold">Thời gian vào:</label>
+								<input
+									type="datetime"
+									id="info-checkInAt"
+									class="form-control"
+									placeholder="Check In"
+								/>
+							</div>
+						</div>
+
+						<div class="row justify-content-center">
+							<div class="form-group mt-2">
+								<label for="info-hoten" class="font-weight-bold">Họ tên:</label>
+								<input type="email" id="info-hoten" class="form-control" placeholder="Email" />
+							</div>
+						</div>
+
+						<div class="row justify-content-center">
+							<div class="form-group mt-2">
+								<label for="info-email" class="font-weight-bold">Email:</label>
+								<input type="email" id="info-email" class="form-control" placeholder="Email" />
+							</div>
+						</div>
+
+						<div class="row justify-content-center">
+							<div class="form-group mt-2">
+								<label for="info-sdt" class="font-weight-bold">Số điện thoại:</label>
+								<input type="text" id="info-sdt" class="form-control" placeholder="Số điện thoại" />
+							</div>
+						</div>
+
+						<div class="row justify-content-center">
+							<div class="form-group mt-2">
+								<label for="info-khoa" class="font-weight-bold">Khoa:</label>
+								<input type="text" id="info-khoa" class="form-control" placeholder="Khoa" />
+							</div>
+						</div>
+
+						<div class="row justify-content-center">
+							<div class="form-group mt-2">
+								<label for="info-nganh" class="font-weight-bold">Ngành:</label>
+								<input type="text" id="info-nganh" class="form-control" placeholder="Ngành" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer action-btn">
+					<button type="button" class="btn btn-primary action-btn_continue" style="display: none">
+						Continue
+					</button>
+					<button type="button" class="btn btn-primary action-btn_submit">Submit</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <!-- Modal mượn thiết bị-->
 <div id="myModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
@@ -587,4 +680,92 @@
 			}
 		});
 	});
+
+	// Check-in
+
+	const handleCheckIn = () => {
+		const checkInForm = document.querySelector('#check-in-form');
+
+		const submitCheckInBtn = checkInForm.querySelector('.action-btn_submit');
+
+		const clearActionBtn = checkInForm.querySelector('.action-btn_continue');
+
+		const checkInInfo = checkInForm.querySelector('#check-in-info');
+
+		const maTVInput = checkInForm.querySelector('#checkInUser');
+
+		const showCheckInInfo = (userInfo = {}, checkInAt = '') => {
+			['email', 'hoten', 'khoa', 'nganh', 'sdt'].forEach((key) => {
+				checkInForm.querySelector(`#info-${key}`).value = userInfo?.[key];
+			});
+
+			checkInForm.querySelector('#info-checkInAt').value = checkInAt
+				? new Date(checkInAt).toLocaleString()
+				: '';
+		};
+
+		clearActionBtn.addEventListener('click', function () {
+			checkInForm.querySelector('#checkInUser').value = '';
+
+			checkInInfo.style.display = 'none';
+			submitCheckInBtn.style.display = 'block';
+			clearActionBtn.style.display = 'none';
+
+			showCheckInInfo({});
+		});
+
+		maTVInput.addEventListener('input', function () {
+			checkInInfo.style.display = 'none';
+			submitCheckInBtn.style.display = 'block';
+			clearActionBtn.style.display = 'none';
+
+			showCheckInInfo({});
+		});
+
+		submitCheckInBtn.addEventListener('click', async function (e) {
+			try {
+				e.preventDefault();
+
+				const maTV = checkInForm.querySelector('#checkInUser').value;
+
+				if (!maTV || Number.isNaN(maTV)) {
+					Swal.fire({
+						position: 'center',
+						icon: 'error',
+						title: 'Vui lòng nhập mã thành viên hợp lệ',
+						showConfirmButton: true,
+						timer: 1000,
+					});
+
+					return;
+				}
+
+				const response = await fetch(`/user/check-in/${maTV}`, {
+					method: 'POST',
+				});
+
+				const result = await response.json();
+
+				Swal.fire({
+					position: 'center',
+					icon: result?.isSuccess ? 'success' : 'error',
+					title: result?.message,
+					showConfirmButton: true,
+					timer: result?.isSuccess ? 1000 : 2000,
+				});
+
+				if (result?.isSuccess) {
+					showCheckInInfo(result?.data?.user ?? {}, result?.data?.checkInAt);
+
+					submitCheckInBtn.style.display = 'none';
+					clearActionBtn.style.display = 'block';
+					checkInInfo.style.display = 'block';
+				}
+			} catch (error) {
+				console.log('check-in-error', error);
+			}
+		});
+	};
+
+	handleCheckIn();
 </script>

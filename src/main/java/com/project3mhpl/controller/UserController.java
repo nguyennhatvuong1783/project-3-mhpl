@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project3mhpl.dto.BaseResponse;
+import com.project3mhpl.dto.CheckInResponseDto;
 import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThietBiService;
@@ -105,6 +108,15 @@ public class UserController {
 		thanhvienService.saveTV(tv);
 
 		return "redirect:/dashboard#manage-users";
+	}
+
+	@PostMapping("/user/check-in/{maTV}")
+	@ResponseBody
+	public BaseResponse<CheckInResponseDto> checkInUser(@PathVariable Integer maTV) {
+
+		System.out.println(maTV);
+
+		return thanhvienService.checkIn(maTV);
 	}
 
 }

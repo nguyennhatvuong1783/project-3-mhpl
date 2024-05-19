@@ -209,5 +209,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 				</table>
 			</div>
 		</form>
-	</body>
+	<div th:if="${successMessage}" style="color: green;">
+            <p th:text="${successMessage}"></p>
+        </div>
+        </body>
 </html>

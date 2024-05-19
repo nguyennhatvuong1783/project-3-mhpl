@@ -1,0 +1,574 @@
+<div class="mt-2 d-flex justify-content-between container">
+    <h2>Thống kê</h2>
+    <div>
+        <button
+            class="btn btn-xs btn-info"
+            style="height: 2.5rem"
+            onclick="toggleContent('content1')"
+            >
+            <i class="fa-solid fa-users-line"></i> Số lượng thành viên vào khu vực học tập
+        </button>
+        <button
+            class="btn btn-xs btn-info"
+            style="height: 2.5rem"
+            onclick="toggleContent('content2')"
+            >
+            <i class="fa-solid fa-computer"></i> Thiết bị được mượn
+        </button>
+        <button
+            class="btn btn-xs btn-info"
+            style="height: 2.5rem"
+            onclick="toggleContent('content3')"
+            >
+            <i class="fa-solid fa-chalkboard-user"></i> Thiết bị đang được mượn
+        </button>
+        <button
+            class="btn btn-xs btn-info"
+            style="height: 2.5rem"
+            onclick="toggleContent('content4')"
+            >
+            <i class="fa-solid fa-user-lock"></i> Vi phạm
+        </button>
+    </div>
+</div>
+
+<!-- Thành viên -->
+<div class="content_statistic" id="content1">
+    <form action="/filter" class="d-flex flex-wrap mt-3 mb-2" id='filterTV'>
+        <div class="d-flex mb-3 align-items-center justify-content-center">
+            <label for="startDate" class="col-form-label text-center">Từ:</label>
+            <div class="input-group ms-3" id="datetimepicker-3">
+                <input type="text" class="form-control" id="startDate" name="startDate" />
+                <input type="hidden" id="idTBMuon" name="idTBMuon" />
+                <span class="input-group-text" data-toggle>
+                    <i class="bi bi-calendar"></i>
+                </span>
+                <span class="input-group-text" title="clear" data-clear>
+                    <i class="bi bi-x"></i>
+                </span>
+            </div>
+        </div>
+        <div class="d-flex mb-3 align-items-center justify-content-center ms-3">
+            <label for="endDate" class="col-form-label text-center">Đến:</label>
+            <div class="input-group ms-3" id="datetimepicker-1">
+                <input type="text" class="form-control" id="endDate" name="endDate" />
+                <input type="hidden" id="idTB" name="idTB" />
+                <span class="input-group-text" data-toggle>
+                    <i class="bi bi-calendar"></i>
+                </span>
+                <span class="input-group-text" title="clear" data-clear>
+                    <i class="bi bi-x"></i>
+                </span>
+            </div>
+        </div>
+        <div class="d-flex mb-3 align-items-center justify-content-center ms-3">
+            <label for="khoa" class="col-form-label text-center">Khoa:</label>
+            <div class="ms-3">  
+                <select class="form-select" id="khoa" name="khoa">
+                    <option value="filter" selected>Lọc khoa</option>
+                    <option th:each="item : ${khoa}" th:value="${item}" th:text="${item}">
+                </select>
+            </div>
+        </div>
+        <div class="d-flex mb-3 align-items-center justify-content-center ms-3">
+            <label for="nganh" class="col-form-label text-center">Ngành:</label>
+            <div class="ms-3">
+                <select class="form-select" id="nganh" name="nganh">
+                    <option value="filter" selected>Lọc ngành</option>
+                    <option th:each="item : ${nganh}" th:value="${item}" th:text="${item}">
+                </select>
+            </div>
+        </div>
+        <div class="row ms-2">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="submit" class="btn btn-primary">Lọc</button>
+            </div>
+        </div>
+    </form>
+    <div class="d-flex align-items-center mb-4 justify-content-center">
+        <div class="me-3">
+            <i class="fa-solid fa-users-line fa-3x"></i>
+        </div>
+        <h2 class="" th:text="${soLuong} + ' Thành viên vào khu vực học tập'"></h2>
+    </div>
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>Mã thành viên</th>
+                <th>Họ tên</th>
+                <th>Khoa</th>
+                <th>Ngành</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Thời gian vào</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${ttsd}">
+                <td th:text="${user?.thanhVienTTSD.maTV}"></td>
+                <td th:text="${user?.thanhVienTTSD.hoten}"></td>
+                <td th:text="${user?.thanhVienTTSD.khoa}"></td>
+                <td th:text="${user?.thanhVienTTSD.nganh}"></td>
+                <td th:text="${user?.thanhVienTTSD.email}"></td>
+                <td th:text="${user?.thanhVienTTSD.sdt}"></td>
+                <td th:text="${user?.tgVao}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Mượn thiết bị -->
+<div class="content_statistic" id="content2" style="display: none;">
+    <form action="/filterBorrow" class="d-flex flex-wrap mt-3 mb-2" id='filterBorrow'>
+        <div class="d-flex mb-3 align-items-center justify-content-center">
+            <label for="startDateBorrow" class="col-form-label text-center">Từ:</label>
+            <div class="input-group ms-3" id="datetimepicker-2">
+                <input type="text" class="form-control" id="startDateBorrow" name="startDateBorrow" />
+                <span class="input-group-text" data-toggle>
+                    <i class="bi bi-calendar"></i>
+                </span>
+                <span class="input-group-text" title="clear" data-clear>
+                    <i class="bi bi-x"></i>
+                </span>
+            </div>
+        </div>
+        <div class="d-flex mb-3 align-items-center justify-content-center ms-3">
+            <label for="endDateBorrow" class="col-form-label text-center">Đến:</label>
+            <div class="input-group ms-3" id="datetimepicker-4">
+                <input type="text" class="form-control" id="endDateBorrow" name="endDateBorrow" />
+                <span class="input-group-text" data-toggle>
+                    <i class="bi bi-calendar"></i>
+                </span>
+                <span class="input-group-text" title="clear" data-clear>
+                    <i class="bi bi-x"></i>
+                </span>
+            </div>
+        </div>
+        <div class="d-flex mb-3 align-items-center justify-content-center ms-3">
+            <label for="devices" class="col-form-label text-center w-75">Tên thiết bị:</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="devices" name="devices"/>
+            </div>
+        </div>
+        <div class="row ms-2">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="submit" class="btn btn-primary">Lọc</button>
+            </div>
+        </div>
+    </form>
+    <div class="d-flex align-items-center mb-4 justify-content-center">
+        <div class="me-3">
+            <i class="fa-solid fa-computer fa-3x"></i>
+        </div>
+        <h2 class="" th:text="${luotMuon} + ' Lượt mượn thiết bị'"></h2>
+    </div>
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>Mã thiết bị</th>
+                <th>Tên thiết bị</th>
+                <th>Mô tả thiết bị</th>
+                <th>Thành viên mượn</th>
+                <th>Thời gian mượn</th>
+                <th>Thời gian trả</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${ttsdBorrow}">
+                <td th:text="${user?.thietBi.maTB}"></td>
+                <td th:text="${user?.thietBi.tenTB}"></td>
+                <td th:text="${user?.thietBi.moTaTB}"></td>
+                <td th:text="${user?.thanhVienTTSD.hoten}"></td>
+                <td th:text="${user?.tgMuon}"></td>
+                <td th:text="${user?.tgTra}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Đang mượn thiết bị -->
+<div class="content_statistic" id="content3" style="display: none;">
+    <form action="/filterBorrowing" class="d-flex flex-wrap mt-3 mb-2" id='filterBorrowing'>
+        <div class="d-flex mb-3 align-items-center justify-content-center">
+            <label for="startDateBorrowing" class="col-form-label text-center">Từ:</label>
+            <div class="input-group ms-3" id="datetimepicker-5">
+                <input type="text" class="form-control" id="startDateBorrowing" name="startDateBorrowing" />
+                <span class="input-group-text" data-toggle>
+                    <i class="bi bi-calendar"></i>
+                </span>
+                <span class="input-group-text" title="clear" data-clear>
+                    <i class="bi bi-x"></i>
+                </span>
+            </div>
+        </div>
+        <div class="d-flex mb-3 align-items-center justify-content-center ms-3">
+            <label for="endDateBorrowing" class="col-form-label text-center">Đến:</label>
+            <div class="input-group ms-3" id="datetimepicker-6">
+                <input type="text" class="form-control" id="endDateBorrowing" name="endDateBorrowing" />
+                <span class="input-group-text" data-toggle>
+                    <i class="bi bi-calendar"></i>
+                </span>
+                <span class="input-group-text" title="clear" data-clear>
+                    <i class="bi bi-x"></i>
+                </span>
+            </div>
+        </div>
+        <div class="row ms-2">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="submit" class="btn btn-primary">Lọc</button>
+            </div>
+        </div>
+    </form>
+    <div class="d-flex align-items-center mb-4 justify-content-center">
+        <div class="me-3">
+            <i class="fa-solid fa-chalkboard-user fa-3x"></i>
+        </div>
+        <h2 class="" th:text="${luotDangMuon} + ' Lượt đang mượn thiết bị'"></h2>
+    </div>
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>Mã thiết bị</th>
+                <th>Tên thiết bị</th>
+                <th>Mô tả thiết bị</th>
+                <th>Thành viên đang mượn</th>
+                <th>Thời gian mượn</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${ttsdBorrowing}">
+                <td th:text="${user?.thietBi.maTB}"></td>
+                <td th:text="${user?.thietBi.tenTB}"></td>
+                <td th:text="${user?.thietBi.moTaTB}"></td>
+                <td th:text="${user?.thanhVienTTSD.hoten}"></td>
+                <td th:text="${user?.tgMuon}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Vi phạm -->
+<div class="content_statistic" id="content4" style="display: none;">
+    <form action="/filterViolate" class="d-flex flex-wrap mt-3 mb-2" id='filterViolate'>
+        <div class="d-flex mb-3 align-items-center justify-content-center ms-3">
+            <label for="status" class="col-form-label text-center">Trạng thái xử lý:</label>
+            <div class="ms-3">  
+                <select class="form-select" id="status" name="status">
+                    <option value="" selected>Tất cả</option>
+                    <option value="1">Đã được xử lý</option>
+                    <option value="0">Đang xử lý</option>
+                </select>
+            </div>
+        </div>
+        <div class="row ms-2">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="submit" class="btn btn-primary">Lọc</button>
+            </div>
+        </div>
+    </form>
+    <div class="d-flex align-items-center mb-4 justify-content-center">
+        <div class="me-3">
+            <i class="fa-solid fa-user-shield fa-3x"></i>
+        </div>
+        <h2 class="me-5" th:text="${countDa} + ' Vi phạm đã được xử lý'"></h2>
+
+        <div class="me-3 ms-5">
+            <i class="fa-solid fa-user-lock fa-3x"></i>
+        </div>
+        <h2 class="" th:text="${countChua} + ' Vi phạm đang xử lý'"></h2>
+    </div>
+    <div class="d-flex align-items-center mb-4 justify-content-center">
+        <div class="me-3">
+            <i class="fa-solid fa-hand-holding-dollar fa-3x"></i>
+        </div>
+        <h2 class="me-5" th:text="'Tổng tiền bồi thường ' + ${tongTien} + ' VND'"></h2>
+    </div>
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>Mã thành viên</th>
+                <th>Họ tên</th>
+                <th>Hình thức xử lý</th>
+                <th>Số tiền</th>
+                <th>Ngày xử lý</th>
+                <th>Trạng thái xử lý</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${xuly}">
+                <td th:text="${user?.thanhVienXL.maTV}"></td>
+                <td th:text="${user?.thanhVienXL.hoten}"></td>
+                <td th:text="${user?.hinhThucXL}"></td>
+                <td th:text="${user?.soTien}"></td>
+                <td th:text="${user?.ngayXL}"></td>
+                <td>
+                    <span class="p-1 bg-success text-white rounded" th:if="${user?.trangThaiXL == true}"
+                          >Đã xử lý</span
+                    >
+                    <span class="p-1 bg-warning text-dark rounded" th:if="${user?.trangThaiXL == false}"
+                          >Đang xử lý</span
+                    >
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+                var datetimepicker3 = document.querySelector("#datetimepicker-3");
+                var dateInput3 = datetimepicker3.querySelector("#startDate");
+                var clearButton3 = datetimepicker3.querySelector("[data-clear]");
+                var flatpickr3 = flatpickr(datetimepicker3, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    // Các tùy chọn khác của Flatpickr
+                });
+                flatpickr3.config.onChange.push(function (selectedDates, dateStr) {
+                    dateInput3.value = dateStr;
+                });
+                clearButton3.addEventListener('click', function () {
+                    dateInput3.value = '';
+                });
+
+                var datetimepicker1 = document.querySelector("#datetimepicker-1");
+                var dateInput1 = datetimepicker1.querySelector("#endDate");
+                var clearButton1 = datetimepicker1.querySelector("[data-clear]");
+                var flatpickr1 = flatpickr(datetimepicker1, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    // Các tùy chọn khác của Flatpickr
+                });
+                flatpickr1.config.onChange.push(function (selectedDates, dateStr) {
+                    dateInput1.value = dateStr;
+                });
+                clearButton1.addEventListener('click', function () {
+                    dateInput1.value = '';
+                });
+
+                var datetimepicker2 = document.querySelector("#datetimepicker-2");
+                var dateInput2 = datetimepicker2.querySelector("#startDateBorrow");
+                var clearButton2 = datetimepicker2.querySelector("[data-clear]");
+                var flatpickr2 = flatpickr(datetimepicker2, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    // Các tùy chọn khác của Flatpickr
+                });
+                flatpickr2.config.onChange.push(function (selectedDates, dateStr) {
+                    dateInput2.value = dateStr;
+                });
+                clearButton2.addEventListener('click', function () {
+                    dateInput2.value = '';
+                });
+
+                var datetimepicker4 = document.querySelector("#datetimepicker-4");
+                var dateInput4 = datetimepicker4.querySelector("#endDateBorrow");
+                var clearButton4 = datetimepicker4.querySelector("[data-clear]");
+                var flatpickr4 = flatpickr(datetimepicker4, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    // Các tùy chọn khác của Flatpickr
+                });
+                flatpickr4.config.onChange.push(function (selectedDates, dateStr) {
+                    dateInput4.value = dateStr;
+                });
+                clearButton4.addEventListener('click', function () {
+                    dateInput4.value = '';
+                });
+
+                var datetimepicker5 = document.querySelector("#datetimepicker-5");
+                var dateInput5 = datetimepicker5.querySelector("#startDateBorrowing");
+                var clearButton5 = datetimepicker5.querySelector("[data-clear]");
+                var flatpickr5 = flatpickr(datetimepicker5, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    // Các tùy chọn khác của Flatpickr
+                });
+                flatpickr5.config.onChange.push(function (selectedDates, dateStr) {
+                    dateInput5.value = dateStr;
+                });
+                clearButton5.addEventListener('click', function () {
+                    dateInput5.value = '';
+                });
+
+                var datetimepicker6 = document.querySelector("#datetimepicker-6");
+                var dateInput6 = datetimepicker6.querySelector("#endDateBorrowing");
+                var clearButton6 = datetimepicker6.querySelector("[data-clear]");
+                var flatpickr6 = flatpickr(datetimepicker6, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    // Các tùy chọn khác của Flatpickr
+                });
+                flatpickr6.config.onChange.push(function (selectedDates, dateStr) {
+                    dateInput6.value = dateStr;
+                });
+                clearButton6.addEventListener('click', function () {
+                    dateInput6.value = '';
+                });
+
+                function toggleContent(contentId) {
+                    // Lấy tất cả các phần tử có lớp content
+                    var contents = document.getElementsByClassName('content_statistic');
+
+                    // Ẩn tất cả các phần tử có lớp content
+                    for (var i = 0; i < contents.length; i++) {
+                        contents[i].style.display = 'none';
+                    }
+
+                    // Hiển thị phần tử được chọn
+                    document.getElementById(contentId).style.display = 'block';
+                }
+</script>
+
+<script>
+    // Thành viên
+    document.querySelector('#filterTV').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let params = {
+            startDate: document.querySelector('#filterTV #startDate').value,
+            endDate: document.querySelector('#filterTV #endDate').value,
+            khoa: document.querySelector('#filterTV #khoa').value,
+            nganh: document.querySelector('#filterTV #nganh').value
+        };
+
+        let queryString = Object.keys(params).map(key => key + '=' + encodeURIComponent(params[key])).join('&');
+
+        let apiUrl = '/filter?' + queryString;
+
+        fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    $.get(apiUrl, function (data) {
+                        $('.content').html(data);
+                    });
+                })
+                .then(data => {
+                    // Xử lý dữ liệu nhận được từ máy chủ
+                })
+                .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                });
+    });
+
+    // Mượn thiết bị
+    document.querySelector('#filterBorrow').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let params = {
+            startDateBorrow: document.querySelector('#filterBorrow #startDateBorrow').value,
+            endDateBorrow: document.querySelector('#filterBorrow #endDateBorrow').value,
+            devices: document.querySelector('#filterBorrow #devices').value
+        };
+
+        let queryString = Object.keys(params).map(key => key + '=' + encodeURIComponent(params[key])).join('&');
+
+        let apiUrl = '/filterBorrow?' + queryString;
+
+        fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    $.get(apiUrl, function (data) {
+                        $('.content').html(data);
+                    });
+                    setTimeout(function () {
+                        toggleContent('content2');
+                    }, 100);
+                })
+                .then(data => {
+                    // Xử lý dữ liệu nhận được từ máy chủ
+                })
+                .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                });
+    });
+
+    // Đang mượn thiết bị
+    document.querySelector('#filterBorrowing').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let params = {
+            startDateBorrowing: document.querySelector('#filterBorrowing #startDateBorrowing').value,
+            endDateBorrowing: document.querySelector('#filterBorrowing #endDateBorrowing').value,
+        };
+
+        let queryString = Object.keys(params).map(key => key + '=' + encodeURIComponent(params[key])).join('&');
+
+        let apiUrl = '/filterBorrowing?' + queryString;
+
+        fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    $.get(apiUrl, function (data) {
+                        $('.content').html(data);
+                    });
+                    setTimeout(function () {
+                        toggleContent('content3');
+                    }, 100);
+                })
+                .then(data => {
+                    // Xử lý dữ liệu nhận được từ máy chủ
+                })
+                .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                });
+    });
+    
+    // Vi phạm
+    document.querySelector('#filterViolate').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let params = {
+            status: document.querySelector('#filterViolate #status').value
+        };
+
+        let queryString = Object.keys(params).map(key => key + '=' + encodeURIComponent(params[key])).join('&');
+
+        let apiUrl = '/filterViolate?' + queryString;
+
+        fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    $.get(apiUrl, function (data) {
+                        $('.content').html(data);
+                    });
+                    setTimeout(function () {
+                        toggleContent('content4');
+                    }, 100);
+                })
+                .then(data => {
+                    // Xử lý dữ liệu nhận được từ máy chủ
+                })
+                .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                });
+    });
+</script>

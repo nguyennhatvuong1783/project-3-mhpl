@@ -27,9 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project3mhpl.entity.ThanhVien;
 import com.project3mhpl.entity.ThietBi;
 import com.project3mhpl.entity.ThongTinSD;
+import com.project3mhpl.entity.XuLy;
 import com.project3mhpl.service.ThanhVienService;
 import com.project3mhpl.service.ThietBiService;
 import com.project3mhpl.service.ThongTinSDService;
+import com.project3mhpl.service.XulyService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -48,6 +50,9 @@ public class ThietBiController {
 
     @Autowired
     private ThongTinSDService thongTinSDService;
+
+    @Autowired
+    private XulyService xuLyService;
 
     @GetMapping("/dat-muon-thiet-bi")
     public String getAll(Model m, HttpServletRequest request) {
@@ -138,6 +143,13 @@ public class ThietBiController {
         }
 
         // Xử lý mượn
+        Iterable<XuLy> xuLyInterable = xuLyService.getAll();
+        for (XuLy xl : xuLyInterable) {
+            if (xl.getThanhVienXL().getMaTV() == maTV && xl.getTrangThaiXL() == false) {
+                return "violate";
+            }
+        }
+
         List<ThongTinSD> list = thongTinSDService.getTTSDByIdTB(maTB);
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();

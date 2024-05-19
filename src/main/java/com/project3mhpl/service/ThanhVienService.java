@@ -192,7 +192,14 @@ public class ThanhVienService {
 	public ThanhVien findBySdt(String sdt) {
 		return thanhvienRepository.findBySdt(sdt);
 	}
+        
+        public ThanhVien findByEmail(String email) {
+                return thanhvienRepository.findByEmail(email);
+        }
 
+        public ThanhVien findByMaTV(Integer maTV) {
+                return thanhvienRepository.findByMaTV(maTV);
+        }
 	public Boolean resetPassword(String email) {
 		ThanhVien tv = thanhvienRepository.findByEmail(email);
 

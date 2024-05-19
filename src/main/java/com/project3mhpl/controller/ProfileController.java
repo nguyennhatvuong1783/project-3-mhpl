@@ -111,8 +111,11 @@ public class ProfileController {
 		if (isAuthenticated == false) {
 			return "redirect:sign-in";
 		}
-
+                
 		ThanhVien member = thanhvienService.getProfile(request);
+                if (thanhvienService.isAdminUser(member.getMaTV())) {
+                                m.addAttribute("isAdmin", true);
+			}
 		if (form.getHoten().isEmpty()) {
 			m.addAttribute("errorMessage", "Vui lòng nhập tên!");
 			member.setHoten(form.getHoten());
@@ -153,6 +156,18 @@ public class ProfileController {
 			m.addAttribute("data", member);
 			return "profile";
 		}
+                ThanhVien existingEmail=thanhvienService.findByEmail(form.getEmail());
+                if (!member.getEmail().equals(form.getEmail())){
+                if(existingEmail != null){
+                    m.addAttribute("errorMessage", "Email đã được đăng kí!");
+                    member.setHoten(form.getHoten());
+                    member.setEmail(form.getEmail());
+                    member.setKhoa(form.getKhoa());
+                    member.setNganh(form.getNganh());   
+                    member.setSdt(form.getSdt());
+                    m.addAttribute("data", member);
+                    return "profile";
+                }}
 		if (form.getSdt().isEmpty()) {
 			m.addAttribute("errorMessage", "Vui lòng nhập số điện thoại!");
 			member.setHoten(form.getHoten());
@@ -211,9 +226,7 @@ public class ProfileController {
 		member.setKhoa(form.getKhoa());
 		member.setNganh(form.getNganh());
 		member.setSdt(form.getSdt());
-                if (thanhvienService.isAdminUser(member.getMaTV())) {
-                                m.addAttribute("isAdmin", true);
-			}
+              
 		thanhvienService.saveTV(member);
                 m.addAttribute("successMessage", "Lưu thông tin thành công!");
                 m.addAttribute("data", member);

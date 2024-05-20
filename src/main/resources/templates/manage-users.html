@@ -46,14 +46,12 @@
 			</div>
 		</div>
 	</div>
-	<form class="d-flex gap-2" id="searchFormUser">
-		<div class="container d-flex gap-2 py-2">
-			<input class="form-control" id="searchInputUser" type="text" placeholder="Search" />
-			<button class="btn btn-primary" id="searchButtonUser" type="submit" onclick="searchUser()">
-				Search
-			</button>
-		</div>
-	</form>
+
+	<div class="container d-flex gap-2 py-2">
+		<input class="form-control" id="searchInputUser" type="text" placeholder="Search" />
+		<button class="btn btn-primary" id="btnSearchUser" type="button">Search</button>
+	</div>
+
 	<div class="container">
 		<table class="table table_bordered">
 			<thead>
@@ -803,7 +801,7 @@
 	}
 
 	// Bắt sự kiện submit của biểu mẫu
-	document.getElementById('searchFormUser').addEventListener('submit', function (event) {
+	document.querySelector('#btnSearchUser')?.addEventListener('click', function (event) {
 		event.preventDefault(); // Tránh hành vi mặc định của biểu mẫu (gửi lại trang)
 		searchUser(); // Thực hiện tìm kiếm
 	});

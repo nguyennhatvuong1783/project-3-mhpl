@@ -114,8 +114,6 @@ public class UserController {
 	@ResponseBody
 	public BaseResponse<CheckInResponseDto> checkInUser(@PathVariable Integer maTV) {
 
-		System.out.println(maTV);
-
 		return thanhvienService.checkIn(maTV);
 	}
 

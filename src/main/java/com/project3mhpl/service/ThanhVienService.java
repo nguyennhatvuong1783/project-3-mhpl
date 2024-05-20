@@ -251,6 +251,14 @@ public class ThanhVienService {
 			}
 		}
 
+		if (tv.getCheckIn() == null) {
+			tv.setCheckIn(0);
+		}
+
+		tv.setCheckIn(tv.getCheckIn() + 1);
+
+		thanhvienRepository.save(tv);
+
 		// Clear sensitive data before return
 		tv.setPassword(null);
 		tv.setXuLy(null);

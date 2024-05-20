@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: qlthanhvien
--- Generation Time: 2024-05-19 15:55:55.0010
+-- Generation Time: 2024-05-20 10:56:25.6930
 -- -------------------------------------------------------------
 
 
@@ -21,22 +21,23 @@
 DROP TABLE IF EXISTS `thanhvien`;
 CREATE TABLE `thanhvien` (
   `MaTV` int NOT NULL,
-  `Password` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `HoTen` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `Khoa` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Nganh` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Email` varchar(25) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `SDT` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Password` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `HoTen` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Khoa` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Nganh` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Email` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `SDT` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `is_admin` bit(1) DEFAULT NULL,
-  `ho_ten` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ho_ten` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `check_in` int DEFAULT '0',
   PRIMARY KEY (`MaTV`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `thietbi`;
 CREATE TABLE `thietbi` (
   `MaTB` int NOT NULL,
-  `TenTB` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `MoTaTB` text COLLATE utf8mb4_general_ci,
+  `TenTB` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `MoTaTB` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`MaTB`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -61,7 +62,7 @@ DROP TABLE IF EXISTS `xuly`;
 CREATE TABLE `xuly` (
   `MaXL` int NOT NULL AUTO_INCREMENT,
   `MaTV` int NOT NULL,
-  `HinhThucXL` varchar(250) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `HinhThucXL` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `SoTien` int DEFAULT NULL,
   `NgayXL` datetime DEFAULT NULL,
   `TrangThaiXL` int DEFAULT '0',
@@ -71,22 +72,21 @@ CREATE TABLE `xuly` (
   CONSTRAINT `xuly_ibfk_1` FOREIGN KEY (`MaTV`) REFERENCES `thanhvien` (`MaTV`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `thanhvien` (`MaTV`, `Password`, `HoTen`, `Khoa`, `Nganh`, `Email`, `SDT`, `is_admin`, `ho_ten`) VALUES
-(1, '1', 'Amin', NULL, NULL, NULL, NULL, b'1', NULL),
-(1120150184, '12345', 'Trần Thị Nữ', 'GDTH', 'GDTH', 'tranthinu@gmail.comm', '0123123123', b'0', NULL),
-(1121430037, '1121430037', 'Nguyễn Thị Phương Diễm', 'Luật', 'LHC', '1121430037@gmail.com', '0911214300', b'0', NULL),
-(1121430051, '1121430051', 'Nguyễn Thị Tuyết Dung', 'Luật', 'LHC', '1121430051@gmail.com', '0911214300', b'0', NULL),
-(1121530087, '12345', 'Trần Thiếu Nam', 'TLH', 'QLGD', 'tranthieunam@gmail.com', '1111111112', b'0', NULL),
-(1122130055, '1122130055', 'Phan Văn Anh', 'Ngoại Ngữ', 'Anh', '1122130055@gmail.com', '0911221300', b'0', NULL),
-(1122380173, '1122380173', 'Hoàng Bích Hà', 'Ngoại Ngữ', 'NNA', '1122380173@gmail.com', '0911223801', b'0', NULL),
-(1122520013, '1122520013', 'Lê Nguyễn Phương Linh', 'ĐT-VT', 'CNKTDTTT', '1122520013@gmail.com', '0911225200', b'0', NULL),
-(1123330257, '12345', 'Ngô Tuyết Nhi', 'QTKD', 'QTKD', 'ngotuyetnhi@gmail.com', '1111111113', b'0', NULL),
-(1123380190, '1123380190', 'Trần Bùi Thảo My', 'Ngoại Ngữ', 'NNA', '1123380190@gmail.com', '0911233801', b'0', NULL),
-(1123380205, '1123380205', 'Mai Thị Minh Huyền', 'Ngoại Ngữ', 'NNA', '1123380205@gmail.com', '0911233802', b'0', NULL),
-(1123380365, '1123380365', 'Nguyễn Ngọc Thảo Vy', 'Ngoại Ngữ', 'NNA', '1123380365@gmail.com', '0911233803', b'0', NULL),
-(1123430154, '1123430154', 'Đinh Hoàng Linh Chi', 'Luật', 'LHC', '1123430154@gmail.com', '0911234301', b'0', NULL),
-(1231231231, 'DW0HOD', 'Tuan', 'CNTT', 'CNTT', 'khactuans.tran@gmail.com', '0123123123', b'0', NULL),
-(2147483647, '12345', 'Nguyễn Văn Nam', 'CNTT', 'HTTT', 'nguyenvannam@gmail.com', '123456789', b'0', NULL);
+INSERT INTO `thanhvien` (`MaTV`, `Password`, `HoTen`, `Khoa`, `Nganh`, `Email`, `SDT`, `is_admin`, `ho_ten`, `check_in`) VALUES
+(1, '1', 'Amin', NULL, NULL, NULL, NULL, b'1', NULL, 0),
+(1120150184, '12345', 'Trần Thị Nữ', 'GDTH', 'GDTH', 'tranthinu@gmail.comm', '0123123123', b'0', NULL, 0),
+(1121430037, '1121430037', 'Nguyễn Thị Phương Diễm', 'Luật', 'LHC', '1121430037@gmail.com', '0911214300', b'0', NULL, 0),
+(1121430051, '1121430051', 'Nguyễn Thị Tuyết Dung', 'Luật', 'LHC', '1121430051@gmail.com', '0911214300', b'0', NULL, 0),
+(1121530087, '12345', 'Trần Thiếu Nam', 'TLH', 'QLGD', 'tranthieunam@gmail.com', '1111111112', b'0', NULL, 0),
+(1122130055, '1122130055', 'Phan Văn Anh', 'Ngoại Ngữ', 'Anh', '1122130055@gmail.com', '0911221300', b'0', NULL, 0),
+(1122380173, '1122380173', 'Hoàng Bích Hà', 'Ngoại Ngữ', 'NNA', '1122380173@gmail.com', '0911223801', b'0', NULL, 0),
+(1122520013, '1122520013', 'Lê Nguyễn Phương Linh', 'ĐT-VT', 'CNKTDTTT', '1122520013@gmail.com', '0911225200', b'0', NULL, 0),
+(1123330257, '12345', 'Ngô Tuyết Nhi', 'QTKD', 'QTKD', 'ngotuyetnhi@gmail.com', '1111111113', b'0', NULL, 0),
+(1123380190, '1123380190', 'Trần Bùi Thảo My', 'Ngoại Ngữ', 'NNA', '1123380190@gmail.com', '0911233801', b'0', NULL, 0),
+(1123380205, '1123380205', 'Mai Thị Minh Huyền', 'Ngoại Ngữ', 'NNA', '1123380205@gmail.com', '0911233802', b'0', NULL, 0),
+(1123380365, '1123380365', 'Nguyễn Ngọc Thảo Vy', 'Ngoại Ngữ', 'NNA', '1123380365@gmail.com', '0911233803', b'0', NULL, 0),
+(1123430154, '1123430154', 'Đinh Hoàng Linh Chi', 'Luật', 'LHC', '1123430154@gmail.com', '0911234301', b'0', NULL, 0),
+(2147483647, '12345', 'Nguyễn Văn Nam', 'CNTT', 'HTTT', 'nguyenvannam@gmail.com', '123456789', b'0', NULL, 0);
 
 INSERT INTO `thietbi` (`MaTB`, `TenTB`, `MoTaTB`, `status`) VALUES
 (1000001, 'Micro', 'Micro không dây MS2023', NULL),

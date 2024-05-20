@@ -35,6 +35,9 @@ public class ThanhVien {
 	@Column(name = "email")
 	private String email;
 
+	@Column(name = "check_in")
+	private Integer checkIn;
+
 	// Thay đổi kiểu dữ liệu thành String
 	@Column(name = "sdt")
 	private String sdt;
@@ -53,7 +56,7 @@ public class ThanhVien {
 
 	// Thay đổi kiểu dữ liệu của tham số
 	public ThanhVien(Integer maTV, String password, String hoten, String khoa, String nganh, String email, String sdt,
-			Boolean isAdmin) {
+			Boolean isAdmin, Integer checkIn) {
 		this.maTV = maTV;
 		this.password = password;
 		this.hoten = hoten;
@@ -62,5 +65,6 @@ public class ThanhVien {
 		this.email = email;
 		this.sdt = sdt;
 		this.isAdmin = isAdmin;
+		this.checkIn = checkIn;
 	}
 }

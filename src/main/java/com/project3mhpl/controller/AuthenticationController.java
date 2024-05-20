@@ -90,6 +90,9 @@ public class AuthenticationController {
 
 	@PostMapping("/sign-up")
 	public String processRegistration(@ModelAttribute("ThanhVien") ThanhVien tv, Model m, ThanhVien form) {
+		tv.setMaTV(Integer.parseInt(tv.getMaTV().toString()));
+		tv.setIsAdmin(false);
+
 		if (tv.getMaTV().toString().length() != 10 || !tv.getMaTV().toString().matches("\\d+")) {
 			m.addAttribute("errorMessage", "Mã thành viên đủ 10 số và không chứa kí tự!");
 			m.addAttribute("thanhvien", tv);
@@ -100,12 +103,12 @@ public class AuthenticationController {
 			m.addAttribute("thanhvien", tv);
 			return "sign-up";
 		}
-                ThanhVien existingMemberByMaTV = thanhVienService.findByMaTV(tv.getMaTV());
-                if (existingMemberByMaTV != null) {
-                        m.addAttribute("errorMessage", "Mã thành viên đã được đăng ký!");
-                        m.addAttribute("thanhvien", tv);
-                        return "sign-up";
-                }
+		ThanhVien existingMemberByMaTV = thanhVienService.findByMaTV(tv.getMaTV());
+		if (existingMemberByMaTV != null) {
+			m.addAttribute("errorMessage", "Mã thành viên đã được đăng ký!");
+			m.addAttribute("thanhvien", tv);
+			return "sign-up";
+		}
 		if (!tv.getKhoa().matches("^[\\p{L}\\s]+$") || !tv.getNganh().matches("^[\\p{L}\\s]+$")) {
 			m.addAttribute("errorMessage", "Khoa và ngành chỉ chứa chữ cái!");
 			m.addAttribute("thanhvien", tv);
@@ -116,25 +119,23 @@ public class AuthenticationController {
 			m.addAttribute("thanhvien", tv);
 			return "sign-up";
 		}
-                ThanhVien existingMember = thanhVienService.findBySdt(tv.getSdt());
-                 if (existingMember != null) {
-                        m.addAttribute("errorMessage", "Số điện thoại đã được đăng ký!");
-                        m.addAttribute("thanhvien", tv);
-                        return "sign-up";
-                }
+		ThanhVien existingMember = thanhVienService.findBySdt(tv.getSdt());
+		if (existingMember != null) {
+			m.addAttribute("errorMessage", "Số điện thoại đã được đăng ký!");
+			m.addAttribute("thanhvien", tv);
+			return "sign-up";
+		}
 		if (!tv.getEmail().matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
 			m.addAttribute("errorMessage", "Email không đúng dịnh dạng!");
 			m.addAttribute("thanhvien", tv);
 			return "sign-up";
 		}
-                ThanhVien existingMemberByEmail = thanhVienService.findByEmail(tv.getEmail());
-                if (existingMemberByEmail != null) {
-                m.addAttribute("errorMessage", "Email đã được đăng ký!");
-                m.addAttribute("thanhvien", tv);
-                return "sign-up";
-                }
-		tv.setMaTV(Integer.parseInt(tv.getMaTV().toString()));
-		tv.setIsAdmin(false);
+		ThanhVien existingMemberByEmail = thanhVienService.findByEmail(tv.getEmail());
+		if (existingMemberByEmail != null) {
+			m.addAttribute("errorMessage", "Email đã được đăng ký!");
+			m.addAttribute("thanhvien", tv);
+			return "sign-up";
+		}
 		thanhVienService.saveTV(tv);
 
 		return "sign-in";
